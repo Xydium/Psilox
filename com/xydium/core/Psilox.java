@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.xydium.rendering.Draw;
 import com.xydium.utility.Time;
 
 /**
@@ -46,8 +47,10 @@ public class Psilox {
 	public static void start() {
 		Psilox.preInit();
 		Psilox.window = new Window(1280, 720, 1.0, "Test");
+		Draw.initDraw();
 		Psilox.setRunning(true);
 		Psilox.runtime = new Thread(() -> {
+			Test.start();
 			loop();
 		});
 		Psilox.runtime.start();
@@ -130,14 +133,15 @@ public class Psilox {
 			lastTick = Time.now();
 			Psilox.tickNumber++;
 			
-			//Execute Engine Runtime
-
 			//update all nodes/components in SceneTree
-			//clear all layers
+			Test.update();
+			//Clean up last frame's layers
+			Draw.clear();
 			//render all nodes/components in SceneTree to Layers
-			//Compress Layers to single image
-			//Psilox.window.drawFrame(Draw.getCurrentFrame());
-			
+			Test.render();
+			//Draw finished rendering into the Window
+			Draw.flatten();
+			Psilox.window.drawFrame(Draw.getCurrentFrame());
 			//Execute Requested User Protocols, if any
 			if(!Psilox.runtimeProtocols.isEmpty()) executeRuntimeProtocols();
 		}
@@ -176,14 +180,6 @@ public class Psilox {
 	private static void createProtocolLists() {
 		Psilox.runtimeProtocols = new HashMap<Protocol, Integer>();
 		Psilox.exitProtocols = new ArrayList<Protocol>();
-	}
-	
-	public static void main(String[] args) throws Exception {
-		Psilox.preInit();
-		Psilox.addExitProtocol(() -> {
-			System.out.println("Psilox Shutting Down");
-		});
-		Psilox.start();
 	}
 	
 }
