@@ -23,7 +23,7 @@ public class Test {
 		Draw.setDrawingLayer("b");
 		Draw.fillCenteredRect(65, 36, 4, 4, new Color(255, 0, 255));
 		Draw.setDrawingLayer("text");
-		Draw.centeredText("It's Shat Boi", 64, 10, new Color(25, 50, 75), new Font("Verdana", Font.PLAIN, 12));
+		Draw.centeredText("It's Shat Boi", 128, 72, new Color(255, 50, 75), new Font("Verdana", Font.PLAIN, 12));
 	}
 	
 	public static void main(String[] args) {

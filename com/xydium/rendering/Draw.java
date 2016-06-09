@@ -179,11 +179,20 @@ public class Draw {
 	public static void centeredText(String text, int x, int y, Color color, Font font) {
 		FontMetrics fm = graphics().getFontMetrics(font);
 		int cx = x - fm.stringWidth(text) / 2;
-		int cy = y + (fm.getAscent() + fm.getDescent()) / 3;
+		int cy = y + fm.getHeight() / 3;
 		text(text, cx, cy, color, font);
 	}
 	
-	private static Graphics2D graphics() {
+	/**
+	 * Gets the GraphicsContext for the current layer
+	 * in rendering. Used by Draw to easily access,
+	 * however may be used elsewhere for direct
+	 * access to Graphics2D functions that have not
+	 * been wrapped.
+	 * 
+	 * @return
+	 */
+	public static Graphics2D graphics() {
 		return layers.getCurrentLayer().graphics();
 	}
 	

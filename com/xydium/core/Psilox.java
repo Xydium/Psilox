@@ -20,7 +20,9 @@ import com.xydium.utility.Time;
  */
 public class Psilox {
 	
-	private static final long TICK_LENGTH = 1_000_000_000 / 60;
+	private static EngineConfig engineConfig;
+	
+	private static long TICK_LENGTH = 1_000_000_000;
 
 	private static Thread runtime;
 	private static boolean running;
@@ -32,22 +34,22 @@ public class Psilox {
 	private static Window window;
 	
 	/**
-	 * Used to enable additional features within Psilox,
-	 * such as protocols.
-	 */
-	public static void preInit() {
-		if(exitProtocols == null) {
-			Psilox.createProtocolLists();
-		}
-	}
-	
-	/**
 	 * Starts the engine and loop.
 	 */
 	public static void start() {
-		Psilox.preInit();
-		Psilox.window = new Window(128, 72, 5, "Test");
+		Psilox.engineConfig = new EngineConfig();
+		
+		Psilox.TICK_LENGTH /= Psilox.engineConfig.getInt("tickspersec");
+		
+		Psilox.createProtocolLists();
+		
+		Psilox.window = new Window(Psilox.engineConfig.getInt("width"), 
+								   Psilox.engineConfig.getInt("height"), 
+								   Psilox.engineConfig.getDouble("scale"),
+								   Psilox.engineConfig.getString("title"));
+		
 		Draw.initDraw();
+		
 		Psilox.setRunning(true);
 		Psilox.runtime = new Thread(() -> {
 			Test.start();
@@ -155,7 +157,7 @@ public class Psilox {
 			Draw.flatten();
 			Psilox.window.drawFrame(Draw.getCurrentFrame());
 			//Execute Requested User Protocols, if any
-			if(!Psilox.runtimeProtocols.isEmpty()) executeRuntimeProtocols();
+			if(Psilox.runtimeProtocols != null) executeRuntimeProtocols();
 		}
 		
 		executeExitProtocols();
@@ -190,7 +192,9 @@ public class Psilox {
 	}
 	
 	private static void createProtocolLists() {
-		Psilox.runtimeProtocols = new HashMap<Protocol, Integer>();
+		if(Psilox.engineConfig.getBoolean("usingruntimeprotocols")) {
+			Psilox.runtimeProtocols = new HashMap<Protocol, Integer>();
+		}
 		Psilox.exitProtocols = new ArrayList<Protocol>();
 	}
 	
