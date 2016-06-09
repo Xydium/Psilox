@@ -7,10 +7,20 @@ import java.util.Map;
 
 import com.xydium.utility.Time;
 
+/**
+ * 
+ * Psilox runtime, initialized from end user defined
+ * main method. Contains primary game loop for updating
+ * and rendering, as well as executing user-defined protocols.
+ * Entirely static access.
+ * 
+ * @author Xydium
+ *
+ */
 public class Psilox {
-
-	private static final long TICK_LENGTH = 1_000_000_000 / 60;
 	
+	private static final long TICK_LENGTH = 1_000_000_000 / 60;
+
 	private static Thread runtime;
 	private static boolean running;
 	private static long tickNumber;
@@ -18,10 +28,17 @@ public class Psilox {
 	private static Map<Protocol, Integer> runtimeProtocols;
 	private static List<Protocol> exitProtocols;
 	
+	/**
+	 * Used to enable additional features within Psilox,
+	 * such as protocols.
+	 */
 	public static void preInit() {
 		Psilox.createProtocolLists();
 	}
 	
+	/**
+	 * Starts the engine and loop.
+	 */
 	public static void start() {
 		Psilox.setRunning(true);
 		Psilox.runtime = new Thread(() -> {
@@ -30,26 +47,54 @@ public class Psilox {
 		Psilox.runtime.start();
 	}
 	
+	/**
+	 * Stops the loop before its next tick.
+	 */
 	public static void stop() {
 		Psilox.setRunning(false);
 	}
 	
+	/**
+	 * Puts a new Runtime Protocol into the map
+	 * for execution in the main loop.  
+	 * 
+	 * @param protocol the protocol to run
+	 * @param runEveryXthTick executes the protocol on this tick remainder
+	 */
 	public static void addRuntimeProtocol(Protocol protocol, int runEveryXthTick) {
 		Psilox.runtimeProtocols.put(protocol, runEveryXthTick);
 	}
 	
+	/**
+	 * Puts the new Runtime Protocol into the map
+	 * with no tick delay. 
+	 * 
+	 * @param protocol
+	 */
 	public static void addRuntimeProtocol(Protocol protocol) {
 		Psilox.addRuntimeProtocol(protocol, 1);
 	}
 	
+	/**
+	 * Adds an Exit Protocol to be run
+	 * by the engine after calling stop.
+	 * 
+	 * @param protocol the protocol to run at exit
+	 */
 	public static void addExitProtocol(Protocol protocol) {
 		Psilox.exitProtocols.add(protocol);
 	}
 	
+	/**
+	 * @return if the engine is running
+	 */
 	public static boolean isRunning() {
 		return Psilox.running;
 	}
 	
+	/**
+	 * @return number of ticks elapsed since start
+	 */
 	public static long getTickNumber() {
 		return Psilox.tickNumber;
 	}
