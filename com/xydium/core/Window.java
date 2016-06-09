@@ -52,14 +52,14 @@ public class Window {
 		frame.setSize((int) (width * scale), (int) (height * scale));
 		frame.addWindowListener(new WindowListener() {
 			public void windowActivated(WindowEvent arg0) {}
-			public void windowClosed(WindowEvent arg0) { Psilox.stop(); }
-			public void windowClosing(WindowEvent arg0) {}
+			public void windowClosed(WindowEvent arg0) {}
+			public void windowClosing(WindowEvent arg0) { Psilox.stop(); }
 			public void windowDeactivated(WindowEvent arg0) {}
 			public void windowDeiconified(WindowEvent arg0) {}
 			public void windowIconified(WindowEvent arg0) {}
 			public void windowOpened(WindowEvent arg0) {}
 		});
-		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setVisible(true);
 	}

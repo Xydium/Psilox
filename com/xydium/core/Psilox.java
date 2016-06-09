@@ -35,13 +35,16 @@ public class Psilox {
 	 * such as protocols.
 	 */
 	public static void preInit() {
-		Psilox.createProtocolLists();
+		if(exitProtocols == null) {
+			Psilox.createProtocolLists();
+		}
 	}
 	
 	/**
 	 * Starts the engine and loop.
 	 */
 	public static void start() {
+		Psilox.preInit();
 		Psilox.window = new Window(1280, 720, 1.0, "Test");
 		Psilox.setRunning(true);
 		Psilox.runtime = new Thread(() -> {
@@ -177,9 +180,10 @@ public class Psilox {
 	
 	public static void main(String[] args) throws Exception {
 		Psilox.preInit();
+		Psilox.addExitProtocol(() -> {
+			System.out.println("Psilox Shutting Down");
+		});
 		Psilox.start();
-		Thread.sleep(10000);
-		Psilox.stop();
 	}
 	
 }
