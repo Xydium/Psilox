@@ -46,7 +46,7 @@ public class Psilox {
 	 */
 	public static void start() {
 		Psilox.preInit();
-		Psilox.window = new Window(1280, 720, 1.0, "Test");
+		Psilox.window = new Window(128, 72, 5, "Test");
 		Draw.initDraw();
 		Psilox.setRunning(true);
 		Psilox.runtime = new Thread(() -> {
@@ -108,18 +108,30 @@ public class Psilox {
 		return Psilox.tickNumber;
 	}
 
+	/**
+	 * @return width of rendering buffer
+	 */
 	public static int windowWidth() {
 		return Psilox.window.getWidth();
 	}
 	
+	/**
+	 * @return height of rendering buffer
+	 */
 	public static int windowHeight() {
 		return Psilox.window.getHeight();
 	}
 	
+	/**
+	 * @return width of jframe, accounting for scale
+	 */
 	public static int frameWidth() {
 		return (int) (Psilox.windowWidth() * Psilox.window.getScale());
 	}
 	
+	/**
+	 * @return height of jframe, account for scale
+	 */
 	public static int frameHeight() {
 		return (int) (Psilox.windowHeight() * Psilox.window.getScale());
 	}
