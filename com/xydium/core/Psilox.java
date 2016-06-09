@@ -28,6 +28,8 @@ public class Psilox {
 	private static Map<Protocol, Integer> runtimeProtocols;
 	private static List<Protocol> exitProtocols;
 	
+	private static Window window;
+	
 	/**
 	 * Used to enable additional features within Psilox,
 	 * such as protocols.
@@ -40,6 +42,7 @@ public class Psilox {
 	 * Starts the engine and loop.
 	 */
 	public static void start() {
+		Psilox.window = new Window(1280, 720, 1.0, "Test");
 		Psilox.setRunning(true);
 		Psilox.runtime = new Thread(() -> {
 			loop();
@@ -99,6 +102,22 @@ public class Psilox {
 		return Psilox.tickNumber;
 	}
 
+	public static int windowWidth() {
+		return Psilox.window.getWidth();
+	}
+	
+	public static int windowHeight() {
+		return Psilox.window.getHeight();
+	}
+	
+	public static int frameWidth() {
+		return (int) (Psilox.windowWidth() * Psilox.window.getScale());
+	}
+	
+	public static int frameHeight() {
+		return (int) (Psilox.windowHeight() * Psilox.window.getScale());
+	}
+	
 	private static void loop() {
 		long lastTick = 0;
 		
@@ -111,9 +130,10 @@ public class Psilox {
 			//Execute Engine Runtime
 
 			//update all nodes/components in SceneTree
+			//clear all layers
 			//render all nodes/components in SceneTree to Layers
 			//Compress Layers to single image
-			//Draw image into window
+			//Psilox.window.drawFrame(Draw.getCurrentFrame());
 			
 			//Execute Requested User Protocols, if any
 			if(!Psilox.runtimeProtocols.isEmpty()) executeRuntimeProtocols();
@@ -143,6 +163,7 @@ public class Psilox {
 		for(Protocol p : Psilox.exitProtocols) {
 			p.execute();
 		}
+		Psilox.window.destroy();
 	}
 	
 	private static void waitForTick(long lastTick) {
@@ -152,6 +173,13 @@ public class Psilox {
 	private static void createProtocolLists() {
 		Psilox.runtimeProtocols = new HashMap<Protocol, Integer>();
 		Psilox.exitProtocols = new ArrayList<Protocol>();
+	}
+	
+	public static void main(String[] args) throws Exception {
+		Psilox.preInit();
+		Psilox.start();
+		Thread.sleep(10000);
+		Psilox.stop();
 	}
 	
 }
