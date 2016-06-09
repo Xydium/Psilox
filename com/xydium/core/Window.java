@@ -48,8 +48,13 @@ public class Window {
 		return title;
 	}
 	
-	private void configureFrame() {
+	public void rescale(double scale) {
+		this.scale = scale;
 		frame.setSize((int) (width * scale), (int) (height * scale));
+	}
+	
+	private void configureFrame() {
+		rescale(scale);
 		frame.addWindowListener(new WindowListener() {
 			public void windowActivated(WindowEvent arg0) {}
 			public void windowClosed(WindowEvent arg0) {}

@@ -96,6 +96,14 @@ public class Psilox {
 		Psilox.exitProtocols.add(protocol);
 	}
 	
+	public static void rescale(double scale) {
+		Psilox.window.rescale(scale);
+	}
+	
+	public static double currentWindowScale() {
+		return Psilox.window.getScale();
+	}
+	
 	/**
 	 * @return if the engine is running
 	 */

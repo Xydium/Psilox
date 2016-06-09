@@ -18,9 +18,9 @@ public class Test {
 	}
 	
 	public static void render() {
-		Draw.setDrawingLayer("a");
-		Draw.fillCenteredRect(63, 36, 4, 4, new Color(255, 255, 0));
 		Draw.setDrawingLayer("b");
+		Draw.fillCenteredRect(63, 36, 4, 4, new Color(255, 255, 0));
+		Draw.setDrawingLayer("a");
 		Draw.fillCenteredRect(65, 36, 4, 4, new Color(255, 0, 255));
 		Draw.setDrawingLayer("text");
 		Draw.centeredText("It's Shat Boi", 128, 72, new Color(255, 50, 75), new Font("Verdana", Font.PLAIN, 12));
@@ -28,6 +28,12 @@ public class Test {
 	
 	public static void main(String[] args) {
 		Psilox.start();
+		Psilox.addExitProtocol(() -> {
+			System.out.println("Goodbye");
+		});
+		Psilox.addRuntimeProtocol(() -> {
+			
+		}, 60);
 	}
 	
 }
