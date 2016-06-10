@@ -1,4 +1,4 @@
-package com.xydium.core;
+package com.xydium.utility;
 
 public interface Protocol {
 
