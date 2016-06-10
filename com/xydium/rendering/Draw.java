@@ -265,7 +265,7 @@ public class Draw {
 	}
 	
 	public static void texture(Texture texture, Transform transform) {
-		texture(texture, transform.position(), transform.dimensions(), (int) transform.rotation());
+		texture(texture, transform.positionGlobal(), new Vec2i(texture.getWidth(), texture.getHeight()).mul(transform.dimensionsGlobal()), (int) transform.rotationGlobal());
 	}
 	
 	/**
