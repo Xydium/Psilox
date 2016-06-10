@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.xydium.rendering.Draw;
+import com.xydium.resources.GlobalAudio;
 import com.xydium.utility.Log;
 import com.xydium.utility.Log.LogLevel;
 import com.xydium.utility.Protocol;
@@ -68,6 +69,10 @@ public class Psilox {
 		Log.internal("Initializing Draw...");
 		Draw.initDraw();
 		Log.internal("Draw Initialized.");
+		
+		Log.internal("Initializing Audio...");
+		GlobalAudio.initAudio();
+		Log.internal("Audio initialized.");
 		
 		Log.internal("Loading Main Scene...");
 		try {
@@ -209,6 +214,9 @@ public class Psilox {
 		Log.internal("Running Exit Protocols...");
 		executeExitProtocols();
 		Log.internal("Exit Protocols Completed.");
+		Log.internal("Shutting down audio...");
+		GlobalAudio.shutdown();
+		Log.internal("Audio shutdown.");
 		Log.internal("Psilox stopped.");
 		Psilox.window.destroy();
 	}
