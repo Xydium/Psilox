@@ -84,6 +84,7 @@ public class LayerSet {
 	
 	private void addDefaultLayer() {
 		addLayer("default");
+		setCurrentLayer("default");
 	}
 	
 }
