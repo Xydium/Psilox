@@ -6,6 +6,9 @@ import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 
+import com.xydium.geometry.Vec2i;
+import com.xydium.utility.Log;
+
 public class Window {
 
 	private int width;
@@ -53,6 +56,10 @@ public class Window {
 		frame.setSize((int) (width * scale), (int) (height * scale));
 	}
 	
+	public Vec2i getDimensions() {
+		return new Vec2i(frame.getWidth(), frame.getHeight());
+	}
+	
 	private void configureFrame() {
 		rescale(scale);
 		frame.addWindowListener(new WindowListener() {
@@ -67,6 +74,10 @@ public class Window {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setVisible(true);
+	}
+	
+	public String toString() {
+		return String.format("Window: Width: %s, Height: %s, Scale: %s, Title: %s", width, height, scale, title);
 	}
 	
 }
