@@ -8,6 +8,7 @@ import com.xydium.geometry.Vec2f;
 import com.xydium.geometry.Vec2i;
 import com.xydium.rendering.Draw;
 import com.xydium.resources.Texture;
+import com.xydium.utility.FontLib;
 import com.xydium.utility.Input;
 import com.xydium.utility.Key;
 
@@ -24,6 +25,7 @@ public class Test2 extends Scene {
 		a = new Transform(new Vec2f(50f, 50f));
 		a.rotate(45);
 		b = new Transform(a, new Vec2f(200f, 200f), new Vec2f(2.0f), 0);
+		FontLib.register("Papyrus.ttf");
 	}
 	
 	public void activate() {
@@ -44,7 +46,7 @@ public class Test2 extends Scene {
 	}
 
 	public void render() {
-		Draw.centeredText("Scene Switching Test", TEXT_POSITION, Color.WHITE, new Font("Verdana", Font.PLAIN, 32));
+		Draw.centeredText("Scene Switching Test", TEXT_POSITION, Color.WHITE, FontLib.get("Papyrus_16_P"));
 		Draw.texture(tex, b);
 	}
 	
