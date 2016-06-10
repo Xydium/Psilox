@@ -6,8 +6,10 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import com.xydium.geometry.Transform;
 import com.xydium.geometry.Vec2;
 import com.xydium.geometry.Vec2f;
+import com.xydium.geometry.Vec2i;
 import com.xydium.resources.Texture;
 
 /**
@@ -233,6 +235,37 @@ public class Draw {
 	
 	public static void texture(Texture texture, Vec2<?> pos, Vec2<?> dim) {
 		texture(texture, pos.getX().intValue(), pos.getY().intValue(), dim.getX().intValue(), dim.getY().intValue());
+	}
+	
+	public static void texture(Texture texture, int x, int y, int theta) { 
+		texture(texture, x, y, 1.0, theta);
+	}
+	
+	public static void texture(Texture texture, int x, int y, double scale, int theta) {
+		texture(texture, x, y, (int) (texture.getWidth() * scale), (int) (texture.getHeight() * scale), theta);
+	}
+	
+	public static void texture(Texture texture, int x, int y, int width, int height, int theta) {
+		Graphics2D g = (Graphics2D) graphics().create();
+		g.rotate(Math.toRadians(theta), x, y);
+		g.drawImage(texture.getImage(), x - width / 2, y - height / 2, width, height, null);
+		g.dispose();
+	}
+	
+	public static void texture(Texture texture, Vec2<?> pos, int theta) {
+		texture(texture, pos, new Vec2i(texture.getWidth(), texture.getHeight()), theta);
+	}
+	
+	public static void texture(Texture texture, Vec2<?> pos, double scale, int theta) {
+		texture(texture, pos, new Vec2f(texture.getWidth() * (float) scale, texture.getHeight() * (float) scale), theta);
+	}
+	
+	public static void texture(Texture texture, Vec2<?> pos, Vec2<?> dim, int theta) {
+		texture(texture, pos.getX().intValue(), pos.getY().intValue(), dim.getX().intValue(), dim.getY().intValue(), theta);
+	}
+	
+	public static void texture(Texture texture, Transform transform) {
+		texture(texture, transform.position(), transform.dimensions(), (int) transform.rotation());
 	}
 	
 	/**
