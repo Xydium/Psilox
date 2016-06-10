@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import com.xydium.geometry.Vec2;
+import com.xydium.geometry.Vec2f;
+import com.xydium.resources.Texture;
 
 /**
  * Draw is used to interface with the Layered 2D graphics
@@ -207,6 +209,30 @@ public class Draw {
 	
 	public static void centeredText(String text, Vec2<?> pos, Color color, Font font) {
 		centeredText(text, pos.getX().intValue(), pos.getY().intValue(), color, font);
+	}
+	
+	public static void texture(Texture texture, int x, int y) {
+		texture(texture, x, y, 1.0);
+	}
+	
+	public static void texture(Texture texture, int x, int y, double scale) {
+		texture(texture, x, y, (int) (texture.getWidth() * scale), (int) (texture.getHeight() * scale));
+	}
+	
+	public static void texture(Texture texture, int x, int y, int width, int height) {
+		graphics().drawImage(texture.getImage(), x, y, width, height, null);
+	}
+	
+	public static void texture(Texture texture, Vec2<?> pos) {
+		texture(texture, pos, 1.0);
+	}
+	
+	public static void texture(Texture texture, Vec2<?> pos, double scale) {
+		texture(texture, pos, new Vec2f(texture.getWidth() * (float) scale, texture.getHeight() * (float) scale));
+	}
+	
+	public static void texture(Texture texture, Vec2<?> pos, Vec2<?> dim) {
+		texture(texture, pos.getX().intValue(), pos.getY().intValue(), dim.getX().intValue(), dim.getY().intValue());
 	}
 	
 	/**
