@@ -75,6 +75,7 @@ public class Psilox {
 		} catch (Exception e) {
 			Log.error("Something went wrong while loading mainscene.");
 			Log.error(e);
+			Psilox.stop();
 		}
 		Log.internal(String.format("Scene %s loaded. (%s)", Psilox.currentScene().getClass().getSimpleName(), Psilox.currentScene().getClass().getName()));
 		
@@ -180,7 +181,8 @@ public class Psilox {
 	}
 	
 	public static void setScene(Scene scene) {
-		if(Psilox.scene != null) Psilox.scene.deactivate(); 
+		if(Psilox.scene != null) Psilox.scene.deactivate();
+		Draw.dumpDrawingLayers();
 		Psilox.scene = scene;
 		Psilox.scene.activate();
 	}
