@@ -6,6 +6,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import com.xydium.geometry.Vec2;
+
 /**
  * Draw is used to interface with the Layered 2D graphics
  * and allows the user to instruct Psilox what to draw
@@ -104,6 +106,10 @@ public class Draw {
 		graphics().drawRect(x, y, width, height);
 	}
 	
+	public static void outlineRect(Vec2<?> pos, Vec2<?> dim, Color color) {
+		outlineRect(pos.getX().intValue(), pos.getY().intValue(), dim.getX().intValue(), dim.getY().intValue(), color);
+	}
+	
 	/**
 	 * Draws the outline of a rectangle with the center point
 	 * at x,y and dimensions of width and height with the selected
@@ -117,6 +123,10 @@ public class Draw {
 	 */
 	public static void outlineCenteredRect(int x, int y, int width, int height, Color color) {
 		outlineRect(x - width / 2, y - width / 2, width, height, color);
+	}
+	
+	public static void outlineCenteredRect(Vec2<?> pos, Vec2<?> dim, Color color) {
+		outlineCenteredRect(pos.getX().intValue(), pos.getY().intValue(), dim.getX().intValue(), dim.getY().intValue(), color);
 	}
 	
 	/**
@@ -134,6 +144,10 @@ public class Draw {
 		graphics().fillRect(x, y, width, height);
 	}
 	
+	public static void fillRect(Vec2<?> pos, Vec2<?> dim, Color color) {
+		fillRect(pos.getX().intValue(), pos.getY().intValue(), dim.getX().intValue(), dim.getY().intValue(), color);
+	}
+	
 	/**
 	 * Fills a rectangle with center point x,y and
 	 * dimensions of width, height with the selected color.
@@ -146,6 +160,10 @@ public class Draw {
 	 */
 	public static void fillCenteredRect(int x, int y, int width, int height, Color color) {
 		fillRect(x - width / 2, y - height / 2, width, height, color);
+	}
+	
+	public static void fillCenteredRect(Vec2<?> pos, Vec2<?> dim, Color color) {
+		fillCenteredRect(pos.getX().intValue(), pos.getY().intValue(), dim.getX().intValue(), dim.getY().intValue(), color);
 	}
 	
 	/**
@@ -165,6 +183,10 @@ public class Draw {
 		graphics().drawString(text, x, y);
 	}
 	
+	public static void text(String text, Vec2<?> pos, Color color, Font font) {
+		text(text, pos.getX().intValue(), pos.getY().intValue(), color, font);
+	}
+	
 	/**
 	 * Draws the desired string on screen in a non-visible
 	 * rectangle with a center point at x,y using the
@@ -181,6 +203,10 @@ public class Draw {
 		int cx = x - fm.stringWidth(text) / 2;
 		int cy = y + fm.getHeight() / 3;
 		text(text, cx, cy, color, font);
+	}
+	
+	public static void centeredText(String text, Vec2<?> pos, Color color, Font font) {
+		centeredText(text, pos.getX().intValue(), pos.getY().intValue(), color, font);
 	}
 	
 	/**
