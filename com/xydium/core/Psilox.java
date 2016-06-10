@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.xydium.rendering.Draw;
+import com.xydium.utility.Log;
+import com.xydium.utility.Log.LogLevel;
+import com.xydium.utility.Protocol;
 import com.xydium.utility.Time;
 
 /**
@@ -33,26 +36,51 @@ public class Psilox {
 	
 	private static Window window;
 	
+	private static Scene scene;
+	
 	/**
 	 * Starts the engine and loop.
 	 */
 	public static void start() {
+		Log.internal("Psilox started.");
+		Log.internal("Loading Engine Config...");
 		Psilox.engineConfig = new EngineConfig();
+		Log.internal("Engine Config Loaded.");
+		
+		Log.setConsoleEnabled(Psilox.engineConfig.getBoolean("consoleenabled"));
+		Log.setLogLevel(LogLevel.values()[Psilox.engineConfig.getInt("consoledetail")]);
+		Log.internal(String.format("LogLevel Set To %s. Console Enabled is %s.", Log.getLogLevel().name(), Log.getConsoleEnabled()));
 		
 		Psilox.TICK_LENGTH /= Psilox.engineConfig.getInt("tickspersec");
+		Log.internal(String.format("Tick Rate Set To %s With Duration Of %s NS", Psilox.engineConfig.getInt("tickspersec"), TICK_LENGTH));
 		
+		Log.internal("Creating Protocol Lists...");
 		Psilox.createProtocolLists();
 		
+		Log.internal("Creating Window...");
 		Psilox.window = new Window(Psilox.engineConfig.getInt("width"), 
 								   Psilox.engineConfig.getInt("height"), 
 								   Psilox.engineConfig.getDouble("scale"),
 								   Psilox.engineConfig.getString("title"));
+		Log.internal("Window Created.");
+		Log.internal(Psilox.window.toString());
 		
+		Log.internal("Initializing Draw...");
 		Draw.initDraw();
+		Log.internal("Draw Initialized.");
+		
+		Log.internal("Loading Main Scene...");
+		try {
+			Psilox.setScene((Scene) (Class.forName(Psilox.engineConfig.getString("mainscene")).newInstance()));
+		} catch (Exception e) {
+			Log.error("Something went wrong while loading mainscene.");
+			Log.error(e);
+		}
+		Log.internal(String.format("Scene %s loaded. (%s)", Psilox.currentScene().getClass().getSimpleName(), Psilox.currentScene().getClass().getName()));
 		
 		Psilox.setRunning(true);
+		Log.internal("Running Psilox...");
 		Psilox.runtime = new Thread(() -> {
-			Test.start();
 			loop();
 		});
 		Psilox.runtime.start();
@@ -62,6 +90,7 @@ public class Psilox {
 	 * Stops the loop before its next tick.
 	 */
 	public static void stop() {
+		Log.internal("Stopping Psilox...");
 		Psilox.setRunning(false);
 	}
 	
@@ -146,7 +175,18 @@ public class Psilox {
 		return (int) (Psilox.windowHeight() * Psilox.window.getScale());
 	}
 	
+	public static Scene currentScene() {
+		return Psilox.scene;
+	}
+	
+	public static void setScene(Scene scene) {
+		if(Psilox.scene != null) Psilox.scene.deactivate(); 
+		Psilox.scene = scene;
+		Psilox.scene.activate();
+	}
+	
 	private static void loop() {
+		Log.internal("Psilox is now running.");
 		long lastTick = 0;
 		
 		while(Psilox.isRunning()) {
@@ -155,20 +195,20 @@ public class Psilox {
 			lastTick = Time.now();
 			Psilox.tickNumber++;
 			
-			//update all nodes/components in SceneTree
-			Test.update();
-			//Clean up last frame's layers
+			Psilox.scene.update();
 			Draw.clear();
-			//render all nodes/components in SceneTree to Layers
-			Test.render();
-			//Draw finished rendering into the Window
+			Psilox.scene.render();
 			Draw.flatten();
 			Psilox.window.drawFrame(Draw.getCurrentFrame());
-			//Execute Requested User Protocols, if any
 			if(Psilox.runtimeProtocols != null) executeRuntimeProtocols();
 		}
 		
+		Log.internal("Escaped Main Loop.");
+		Log.internal("Running Exit Protocols...");
 		executeExitProtocols();
+		Log.internal("Exit Protocols Completed.");
+		Log.internal("Psilox stopped.");
+		Psilox.window.destroy();
 	}
 	
 	private static void setRunning(boolean running) {
@@ -192,7 +232,6 @@ public class Psilox {
 		for(Protocol p : Psilox.exitProtocols) {
 			p.execute();
 		}
-		Psilox.window.destroy();
 	}
 	
 	private static void waitForTick(long lastTick) {
@@ -202,8 +241,10 @@ public class Psilox {
 	private static void createProtocolLists() {
 		if(Psilox.engineConfig.getBoolean("usingruntimeprotocols")) {
 			Psilox.runtimeProtocols = new HashMap<Protocol, Integer>();
+			Log.internal("Created Runtime Protocol List.");
 		}
 		Psilox.exitProtocols = new ArrayList<Protocol>();
+		Log.internal("Created Exit Protocol List.");
 	}
 	
 }
