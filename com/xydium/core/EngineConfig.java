@@ -41,6 +41,7 @@ public class EngineConfig {
 			int splitIndex;
 			while(sc.hasNextLine()) {
 				line = sc.nextLine();
+				if(line.equals("") || line.charAt(0) == '#') continue;
 				splitIndex = line.indexOf('=');
 				configurations.put(line.substring(0, splitIndex), line.substring(splitIndex + 1));
 			}
