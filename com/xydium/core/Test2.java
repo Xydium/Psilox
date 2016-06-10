@@ -14,20 +14,33 @@ public class Test2 extends Scene {
 	
 	public void load() {
 		tex = new Texture("011.png");
-		a = new Transform(new Vec2f(50f, 50f));
+		a = new Transform(new Vec2f((float) Psilox.windowWidth() / 2, (float) Psilox.windowHeight() / 2));
 	}
 	
 	public void update() {
-		if(Input.keyTap(Key.ESCAPE)) {
-			Psilox.setScene(new Test());
-		}
 		if(Input.keyDown(Key.SPACE)) {
-			a.rotate(10);
+			a.rotate(1);
+		}
+		if(Input.keyDown(Key.LEFT)) {
+			a.rescale(new Vec2f(0.1f, 0f));
+		}
+		if(Input.keyDown(Key.RIGHT)) {
+			a.rescale(new Vec2f(-0.1f, 0f));
+		}
+		if(Input.keyDown(Key.UP)) {
+			a.rescale(new Vec2f(0f, 0.1f));
+		}
+		if(Input.keyDown(Key.DOWN)) {
+			a.rescale(new Vec2f(0f, -0.1f));
 		}
 	}
 
 	public void render() {
 		Draw.texture(tex, a);
+	}
+	
+	public static void main(String[] args) {
+		Psilox.start();
 	}
 	
 }

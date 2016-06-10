@@ -91,7 +91,7 @@ public class Transform {
 		position.addR(delta);
 	}
 	
-	public void stretch(Vec2f delta) {
+	public void rescale(Vec2f delta) {
 		scale.addR(delta);
 	}
 	

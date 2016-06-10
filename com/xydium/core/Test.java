@@ -66,8 +66,4 @@ public class Test extends Scene {
 		Draw.centeredText("Psilox Input Map Demo", new Vec2i(Psilox.windowWidth() / 2, 32), Color.WHITE, new Font("Verdana", Font.PLAIN, 32));
 	}
 	
-	public static void main(String[] args) {
-		Psilox.start();
-	}
-	
 }

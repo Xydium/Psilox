@@ -1,4 +1,4 @@
-package com.xydium.utility;
+package com.xydium.resources;
 
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.xydium.utility.Log;
 
 public class FontLib {
 
@@ -51,7 +53,7 @@ public class FontLib {
 		final byte NAME = 0;
 		final byte SIZE = 1;
 		final byte STYLE = 2;
-		Font newFont = new Font(fontParts[NAME], getStyle(fontParts[2]), Integer.parseInt(fontParts[1]));
+		Font newFont = new Font(fontParts[NAME], getStyle(fontParts[STYLE]), Integer.parseInt(fontParts[SIZE]));
 		fontLib.put(fontData, newFont);
 	}
 	
