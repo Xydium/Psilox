@@ -25,5 +25,25 @@ public class Vec2f extends Vec2<Float> {
 	public Vec2<Float> div(Vec2<?> other) {
 		return new Vec2f(getX() / other.getX().floatValue(), getY() / other.getY().floatValue());
 	}
+
+	public void addR(Vec2<?> other) {
+		setX(getX().floatValue() + other.getX().floatValue());
+		setY(getY().floatValue() + other.getY().floatValue());
+	}
+
+	public void subR(Vec2<?> other) {
+		setX(getX().floatValue() - other.getX().floatValue());
+		setY(getY().floatValue() - other.getY().floatValue());
+	}
+
+	public void mulR(Vec2<?> other) {
+		setX(getX().floatValue() * other.getX().floatValue());
+		setY(getY().floatValue() * other.getY().floatValue());
+	}
+
+	public void divR(Vec2<?> other) {
+		setX(getX().floatValue() / other.getX().floatValue());
+		setY(getY().floatValue() / other.getY().floatValue());
+	}
 	
 }

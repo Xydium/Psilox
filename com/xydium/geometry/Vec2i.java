@@ -26,4 +26,24 @@ public class Vec2i extends Vec2<Integer> {
 		return new Vec2i(getX() / other.getX().intValue(), getY() / other.getY().intValue());
 	}
 	
+	public void addR(Vec2<?> other) {
+		setX(getX().intValue() + other.getX().intValue());
+		setY(getY().intValue() + other.getY().intValue());
+	}
+
+	public void subR(Vec2<?> other) {
+		setX(getX().intValue() - other.getX().intValue());
+		setY(getY().intValue() - other.getY().intValue());
+	}
+
+	public void mulR(Vec2<?> other) {
+		setX(getX().intValue() * other.getX().intValue());
+		setY(getY().intValue() * other.getY().intValue());
+	}
+
+	public void divR(Vec2<?> other) {
+		setX(getX().intValue() / other.getX().intValue());
+		setY(getY().intValue() / other.getY().intValue());
+	}
+	
 }

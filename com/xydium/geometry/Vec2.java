@@ -31,6 +31,11 @@ public abstract class Vec2<T extends Number> {
 	public abstract Vec2<T> mul(Vec2<?> other);
 	public abstract Vec2<T> div(Vec2<?> other);
 	
+	public abstract void addR(Vec2<?> other);
+	public abstract void subR(Vec2<?> other);
+	public abstract void mulR(Vec2<?> other);
+	public abstract void divR(Vec2<?> other);
+	
 	public String toString() {
 		return String.format("Vec2<%s>(%s, %s)", x.getClass().getSimpleName(), x, y);
 	}
