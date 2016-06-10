@@ -6,7 +6,9 @@ import java.awt.Font;
 import com.xydium.geometry.Vec2;
 import com.xydium.geometry.Vec2i;
 import com.xydium.rendering.Draw;
+import com.xydium.utility.Input;
 import com.xydium.utility.InputMap;
+import com.xydium.utility.Key;
 
 public class Test extends Scene {
 	
@@ -47,6 +49,10 @@ public class Test extends Scene {
 			pos2 = pos2.add(new Vec2i(-5, 0));
 		} else if(player2.actionDown("move_right")) {
 			pos2 = pos2.add(new Vec2i(5, 0));
+		}
+		
+		if(Input.keyTap(Key.ESCAPE)) {
+			Psilox.setScene(new Test2());
 		}
 	}
 	
