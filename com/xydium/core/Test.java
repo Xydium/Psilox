@@ -3,37 +3,38 @@ package com.xydium.core;
 import java.awt.Color;
 import java.awt.Font;
 
+import com.xydium.geometry.TrigFunction;
+import com.xydium.geometry.TrigFunction.TrigFunctionType;
+import com.xydium.geometry.Vec2f;
+import com.xydium.geometry.Vec2i;
 import com.xydium.rendering.Draw;
 
-public class Test {
+public class Test extends Scene {
 	
-	public static void start() {
-		Draw.addDrawingLayer("a");
-		Draw.addDrawingLayer("b");
-		Draw.addDrawingLayer("text");
+	private Color color;
+	private Font font;
+	private TrigFunction sin, sin2;
+	private Vec2i pos;
+	
+	public void load() {
+		color = new Color(255, 25, 50);
+		font = new Font("Verdana", Font.PLAIN, 12);
+		sin = new TrigFunction(1, 10, TrigFunctionType.SIN);
+		sin2 = new TrigFunction(20, 1, TrigFunctionType.SIN);
+		pos = new Vec2i(Psilox.windowWidth() / 2, Psilox.windowHeight() / 2);
 	}
 	
-	public static void update() {
-		
+	public void update() {
+		sin.setAmplitude(sin2.next() + sin2.getAmplitude());
+		pos.setY((int) (sin.next() + Psilox.windowHeight() / 2));
 	}
 	
-	public static void render() {
-		Draw.setDrawingLayer("b");
-		Draw.fillCenteredRect(63, 36, 4, 4, new Color(255, 255, 0));
-		Draw.setDrawingLayer("a");
-		Draw.fillCenteredRect(65, 36, 4, 4, new Color(255, 0, 255));
-		Draw.setDrawingLayer("text");
-		Draw.centeredText("It's Shat Boi", 128, 72, new Color(255, 50, 75), new Font("Verdana", Font.PLAIN, 12));
+	public void render() {
+		Draw.centeredText("Welcome to Psilox", pos, color, font);
 	}
 	
 	public static void main(String[] args) {
 		Psilox.start();
-		Psilox.addExitProtocol(() -> {
-			System.out.println("Goodbye");
-		});
-		Psilox.addRuntimeProtocol(() -> {
-			
-		}, 60);
 	}
 	
 }
