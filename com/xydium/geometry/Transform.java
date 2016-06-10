@@ -5,22 +5,22 @@ public class Transform {
 	private Transform parent;
 	
 	private Vec2f position;
-	private Vec2f dimensions;
+	private Vec2f scale;
 	private double rotation;
 	
-	public Transform(Transform parent, Vec2f position, Vec2f dimensions, double rotation) {
+	public Transform(Transform parent, Vec2f position, Vec2f scale, double rotation) {
 		this.parent = parent;
 		this.position = position;
-		this.dimensions = dimensions;
+		this.scale = scale;
 		this.rotation = rotation;
 	}
 	
-	public Transform(Vec2f position, Vec2f dimensions, double rotation) {
-		this(null, position, dimensions, rotation);
+	public Transform(Vec2f position, Vec2f scale, double rotation) {
+		this(null, position, scale, rotation);
 	}
 	
-	public Transform(Vec2f position, Vec2f dimensions) {
-		this(position, dimensions, 0);
+	public Transform(Vec2f position, Vec2f scale) {
+		this(position, scale, 0);
 	}
 	
 	public Transform(Vec2f position) {
@@ -35,6 +35,10 @@ public class Transform {
 		return position;
 	}
 	
+	public void setPosition(Vec2f position) {
+		this.position = position;
+	}
+	
 	public Vec2f positionGlobal() {
 		if(parent == null) {
 			return position;
@@ -47,24 +51,32 @@ public class Transform {
 		return result;
 	}
 	
-	public Vec2f dimensions() {
-		return dimensions;
+	public Vec2f scale() {
+		return scale;
 	}
 	
-	public Vec2f dimensionsGlobal() {
+	public void setScale(Vec2f scale) {
+		this.scale = scale;
+	}
+	
+	public Vec2f scaleGlobal() {
 		if(parent == null) {
-			return dimensions;
+			return scale;
 		}
 		
 		Vec2f result = new Vec2f(1f);
-		result.mulR(dimensions);
-		result.mulR(parent.dimensionsGlobal());
+		result.mulR(scale);
+		result.mulR(parent.scaleGlobal());
 				
 		return result;
 	}
 	
 	public double rotation() {
 		return rotation;
+	}
+	
+	public void setRotation(double rotation) {
+		this.rotation = rotation;
 	}
 	
 	public double rotationGlobal() {
@@ -80,7 +92,7 @@ public class Transform {
 	}
 	
 	public void stretch(Vec2f delta) {
-		dimensions.addR(delta);
+		scale.addR(delta);
 	}
 	
 	public void rotate(double delta) {
