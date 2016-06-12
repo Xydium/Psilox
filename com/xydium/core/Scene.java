@@ -1,15 +1,28 @@
 package com.xydium.core;
 
-public abstract class Scene {
+import com.xydium.input.Input;
+import com.xydium.input.InputEvent;
+import com.xydium.input.InputListener;
+
+public abstract class Scene implements InputListener {
 
 	public Scene() {
 		load();
 	}
 	
 	public void load() {}
-	public void activate() {}
-	public void deactivate() {}
+	
+	public void activate() {
+		Input.addListener(this);
+	}
+	
+	public void deactivate() {
+		Input.removeListener(this);
+	}
+	
 	public void update() {}
 	public void render() {}
+	
+	public void receiveInput(InputEvent ev) {}
 	
 }
