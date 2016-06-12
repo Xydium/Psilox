@@ -1,5 +1,6 @@
 package com.xydium.node;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class NodeTree {
@@ -12,6 +13,8 @@ public class NodeTree {
 	private Node root;
 	
 	public NodeTree() {
+		this.queuedAdditions = new HashMap<Node, Node>();
+		this.queuedRemovals = new HashMap<Node, Node>();
 		this.root = new Node("root");
 		root.setTree(this);
 	}
