@@ -9,6 +9,7 @@ import com.xydium.geometry.Transform;
 import com.xydium.input.Input;
 import com.xydium.input.InputEvent;
 import com.xydium.input.InputListener;
+import com.xydium.rendering.Draw;
 
 public class Node implements InputListener {
 
@@ -23,12 +24,14 @@ public class Node implements InputListener {
 	private boolean inputListening;
 	private NodeTree tree;
 	private long UUID;
+	private String layer;
 	
 	public Node(String tag) {
 		this.transform = new Transform();
 		this.children = new HashMap<String, Node>();
 		this.tag = tag;
 		this.UUID = nextID++;
+		this.layer = "default";
 		setUpdating(true);
 		setVisible(true);
 		setInputListening(false);
@@ -53,6 +56,7 @@ public class Node implements InputListener {
 		for(Node child : getChildList()) {
 			if(child.isVisible()) {
 				child.renderChildren();
+				Draw.setDrawingLayer(child.getLayer());
 				child.render();
 			}
 		}
@@ -209,6 +213,14 @@ public class Node implements InputListener {
 	
 	public long getUUID() {
 		return UUID;
+	}
+	
+	public String getLayer() {
+		return layer;
+	}
+	
+	public void setLayer(String layer) {
+		this.layer = layer;
 	}
 	
 }
