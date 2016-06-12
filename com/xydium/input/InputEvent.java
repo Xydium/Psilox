@@ -42,7 +42,7 @@ public class InputEvent {
 	}
 	
 	public String toString() {
-		return String.format("Key Event: Type=%s, Key=%s, State=%s", type.name(), key, state.name());
+		return String.format("Key Event: Type=%s, Key=%s, State=%s", type.name(), "" + key, state.name());
 	}
 	
 }

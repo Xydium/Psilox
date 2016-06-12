@@ -94,7 +94,7 @@ public class Node implements InputListener {
 		child.setParent(this);
 		child.getTransform().setParent(getTransform());
 		child.setTree(getTree());
-		children.put(child.getTag(), child);
+		children.putIfAbsent(child.getTag(), child);
 		child.added();
 	}
 	
@@ -221,6 +221,10 @@ public class Node implements InputListener {
 	
 	public void setLayer(String layer) {
 		this.layer = layer;
+	}
+	
+	public String toString() {
+		return String.format("Node %s: Type=%s, Parent=%s, UUID=%s, Layer=%s", tag, getClass().getSimpleName(), parent.getTag(), "" + UUID, layer);
 	}
 	
 }
