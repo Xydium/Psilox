@@ -10,6 +10,7 @@ import com.xydium.input.Input;
 import com.xydium.input.InputEvent;
 import com.xydium.input.InputListener;
 import com.xydium.rendering.Draw;
+import com.xydium.utility.Log;
 
 public class Node implements InputListener {
 
@@ -94,8 +95,10 @@ public class Node implements InputListener {
 		child.setParent(this);
 		child.getTransform().setParent(getTransform());
 		child.setTree(getTree());
-		children.putIfAbsent(child.getTag(), child);
-		child.added();
+		if(children.putIfAbsent(child.getTag(), child) == null)
+			child.added();
+		else 
+			Log.error(String.format("Failed to add duplicate tagged node %s to %s", child.getTag(), tag));
 	}
 	
 	public void addChildren(Node... children) {
