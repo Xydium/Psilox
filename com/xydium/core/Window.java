@@ -7,7 +7,7 @@ import java.awt.event.WindowListener;
 import javax.swing.JFrame;
 
 import com.xydium.geometry.Vec2i;
-import com.xydium.utility.Input;
+import com.xydium.input.Input;
 
 public class Window {
 

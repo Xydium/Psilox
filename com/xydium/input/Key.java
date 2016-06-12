@@ -1,4 +1,4 @@
-package com.xydium.utility;
+package com.xydium.input;
 
 public class Key {
 
