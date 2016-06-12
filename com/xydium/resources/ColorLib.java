@@ -21,19 +21,19 @@ public class ColorLib {
 	}
 	
 	private static void addColor(String colorData) {
-		byte[] values = splitData(colorData);
+		short[] values = splitData(colorData);
 		Color c = new Color(values[1], values[2], values[3], values[0]);
 		colorMap.put(colorData, c);
 	}
 	
-	private static byte[] splitData(String colorData) {
+	private static short[] splitData(String colorData) {
 		if(colorData.length() == 6) { 
 			colorData = "FF" + colorData.toUpperCase();
 		}
 		
-		byte[] values = new byte[4];
+		short[] values = new short[4];
 		for(int i = 0; i < 4; i++) {
-			values[i] = Byte.parseByte(colorData.substring(i*2, i*2+2), 16);
+			values[i] = Short.parseShort(colorData.substring(i*2, i*2+2), 16);
 		}
 		
 		return values;
