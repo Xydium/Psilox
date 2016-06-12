@@ -37,7 +37,7 @@ public class NodeTree {
 	}
 	
 	public Node getNode(String nodePath) {
-		String[] childrenSequence = nodePath.split(".");
+		String[] childrenSequence = nodePath.split("\\.");
 		Node n = root;
 		for(String s : childrenSequence) {
 			n = n.getChild(s);
