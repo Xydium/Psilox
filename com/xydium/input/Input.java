@@ -60,7 +60,7 @@ public class Input extends KeyAdapter {
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		KEYS[key]++;
-		dispatchEvent(new InputEvent(InputType.KEYBOARD, key, InputState.PRESSED, e));
+		if(KEYS[key] == 1) dispatchEvent(new InputEvent(InputType.KEYBOARD, key, InputState.PRESSED, e));
 	}
 	
 	public void keyReleased(KeyEvent e) {
