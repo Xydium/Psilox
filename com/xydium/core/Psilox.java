@@ -193,6 +193,7 @@ public class Psilox {
 	public static void setScene(Scene scene) {
 		if(Psilox.scene != null) Psilox.scene.deactivate();
 		Draw.dumpDrawingLayers();
+		Input.dumpListeners();
 		Psilox.scene = scene;
 		Psilox.scene.activate();
 	}
