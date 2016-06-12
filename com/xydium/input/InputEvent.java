@@ -37,4 +37,8 @@ public class InputEvent {
 		return halted;
 	}
 	
+	public boolean matches(InputType type, int key, InputState state) {
+		return this.type == type && this.key == key && this.state == state;
+	}
+	
 }
