@@ -87,6 +87,10 @@ public class Transform {
 		return parent.rotationGlobal() + rotation;
 	}
 	
+	public void setParent(Transform parent) {
+		this.parent = parent;
+	}
+	
 	public void translate(Vec2f delta) {
 		position.addR(delta);
 	}

@@ -186,6 +186,10 @@ public class Psilox {
 		return Psilox.scene;
 	}
 	
+	public static Scene getScene() {
+		return scene;
+	}
+	
 	public static void setScene(Scene scene) {
 		if(Psilox.scene != null) Psilox.scene.deactivate();
 		Draw.dumpDrawingLayers();
