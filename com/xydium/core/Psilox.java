@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.xydium.input.Input;
 import com.xydium.rendering.Draw;
 import com.xydium.resources.GlobalAudio;
 import com.xydium.utility.Log;
@@ -211,6 +212,9 @@ public class Psilox {
 		}
 		
 		Log.internal("Escaped Main Loop.");
+		Log.internal("Dumping Input Listeners...");
+		Input.dumpListeners();
+		Log.internal("Input Listeners Dumped.");
 		Log.internal("Running Exit Protocols...");
 		executeExitProtocols();
 		Log.internal("Exit Protocols Completed.");

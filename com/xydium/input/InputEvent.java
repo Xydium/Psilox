@@ -22,7 +22,7 @@ public class InputEvent {
 	}
 	
 	public enum InputState {
-		TYPED, PRESSED, RELEASED;
+		PRESSED, RELEASED;
 	}
 	
 	public void halt() {
@@ -39,6 +39,10 @@ public class InputEvent {
 	
 	public boolean matches(InputType type, int key, InputState state) {
 		return this.type == type && this.key == key && this.state == state;
+	}
+	
+	public String toString() {
+		return String.format("Key Event: Type=%s, Key=%s, State=%s", type.name(), key, state.name());
 	}
 	
 }

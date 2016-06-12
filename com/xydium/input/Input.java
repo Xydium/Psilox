@@ -27,6 +27,10 @@ public class Input extends KeyAdapter {
 		listeners.remove(listener);
 	}
 	
+	public static void dumpListeners() {
+		listeners.clear();
+	}
+	
 	/**
 	 * Returns if a key is currently being held down.
 	 * 
@@ -67,11 +71,6 @@ public class Input extends KeyAdapter {
 		int key = e.getKeyCode();
 		KEYS[key] = 0;
 		dispatchEvent(new InputEvent(InputType.KEYBOARD, key, InputState.RELEASED, e));
-	}
-	
-	public void keyTyped(KeyEvent e) {
-		int key = e.getKeyCode();
-		dispatchEvent(new InputEvent(InputType.KEYBOARD, key, InputState.TYPED, e));
 	}
 	
 	private static void dispatchEvent(InputEvent ev) {
