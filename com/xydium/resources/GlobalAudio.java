@@ -26,7 +26,6 @@ public final class GlobalAudio
 	 */
 	public static void initAudio()
 	{
-		Log.internal("Initing Audio");
 		sounds = new HashMap<String, Sound>();
 		music = new HashMap<String, Music>();
 		TinySound.init();
@@ -35,7 +34,6 @@ public final class GlobalAudio
 	public static void shutdown()
 	{
 		TinySound.shutdown();
-		Log.internal("Shuting down audio");
 	}
 	
 	/**
