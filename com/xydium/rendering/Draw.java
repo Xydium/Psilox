@@ -27,6 +27,7 @@ import com.xydium.resources.Texture;
 public class Draw {
 
 	private static LayerSet layers;
+	private static Texture temporaryTarget;
 	
 	/**
 	 * Called by Psilox to prevent null-pointers
@@ -56,6 +57,14 @@ public class Draw {
 	 */
 	public static void setDrawingLayer(String layer) {
 		layers.setCurrentLayer(layer);
+	}
+	
+	public static void bindTemporaryTarget(Texture texture) {
+		temporaryTarget = texture;
+	}
+	
+	public static void releaseTemporaryTarget() {
+		temporaryTarget = null;
 	}
 	
 	/**
@@ -278,6 +287,9 @@ public class Draw {
 	 * @return
 	 */
 	public static Graphics2D graphics() {
+		if(temporaryTarget != null) {
+			return temporaryTarget.graphics();
+		}
 		return layers.getCurrentLayer().graphics();
 	}
 	
