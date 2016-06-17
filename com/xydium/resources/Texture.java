@@ -41,7 +41,7 @@ public class Texture {
 	}
 	
 	public void setPixel(int x, int y, Color color) {
-		if(x < 0 || x > getWidth() || y < 0 || y > getHeight()) return;
+		if(x < 0 || x >= getWidth() || y < 0 || y >= getHeight()) return;
 		image.setRGB(x, y, color.getRGB());
 	}
 	
