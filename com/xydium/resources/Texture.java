@@ -1,5 +1,6 @@
 package com.xydium.resources;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -37,6 +38,10 @@ public class Texture {
 	
 	public Graphics2D graphics() {
 		return graphics;
+	}
+	
+	public void setPixel(int x, int y, Color color) {
+		image.setRGB(x, y, color.getRGB());
 	}
 	
 	public static Texture create(int width, int height) {
