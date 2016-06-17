@@ -93,7 +93,43 @@ public class TrigFunction {
 	public enum TrigFunctionType {
 		SIN(Math::sin),
 		COS(Math::cos),
-		TAN(Math::tan);
+		TAN(Math::tan),
+		CSC(theta -> {
+			double sin = Math.sin(theta);
+			try {
+				return 1 / sin; 
+			} catch(Exception e) {
+				if(Math.sin(theta - 0.01) > 0) {
+					return Double.POSITIVE_INFINITY;
+				} else {
+					return Double.NEGATIVE_INFINITY;
+				}
+			}
+		}),
+		SEC(theta -> {
+			double cos = Math.cos(theta);
+			try {
+				return 1 / cos; 
+			} catch(Exception e) {
+				if(Math.cos(theta - 0.01) > 0) {
+					return Double.POSITIVE_INFINITY;
+				} else {
+					return Double.NEGATIVE_INFINITY;
+				}
+			}
+		}),
+		COT(theta -> {
+			double tan = Math.tan(theta);
+			try {
+				return 1 / tan; 
+			} catch(Exception e) {
+				if(Math.tan(theta - 0.01) > 0) {
+					return Double.POSITIVE_INFINITY;
+				} else {
+					return Double.NEGATIVE_INFINITY;
+				}
+			}
+		});
 		
 		public Function function;
 		
