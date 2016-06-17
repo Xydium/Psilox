@@ -1,20 +1,20 @@
 package com.xydium.input;
 
-import java.awt.event.KeyEvent;
+import java.awt.AWTEvent;
 
 public class InputEvent {
 	
 	public InputType type;
 	public int key;
 	public InputState state;
-	public KeyEvent keyEvent;
+	public AWTEvent event;
 	private boolean halted;
 	
-	public InputEvent(InputType type, int key, InputState state, KeyEvent keyEvent) {
+	public InputEvent(InputType type, int key, InputState state, AWTEvent event) {
 		this.type = type;
 		this.key = key;
 		this.state = state;
-		this.keyEvent = keyEvent;
+		this.event = event;
 	}
 	
 	public enum InputType {
@@ -22,7 +22,7 @@ public class InputEvent {
 	}
 	
 	public enum InputState {
-		PRESSED, RELEASED;
+		PRESSED, RELEASED, DRAGGED, CLICKED, MOVED;
 	}
 	
 	public void halt() {
