@@ -266,4 +266,8 @@ public class Psilox {
 		Log.internal("Created Exit Protocol List.");
 	}
 	
+	public static Window getWindow() {
+		return window;
+	}
+	
 }

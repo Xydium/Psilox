@@ -85,6 +85,10 @@ public class Window {
 		frame.addKeyListener(Input.init());
 	}
 	
+	public void setFullscreen() {
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+	}
+	
 	public String toString() {
 		return String.format("Window: Width: %s, Height: %s, Scale: %s, Title: %s", width, height, scale, title);
 	}
