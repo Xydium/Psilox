@@ -277,6 +277,49 @@ public class Draw {
 		texture(texture, transform.positionGlobal(), new Vec2f((float) texture.getWidth(), (float) texture.getHeight()).mul(transform.scaleGlobal()), (int) transform.rotationGlobal());
 	}
 	
+	public static void line(int ox, int oy, int ex, int ey, Color color) {
+		graphics().setColor(color);
+		graphics().drawLine(ox, oy, ex, ey);
+	}
+	
+	public static void line(Vec2<?> origin, Vec2<?> end, Color color) {
+		line(origin.getX().intValue(), origin.getY().intValue(), end.getX().intValue(), end.getY().intValue(), color);
+	}
+	
+	public static void outlineOval(int x, int y, int width, int height, Color color) {
+		graphics().setColor(color);
+		graphics().drawOval(x, y, width, height);
+	}
+	
+	public static void outlineOval(Vec2<?> pos, Vec2<?> dim, Color color) {
+		outlineOval(pos.getX().intValue(), pos.getY().intValue(), dim.getX().intValue(), dim.getY().intValue(), color);
+	}
+	
+	public static void outlineCenteredOval(int x, int y, int width, int height, Color color) {
+		outlineOval(x - width / 2, y - height / 2, width, height, color);
+	}
+	
+	public static void outlineCenteredOval(Vec2<?> pos, Vec2<?> dim, Color color) {
+		outlineCenteredOval(pos.getX().intValue(), pos.getY().intValue(), dim.getX().intValue(), dim.getY().intValue(), color);
+	}
+	
+	public static void fillOval(int x, int y, int width, int height, Color color) {
+		graphics().setColor(color);
+		graphics().fillOval(x, y, width, height);
+	}
+	
+	public static void fillOval(Vec2<?> pos, Vec2<?> dim, Color color) {
+		fillOval(pos.getX().intValue(), pos.getY().intValue(), dim.getX().intValue(), dim.getY().intValue(), color);
+	}
+	
+	public static void fillCenteredOval(int x, int y, int width, int height, Color color) {
+		fillOval(x - width / 2, y - height / 2, width, height, color);
+	}
+	
+	public static void fillCenteredOval(Vec2<?> pos, Vec2<?> dim, Color color) {
+		fillCenteredOval(pos.getX().intValue(), pos.getY().intValue(), dim.getX().intValue(), dim.getY().intValue(), color);
+	}
+	
 	/**
 	 * Gets the GraphicsContext for the current layer
 	 * in rendering. Used by Draw to easily access,
