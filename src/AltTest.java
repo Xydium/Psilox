@@ -48,7 +48,7 @@ public class AltTest extends JFrame implements GLEventListener{
 		canvas.requestFocusInWindow();
 		while(true) {
 			canvas.display();
-			angle += 5;
+			angle += 4;
 			angle %= 360;
 			try {
 				Thread.sleep(5);
@@ -72,17 +72,17 @@ public class AltTest extends JFrame implements GLEventListener{
 	}
 	
 	public void display(GLAutoDrawable d) {
-		GL2 gl = d.getGL().getGL2();
-		gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+		Render.ready(d.getGL());
+		Render.clearBufferBit = GL.GL_COLOR_BUFFER_BIT;
+		Render.clear();
 		
-		gl.glLoadIdentity();
-		gl.glTranslatef(200.0f, 0.0f, 0.0f);
-		gl.glRotatef(angle * 2, 0, 0, 1);
+		Render.clearTransform();
+		Render.translate(200, 0);
+		Render.rotate(angle);
 		
-		gl.glVertexPointer(2, GL2.GL_INT, 0, verticesBuf1);
-		gl.glColorPointer(3, GL2.GL_FLOAT, 0, colorsBuf1);
-		gl.glDrawArrays(GL.GL_TRIANGLES, 0, 3);
+		Render.combinedBuffers(verticesBuf1, colorsBuf1, GL.GL_TRIANGLES);
 		
+		/*
 		gl.glLoadIdentity();
 		gl.glTranslatef(200.0f, 100.0f, 0.0f);
 		gl.glRotatef(angle, 0, 0, 1);
@@ -91,7 +91,21 @@ public class AltTest extends JFrame implements GLEventListener{
 		gl.glColorPointer(3, GL2.GL_FLOAT, 0, colorsBuf);
 		gl.glDrawArrays(GL2.GL_QUADS, 0, 4);
 		
-		gl.glFlush();
+		gl.glLoadIdentity();
+		gl.glBegin(GL2.GL_QUADS);
+		gl.glVertex2f(10, 10);
+		gl.glVertex2f(100, 100);
+		gl.glVertex2f(200, 10);
+		gl.glVertex2f(100, 10);
+		gl.glVertex2f(300, 10);
+		gl.glVertex2f(100, 100);
+		gl.glVertex2f(400, 10);
+		gl.glVertex2f(100, 100);
+		gl.glEnd();
+		
+		*/
+		
+		Render.flush();
 	}
 	
 	public void reshape(GLAutoDrawable d, int x, int y, int w, int h) {
