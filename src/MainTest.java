@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
@@ -39,8 +40,8 @@ public class MainTest extends JFrame implements GLEventListener {
 		1, 0, 0
 	};
 	
-	FloatBuffer vertexFB = FloatBuffer.wrap(square);
-	FloatBuffer colorFB = FloatBuffer.wrap(colorData);
+	FloatBuffer vertexFB = (FloatBuffer) FloatBuffer.wrap(square).flip();
+	FloatBuffer colorFB = (FloatBuffer) FloatBuffer.wrap(colorData).flip();
 	
 	public MainTest() {
 		super("Test");
@@ -82,6 +83,7 @@ public class MainTest extends JFrame implements GLEventListener {
 		GL4 gl = d.getGL().getGL4();
 		
 		gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
+		gl.glEnableClientState(GL2.GL_COLOR_ARRAY);
 		
 		gl.glEnable(GL4.GL_DEPTH_TEST);
 		gl.glClearDepthf(10.0f);
@@ -142,7 +144,7 @@ public class MainTest extends JFrame implements GLEventListener {
 	}
 
 	public void reshape(GLAutoDrawable d, int x, int y, int w, int h) {
-		GL4 gl = d.getGL().getGL4();
+		GL3 gl = d.getGL().getGL3();
 	}
 
 	public static void main(String[] args) {
