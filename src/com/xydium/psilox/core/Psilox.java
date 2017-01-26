@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
+import com.xydium.psilox.math.Vec3;
 import com.xydium.psilox.rendering.Color;
 import com.xydium.psilox.rendering.CombinedBuffer;
 import com.xydium.psilox.rendering.Primitives;
@@ -53,12 +54,16 @@ public class Psilox {
 		tick++;
 	}
 	
-	private CombinedBuffer shape = new CombinedBuffer(Primitives.C_SQUARE, new Color(1, 0.7f, 0.5f, 1));
+	private CombinedBuffer shape = new CombinedBuffer(Primitives.C_UTRI, new Color[] {
+			new Color(1, 0, 0, 1),
+			new Color(0, 1, 0, 1),
+			new Color(0, 0, 1, 1),
+	});
 	
 	public void render() {
 		if(clearScreen) Render.clear();
-		Render.setTransform(tick % config.width, 50, 0, 0, tick % 50, tick % 50);
-		shape.render(GL2.GL_QUADS);
+		Render.setTransform(new Vec3(100, 100), tick % 360, new Vec3(50, 50));
+		shape.render(GL2.GL_TRIANGLES);
 	}
 	
 	public long ticks() {
