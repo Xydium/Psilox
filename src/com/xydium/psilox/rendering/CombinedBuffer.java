@@ -4,15 +4,15 @@ import java.nio.FloatBuffer;
 
 import com.jogamp.common.nio.Buffers;
 
-public class CombinedBufferShape {
+public class CombinedBuffer {
 	
 	private FloatBuffer vertices, colors;
 	
-	public CombinedBufferShape(Vertex[] verts, Color color) {
+	public CombinedBuffer(Vertex[] verts, Color color) {
 		this(verts, new Color[]{color});
 	}
 	
-	public CombinedBufferShape(Vertex[] verts, Color[] cols) {
+	public CombinedBuffer(Vertex[] verts, Color[] cols) {
 		vertices = Buffers.newDirectFloatBuffer(Vertex.toFloatArray(verts));
 		colors = Buffers.newDirectFloatBuffer(Color.toFloatArray(cols));
 		vertices.rewind();
