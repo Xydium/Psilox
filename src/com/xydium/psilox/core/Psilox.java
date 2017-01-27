@@ -41,6 +41,7 @@ public class Psilox {
 		initLog();
 		initIntervals();
 		initWindow();
+		Primitives.initPrimitiveBuffers();
 		initThread();
 		//tree.getRoot().addChild(mainNode);
 	}
@@ -50,20 +51,23 @@ public class Psilox {
 	}
 	
 	public void update() {
+		Log.info("" + deltaTime());
 		//tree.update();
 		tick++;
 	}
 	
-	private CombinedBuffer shape = new CombinedBuffer(Primitives.C_UTRI, new Color[] {
-			new Color(1, 0, 0, 1),
-			new Color(0, 1, 0, 1),
-			new Color(0, 0, 1, 1),
-	});
-	
 	public void render() {
+		CombinedBuffer shape = new CombinedBuffer(Primitives.FB_C_EQTRI, new Color[] {
+				new Color(1, 0, 0, 1),
+				new Color(0, 1, 0, 1),
+				new Color(0, 0, 1, 1),
+		});
+		
 		if(clearScreen) Render.clear();
-		Render.setTransform(new Vec3(100, 100), tick % 360, new Vec3(50, 50));
-		shape.render(GL2.GL_TRIANGLES);
+		for(int i = 0; i < 5000; i++) {
+			Render.setTransform((i / 5000f) * 1280, 360, 0, tick * (tick % 360 / 360f) + i, 0, 0, 1, 50, 50, 0);
+			shape.render(GL2.GL_TRIANGLES);
+		}
 	}
 	
 	public long ticks() {
@@ -145,11 +149,7 @@ public class Psilox {
 	
 	private void initThread() {
 		setRunning(true);
-		thread = new Thread(new Runnable() {
-			public void run() {
-				loop();
-			}			
-		});
+		thread = new Thread(() -> { loop(); });
 		thread.start();
 	}
 	

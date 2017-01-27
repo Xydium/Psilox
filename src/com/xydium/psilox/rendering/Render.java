@@ -15,6 +15,10 @@ public class Render {
 		Render.gl = gl.getGL2();
 	}
 	
+	public static GL2 gl() {
+		return gl;
+	}
+	
 	public static void clear() {
 		gl.glClear(clearBufferBit);
 	}
@@ -52,6 +56,13 @@ public class Render {
 		translate(p);
 		rotate(theta, a);
 		scale(s);
+	}
+	
+	public static void setTransform(float px, float py, float pz, float theta, float ax, float ay, float az, float sx, float sy, float sz) {
+		clearTransform();
+		gl.glTranslatef(px, py, pz);
+		gl.glRotatef(theta, ax, ay, az);
+		gl.glScalef(sx, sy, sz);
 	}
 	
 	public static void setTransform(Vec3 p, float theta, Vec3 s) {
