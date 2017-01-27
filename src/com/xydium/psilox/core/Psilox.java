@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
-import com.xydium.psilox.math.Vec3;
 import com.xydium.psilox.rendering.Color;
 import com.xydium.psilox.rendering.CombinedBuffer;
 import com.xydium.psilox.rendering.Primitives;
@@ -65,7 +64,7 @@ public class Psilox {
 		
 		if(clearScreen) Render.clear();
 		for(int i = 0; i < 5000; i++) {
-			Render.setTransform((i / 5000f) * 1280, 360, 0, tick * (tick % 360 / 360f) + i, 0, 0, 1, 50, 50, 0);
+			Render.setTransform((i / 5000f) * 1280, 360, 0, tick * 10 * (tick % 360 / 360f) + i, 0, 0, 1, 50, 50, 0);
 			shape.render(GL2.GL_TRIANGLES);
 		}
 	}
