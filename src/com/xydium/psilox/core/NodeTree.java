@@ -3,6 +3,7 @@ package com.xydium.psilox.core;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.xydium.psilox.input.Input;
 import com.xydium.psilox.node.Node;
 import com.xydium.psilox.rendering.Draw;
 
@@ -90,10 +91,10 @@ public class NodeTree {
 	public Audio audio() {
 		return psilox.audio();
 	}
+	*/
 	
 	public Input input() {
 		return psilox.input();
 	}
-	*/
 	
 }

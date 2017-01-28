@@ -41,6 +41,9 @@ public class Window extends JFrame implements GLEventListener {
 	
 	public void setup() {
 		setSize(width, height);
+		addKeyListener(psilox.input());
+		addMouseListener(psilox.input());
+		addMouseMotionListener(psilox.input());
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {

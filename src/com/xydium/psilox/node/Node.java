@@ -8,12 +8,15 @@ import java.util.Map;
 import com.xydium.psilox.core.NodeTree;
 import com.xydium.psilox.core.Psilox;
 import com.xydium.psilox.core.Window;
+import com.xydium.psilox.input.Input;
+import com.xydium.psilox.input.InputEvent;
+import com.xydium.psilox.input.InputListener;
 import com.xydium.psilox.math.Random;
 import com.xydium.psilox.math.Transform;
 import com.xydium.psilox.rendering.Draw;
 import com.xydium.psilox.utilities.Log;
 
-public class Node {
+public class Node implements InputListener {
 
 	private static long nextID = 0;
 	
@@ -44,6 +47,7 @@ public class Node {
 	public void removed() {}
 	public void update() {}
 	public void render() {}
+	public void receiveInput(InputEvent ev) {}
 	
 	public void updateChildren() {
 		for(Node child : getChildList()) {	
@@ -200,6 +204,19 @@ public class Node {
 		this.visible = visible;
 	}
 	
+	public boolean isInputListening() {
+		return inputListening;
+	}
+	
+	public void setInputListening(boolean inputListening) {
+		this.inputListening = inputListening;
+		if(inputListening) {
+			input().addListener(this);
+		} else {
+			input().removeListener(this);
+		}
+	}
+	
 	public NodeTree getTree() {
 		return tree;
 	}
@@ -235,11 +252,10 @@ public class Node {
 	/*
 	public Audio audio() {
 		return getTree().audio();
-	}
+	} */
 	
 	public Input input() {
 		return getTree().input();
 	}
-	*/
 	
 }

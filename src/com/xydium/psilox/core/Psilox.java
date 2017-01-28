@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jogamp.opengl.GL;
+import com.xydium.psilox.input.Input;
 import com.xydium.psilox.node.Node;
 import com.xydium.psilox.rendering.Draw;
 import com.xydium.psilox.rendering.Primitives;
@@ -29,6 +30,7 @@ public class Psilox {
 	
 	private Window window;
 	private Draw draw;
+	private Input input;
 	private NodeTree tree;
 	
 	private Psilox(PsiloxConfig config) {
@@ -84,6 +86,10 @@ public class Psilox {
 		return draw;
 	}
 	
+	public Input input() {
+		return input;
+	}
+	
 	private void loop() {
 		long lastUpdate = Time.now() - updateInterval;
 		long lastRender = Time.now() - renderInterval;
@@ -104,7 +110,7 @@ public class Psilox {
 	}
 	
 	private void exit() {
-		//input.dumpListeners();
+		input.dumpListeners();
 		//audio.destroy();
 		window.dispose();
 		runtimeRegistry.remove(this);
@@ -135,6 +141,7 @@ public class Psilox {
 	
 	private void initWindow() {
 		clearScreen = config.clearscreen;
+		input = new Input();
 		draw = new Draw();
 		tree = new NodeTree(this);
 		window = new Window(config.title, config.width, config.height, this);
