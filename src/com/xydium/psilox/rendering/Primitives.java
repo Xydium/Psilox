@@ -3,10 +3,16 @@ package com.xydium.psilox.rendering;
 import java.nio.FloatBuffer;
 
 import com.jogamp.common.nio.Buffers;
+import com.jogamp.opengl.GL2;
 import com.xydium.psilox.math.Vec3;
 
 public class Primitives {
 
+	public static final int QUADS = GL2.GL_QUADS;
+	public static final int TRI = GL2.GL_TRIANGLES;
+	public static final int LINE = GL2.GL_LINES;
+	public static final int POINT = GL2.GL_POINTS;
+	
 	public static FloatBuffer FB_RECT;
 	public static FloatBuffer FB_C_RECT;
 	public static FloatBuffer FB_UTRI;

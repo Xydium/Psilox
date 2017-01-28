@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2;
-import com.xydium.psilox.rendering.Color;
-import com.xydium.psilox.rendering.CombinedBuffer;
+import com.xydium.psilox.node.Node;
+import com.xydium.psilox.rendering.Draw;
 import com.xydium.psilox.rendering.Primitives;
-import com.xydium.psilox.rendering.Render;
 import com.xydium.psilox.utilities.Log;
 import com.xydium.psilox.utilities.Time;
 
@@ -30,19 +28,21 @@ public class Psilox {
 	private float deltaTime;
 	
 	private Window window;
+	private Draw draw;
+	private NodeTree tree;
 	
 	private Psilox(PsiloxConfig config) {
 		this.config = config;
 	}
 	
-	public void start(/*Node mainNode*/) {
+	public void start(Node mainNode) {
 		if(running()) return;
 		initLog();
 		initIntervals();
 		initWindow();
 		Primitives.initPrimitiveBuffers();
 		initThread();
-		//tree.getRoot().addChild(mainNode);
+		tree.getRoot().addChild(mainNode);
 	}
 	
 	public void stop() {
@@ -50,23 +50,13 @@ public class Psilox {
 	}
 	
 	public void update() {
-		Log.info("" + deltaTime());
-		//tree.update();
+		tree.update();
 		tick++;
 	}
 	
 	public void render() {
-		CombinedBuffer shape = new CombinedBuffer(Primitives.FB_C_EQTRI, new Color[] {
-				new Color(1, 0, 0, 1),
-				new Color(0, 1, 0, 1),
-				new Color(0, 0, 1, 1),
-		});
-		
-		if(clearScreen) Render.clear();
-		for(int i = 0; i < 5000; i++) {
-			Render.setTransform((i / 5000f) * 1280, 360, 0, tick * 10 * (tick % 360 / 360f) + i, 0, 0, 1, 50, 50, 0);
-			shape.render(GL2.GL_TRIANGLES);
-		}
+		if(clearScreen) draw.clear();
+		tree.render();
 	}
 	
 	public long ticks() {
@@ -88,6 +78,10 @@ public class Psilox {
 	
 	public Window window() {
 		return window;
+	}
+	
+	public Draw draw() {
+		return draw;
 	}
 	
 	private void loop() {
@@ -141,9 +135,11 @@ public class Psilox {
 	
 	private void initWindow() {
 		clearScreen = config.clearscreen;
+		draw = new Draw();
+		tree = new NodeTree(this);
 		window = new Window(config.title, config.width, config.height, this);
 		window.setup();
-		Render.clearBufferBit = GL.GL_COLOR_BUFFER_BIT;
+		draw.clearBufferBit = GL.GL_COLOR_BUFFER_BIT;
 	}
 	
 	private void initThread() {

@@ -26,6 +26,26 @@ public class Vec3 {
 		this(n, n, n);
 	}
 	
+	public Vec3 sum(Vec3 o) {
+		return new Vec3(x + o.x, y + o.y, z + o.z);
+	}
+	
+	public Vec3 dif(Vec3 o) {
+		return new Vec3(x - o.x, y - o.y, z - o.z);
+	}
+	
+	public Vec3 pro(Vec3 o) {
+		return new Vec3(x * o.x, y * o.y, z * o.z);
+	}
+	
+	public Vec3 sca(float d) {
+		return new Vec3(x * d, y * d, z * d);
+	}
+	
+	public Vec3 quo(Vec3 o) {
+		return new Vec3(x / o.x, y / o.y, z / o.z);
+	}
+	
 	public static float[] toFloatArray(Vec3[] vertices) { 
 		float[] res = new float[vertices.length * 3];
 		int i = 0;

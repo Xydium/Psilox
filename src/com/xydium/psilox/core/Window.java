@@ -14,7 +14,7 @@ import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
-import com.xydium.psilox.rendering.Render;
+import com.xydium.psilox.rendering.Draw;
 
 public class Window extends JFrame implements GLEventListener {
 	
@@ -56,9 +56,9 @@ public class Window extends JFrame implements GLEventListener {
 	}
 	
 	public void display(GLAutoDrawable d) {
-		Render.ready(d.getGL());
+		psilox.draw().ready(d.getGL());
 		psilox.render();
-		Render.flush();
+		psilox.draw().flush();
 	}
 
 	public void dispose(GLAutoDrawable d) {
@@ -72,8 +72,8 @@ public class Window extends JFrame implements GLEventListener {
 		System.out.println(gl.glGetString(GL.GL_VERSION));
 		gl.getGL2().glEnableClientState(GL2.GL_VERTEX_ARRAY);
 		gl.getGL2().glEnableClientState(GL2.GL_COLOR_ARRAY);
-		Render.ready(d.getGL().getGL2());
-		Render.clearColor(psilox.config.clearColor);
+		psilox.draw().ready(d.getGL().getGL2());
+		psilox.draw().clearColor(psilox.config.clearColor);
 	}
 
 	public void reshape(GLAutoDrawable d, int x, int y, int w, int h) {

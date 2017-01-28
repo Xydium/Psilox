@@ -3,73 +3,78 @@ import java.nio.FloatBuffer;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
+import com.xydium.psilox.math.Transform;
 import com.xydium.psilox.math.Vec3;
 
-public class Render {
+public class Draw {
 
-	private static GL2 gl;
+	private GL2 gl;
 	
-	public static int clearBufferBit;
+	public int clearBufferBit;
 	
-	public static void ready(GL gl) {
-		Render.gl = gl.getGL2();
+	public void ready(GL gl) {
+		this.gl = gl.getGL2();
 	}
 	
-	public static GL2 gl() {
+	public GL2 gl() {
 		return gl;
 	}
 	
-	public static void clear() {
+	public void clear() {
 		gl.glClear(clearBufferBit);
 	}
 	
-	public static void clearColor(Color c) {
+	public void clearColor(Color c) {
 		gl.glClearColor(c.r, c.g, c.b, c.a);
 	}
 	
-	public static void clearTransform() {
+	public void clearTransform() {
 		gl.glLoadIdentity();
 	}
 	
-	public static void flush() {
+	public void flush() {
 		gl.glFlush();
 	}
 	
-	public static void translate(Vec3 p) {
+	public void translate(Vec3 p) {
 		gl.glTranslatef(p.x, p.y, p.z);
 	}
 
-	public static void rotate(float theta) {
+	public void rotate(float theta) {
 		rotate(theta, Vec3.Z_UNIT);
 	}
 	
-	public static void rotate(float theta, Vec3 a) {
+	public void rotate(float theta, Vec3 a) {
 		gl.glRotatef(theta, a.x, a.y, a.z);
 	}
 	
-	public static void scale(Vec3 s) {
+	public void scale(Vec3 s) {
 		gl.glScalef(s.x, s.y, s.z);
 	}
 	
-	public static void setTransform(Vec3 p, float theta, Vec3 a, Vec3 s) {
+	public void setTransform(Transform transform) {
+		setTransform(transform.positionGlobal(), transform.rotationGlobal(), Vec3.Z_UNIT, transform.scaleGlobal());
+	}
+	
+	public void setTransform(Vec3 p, float theta, Vec3 a, Vec3 s) {
 		clearTransform();
 		translate(p);
 		rotate(theta, a);
 		scale(s);
 	}
 	
-	public static void setTransform(float px, float py, float pz, float theta, float ax, float ay, float az, float sx, float sy, float sz) {
+	public void setTransform(float px, float py, float pz, float theta, float ax, float ay, float az, float sx, float sy, float sz) {
 		clearTransform();
 		gl.glTranslatef(px, py, pz);
 		gl.glRotatef(theta, ax, ay, az);
 		gl.glScalef(sx, sy, sz);
 	}
 	
-	public static void setTransform(Vec3 p, float theta, Vec3 s) {
+	public void setTransform(Vec3 p, float theta, Vec3 s) {
 		setTransform(p, theta, Vec3.Z_UNIT, s);
 	}
 	
-	public static void combinedBuffers(int renderMode, FloatBuffer vertices, FloatBuffer colors) {
+	public void combinedBuffers(int renderMode, FloatBuffer vertices, FloatBuffer colors) {
 		gl.glVertexPointer(3, GL2.GL_FLOAT, 0, vertices);
 		if(colors.capacity() == 4) {
 			gl.glDisableClientState(GL2.GL_COLOR_ARRAY);
@@ -81,7 +86,7 @@ public class Render {
 		gl.glDrawArrays(renderMode, 0, vertices.capacity() / 3);
 	}
 	
-	public static void fixedFunction(int mode, Vec3[] vertices, Color... colors) {
+	public void fixedFunction(int mode, Vec3[] vertices, Color... colors) {
 		gl.glBegin(mode);
 		Vec3 idv;
 		Color idc;
