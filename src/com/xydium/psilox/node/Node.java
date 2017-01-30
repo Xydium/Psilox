@@ -62,13 +62,13 @@ public class Node implements InputListener {
 		for(Node child : getChildList()) {	
 			if(child.isVisible()) {
 				child.renderChildren();
-				draw().setTransform(child.getTransform());
+				draw().setTransform(child.transform());
 				child.render();
 			}
 		}
 	}
 	
-	public Transform getTransform() {
+	public Transform transform() {
 		return transform;
 	}
 	
@@ -97,7 +97,7 @@ public class Node implements InputListener {
 			return;
 		}
 		child.setParent(this);
-		child.getTransform().setParent(getTransform());
+		child.transform().setParent(transform());
 		child.setTree(getTree());
 		if(children.putIfAbsent(child.getTag(), child) == null) {
 			child.added();
@@ -119,7 +119,7 @@ public class Node implements InputListener {
 		}
 		Node child = children.get(tag);
 		child.setParent(null);
-		child.getTransform().setParent(null);
+		child.transform().setParent(null);
 		child.setTree(null);
 		children.remove(tag);
 		child.removed();
@@ -234,7 +234,7 @@ public class Node implements InputListener {
 	}
 	
 	public String toString() {
-		return String.format("Node %s: Type=%s, Parent=%s, UUID=%s, Layer=%s", tag, getClass().getSimpleName(), parent == null ? "null" : parent.getTag(), UID);
+		return String.format("Node %s: Type=%s, Parent=%s, UID=%s", tag, getClass().getSimpleName(), parent == null ? "null" : parent.getTag(), UID);
 	}
 	
 	public Psilox psilox() {

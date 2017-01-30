@@ -37,14 +37,21 @@ public class Psilox {
 		this.config = config;
 	}
 	
-	public void start(Node mainNode) {
+	public void start(Class<? extends Node> mainClass) {
 		if(running()) return;
 		initLog();
 		initIntervals();
 		initWindow();
 		Primitives.initPrimitiveBuffers();
 		initThread();
-		tree.getRoot().addChild(mainNode);
+		Node mainNode = null;
+		try {
+			mainNode = mainClass.newInstance();
+			tree.getRoot().addChild(mainNode);
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+			stop();
+		}
 	}
 	
 	public void stop() {

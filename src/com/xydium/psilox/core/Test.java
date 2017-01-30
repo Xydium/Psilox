@@ -1,49 +1,39 @@
 package com.xydium.psilox.core;
 
+import com.xydium.psilox.math.Random;
 import com.xydium.psilox.math.Vec3;
 import com.xydium.psilox.node.Node;
-import com.xydium.psilox.node.Rect;
 import com.xydium.psilox.rendering.Color;
 import com.xydium.psilox.rendering.Primitives;
+import com.xydium.psilox.utilities.Time;
 
-public class Test extends Node {
-
-	private Rect r;
+public class Test extends Node { 
 	
-	public Test(String tag) {
-		super(tag);
+	public Test() {
+		super("Test" + Random.intVal());
 		setUpdating(true);
 	}
 	
-	public void added() {
-		transform.translate(new Vec3(100, 360));
-		
-		r = new Rect("Shape", new Vec3(75, 25), true, new Color(1, 0.2f, 0.8f)); 
-		r.getTransform().translate(new Vec3(100, 0));
-		addChild(r);
-	}
-	
-	public void update() {
-		r.getTransform().translate(Vec3.X_UNIT.sca(2));
-		transform.translate(Vec3.X_UNIT);
-	}
-	
 	public void render() {
-		draw().fixedFunction(
-				Primitives.LINE, 
-				new Vec3[] { 
-						Vec3.ZERO, 
-						r.getTransform().position()
-				},  
-				new Color(1, 1, 1)
-		);
+		for(int i = 0; i < 500; i+= 10) {
+			draw().fixedFunction(
+					Primitives.LINE,
+					new Vec3[] {
+							Vec3.X_UNIT.sca(i),
+							Vec3.Y_UNIT.sca(500 - i)
+					},
+					new Color(255, 0, 255)
+			);
+		}
 	}
 	
 	public static void main(String[] args) {
 		PsiloxConfig cfg = new PsiloxConfig();
-		cfg.width = 1280;
-		cfg.height = 720;
-		Psilox.createRuntime(cfg).start(new Test("Main"));
+		cfg.width = 500;
+		cfg.height = 500;
+		cfg.fps = 60;
+		cfg.clearscreen = true;
+		Psilox.createRuntime(cfg).start(Test.class);
 	}
 	
 }

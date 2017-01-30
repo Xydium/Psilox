@@ -21,11 +21,7 @@ public class Input extends KeyAdapter implements MouseListener, MouseMotionListe
 	private final short[] KEYS = new short[NUM_KEYS];
 	private final short[] BUTTONS = new short[NUM_BUTTONS];
 	
-	public static Vec3 mousePosition = new Vec3(0);
-	
-	public static Input init() {
-		return new Input();
-	}
+	public Vec3 mousePosition = new Vec3(0);
 	
 	public void addListener(InputListener listener) {
 		listeners.add(listener);

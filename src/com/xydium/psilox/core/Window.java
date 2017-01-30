@@ -1,5 +1,6 @@
 package com.xydium.psilox.core;
 
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -14,7 +15,7 @@ import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
-import com.xydium.psilox.rendering.Draw;
+import com.xydium.psilox.utilities.Log;
 
 public class Window extends JFrame implements GLEventListener {
 	
@@ -32,6 +33,7 @@ public class Window extends JFrame implements GLEventListener {
 		this.width = width;
 		this.height = height;
 		this.psilox = psilox;
+		System.setProperty("sun.awt.noerasebackground", "true");
 		GLProfile prof = GLProfile.get(GLProfile.GL2);
 		caps = new GLCapabilities(prof);
 		canvas = new GLCanvas(caps);
@@ -41,9 +43,9 @@ public class Window extends JFrame implements GLEventListener {
 	
 	public void setup() {
 		setSize(width, height);
-		addKeyListener(psilox.input());
-		addMouseListener(psilox.input());
-		addMouseMotionListener(psilox.input());
+		canvas.addKeyListener(psilox.input());
+		canvas.addMouseListener(psilox.input());
+		canvas.addMouseMotionListener(psilox.input());
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
@@ -72,7 +74,7 @@ public class Window extends JFrame implements GLEventListener {
 		GL gl = d.getGL();
 		glu = new GLU();
 		glut = new GLUT();
-		System.out.println(gl.glGetString(GL.GL_VERSION));
+		Log.info(gl.glGetString(GL.GL_VERSION));
 		gl.getGL2().glEnableClientState(GL2.GL_VERTEX_ARRAY);
 		gl.getGL2().glEnableClientState(GL2.GL_COLOR_ARRAY);
 		psilox.draw().ready(d.getGL().getGL2());

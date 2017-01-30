@@ -98,4 +98,8 @@ public class Transform {
 		rotation += delta;
 	}
 	
+	public String toString() {
+		return String.format("Transform: %s, Position=%s, Rotation=%.2f, Scale=%s", parent == null ? "NoParent" : "HasParent", position.toString(), rotation, scale.toString());
+	}
+	
 }

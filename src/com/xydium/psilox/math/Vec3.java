@@ -9,6 +9,10 @@ public class Vec3 {
 	public static final Vec3 ONE = new Vec3(1, 1, 1);
 	public static final Vec3 ZERO = new Vec3(0, 0, 0);
 	public static final Vec3 TWO_D = new Vec3(1, 1, 0);
+	public static final Vec3 UP = new Vec3(0, 1);
+	public static final Vec3 DOWN = new Vec3(0, -1);
+	public static final Vec3 LEFT = new Vec3(-1, 0);
+	public static final Vec3 RIGHT = new Vec3(1, 0);
 	
 	public final float x, y, z;
 	
@@ -58,6 +62,10 @@ public class Vec3 {
 			i++;
 		}
 		return res;
+	}
+	
+	public String toString() {
+		return String.format("(%.2f, %.2f, %.2f)", x, y, z);
 	}
 	
 }

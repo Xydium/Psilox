@@ -15,6 +15,14 @@ public class Color {
 		this(r, g, b, 1);
 	}
 
+	public Color(int r, int g, int b, int a) {
+		this(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
+	}
+	
+	public Color(int r, int g, int b) {
+		this(r, g, b, 1);
+	}
+	
 	public static float[] toFloatArray(Color[] colors) { 
 		float[] res = new float[colors.length * 4];
 		int i = 0;
