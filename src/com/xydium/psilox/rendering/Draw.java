@@ -99,4 +99,15 @@ public class Draw {
 		gl.glEnd();
 	}
 	
+	public void fixedFunction(int mode, Color color, Vec3...vertices) {
+		gl.glBegin(mode);
+		Vec3 idv;
+		gl.glColor4f(color.r, color.g, color.b, color.a);
+		for(int i = 0; i < vertices.length; i++) {
+			idv = vertices[i];
+			gl.glVertex3f(idv.x, idv.y, idv.z);
+		}
+		gl.glEnd();
+	}
+	
 }

@@ -33,16 +33,16 @@ public class Window extends JFrame implements GLEventListener {
 		this.width = width;
 		this.height = height;
 		this.psilox = psilox;
-		System.setProperty("sun.awt.noerasebackground", "true");
 		GLProfile prof = GLProfile.get(GLProfile.GL2);
 		caps = new GLCapabilities(prof);
+		caps.setDoubleBuffered(psilox.config.doubleBuffer);
 		canvas = new GLCanvas(caps);
 		canvas.addGLEventListener(this);
 		getContentPane().add(canvas);
 	}
 	
 	public void setup() {
-		setSize(width, height);
+		canvas.setSize(width, height);
 		canvas.addKeyListener(psilox.input());
 		canvas.addMouseListener(psilox.input());
 		canvas.addMouseMotionListener(psilox.input());
@@ -52,6 +52,7 @@ public class Window extends JFrame implements GLEventListener {
 			public void windowClosing(WindowEvent e) { psilox.stop(); }
 		});
 		setResizable(false);
+		pack();
 		setVisible(true);
 		canvas.requestFocusInWindow();
 	}

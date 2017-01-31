@@ -18,7 +18,7 @@ public class Random {
 		return (float) doubleVal(Float.MIN_VALUE, Float.MAX_VALUE);
 	}
 	
-	public static float floatVal(double max) {
+	public static float floatVal(float max) {
 		return (float) doubleVal(0, max);
 	}
 	

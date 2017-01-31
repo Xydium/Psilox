@@ -35,23 +35,16 @@ public class Psilox {
 	
 	private Psilox(PsiloxConfig config) {
 		this.config = config;
-	}
-	
-	public void start(Class<? extends Node> mainClass) {
-		if(running()) return;
 		initLog();
 		initIntervals();
 		initWindow();
 		Primitives.initPrimitiveBuffers();
+	}
+	
+	public void start(Node mainNode) {
+		if(running()) return;
 		initThread();
-		Node mainNode = null;
-		try {
-			mainNode = mainClass.newInstance();
-			tree.getRoot().addChild(mainNode);
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
-			stop();
-		}
+		tree.getRoot().addChild(mainNode);
 	}
 	
 	public void stop() {
