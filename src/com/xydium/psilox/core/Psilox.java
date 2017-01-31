@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.jogamp.opengl.GL;
 import com.xydium.psilox.input.Input;
+import com.xydium.psilox.math.Vec;
 import com.xydium.psilox.node.Node;
 import com.xydium.psilox.rendering.Draw;
 import com.xydium.psilox.rendering.Primitives;
@@ -145,7 +146,12 @@ public class Psilox {
 		input = new Input();
 		draw = new Draw();
 		tree = new NodeTree(this);
-		window = new Window(config.title, config.width, config.height, this);
+		if(config.fullscreen) {
+			Vec w = config.monitorSize();
+			config.width = (int) w.x;
+			config.height = (int) w.y;
+		}
+		window = new Window(config.title, config.width, config.height, config.fullscreen, this);
 		window.setup();
 		draw.clearBufferBit = GL.GL_COLOR_BUFFER_BIT;
 	}

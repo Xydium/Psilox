@@ -13,6 +13,7 @@ import com.xydium.psilox.input.InputEvent;
 import com.xydium.psilox.input.InputListener;
 import com.xydium.psilox.math.Random;
 import com.xydium.psilox.math.Transform;
+import com.xydium.psilox.math.Vec;
 import com.xydium.psilox.rendering.Draw;
 import com.xydium.psilox.utilities.Log;
 
@@ -247,6 +248,10 @@ public class Node implements InputListener {
 	
 	public Draw draw() {
 		return getTree().draw();
+	}
+	
+	public Vec viewSize() {
+		return new Vec(window().getWidth(), window().getHeight());
 	}
 	
 	/*

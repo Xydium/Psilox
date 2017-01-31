@@ -25,9 +25,6 @@ public class Test extends Node {
 			color = new Color((float) Math.sin(a * Math.PI * 2 / 500.0), (float) Math.cos(b * Math.PI * 2 / 500.0), 1);
 			draw().fixedFunction(Primitives.LINE, color, 
 					genPoint(a), genPoint(b)
-					//genPoint(a + d), genPoint(b + d),
-					//genPoint(a + d + d), genPoint(b + d + d),
-					//genPoint(a + d + d + d), genPoint(b + d + d + d)
 			);
 		}
 	}

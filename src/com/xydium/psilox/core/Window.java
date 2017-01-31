@@ -21,6 +21,7 @@ public class Window extends JFrame implements GLEventListener {
 	
 	private int width;
 	private int height;
+	private boolean fullscreen;
 	private Psilox psilox;
 	
 	private GLU glu;
@@ -28,10 +29,11 @@ public class Window extends JFrame implements GLEventListener {
 	private GLCapabilities caps;
 	private GLCanvas canvas;
 	
-	public Window(String title, int width, int height, final Psilox psilox) {
+	public Window(String title, int width, int height, boolean fullscreen, final Psilox psilox) {
 		super(title);
 		this.width = width;
 		this.height = height;
+		this.fullscreen = fullscreen;
 		this.psilox = psilox;
 		GLProfile prof = GLProfile.get(GLProfile.GL2);
 		caps = new GLCapabilities(prof);
@@ -46,12 +48,17 @@ public class Window extends JFrame implements GLEventListener {
 		canvas.addKeyListener(psilox.input());
 		canvas.addMouseListener(psilox.input());
 		canvas.addMouseMotionListener(psilox.input());
-		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) { psilox.stop(); }
 		});
 		setResizable(false);
+		if(fullscreen) {
+			setExtendedState(MAXIMIZED_BOTH);
+			setUndecorated(true);
+		} else {
+			setLocationRelativeTo(null);
+		}
 		pack();
 		setVisible(true);
 		canvas.requestFocusInWindow();
@@ -89,6 +96,14 @@ public class Window extends JFrame implements GLEventListener {
 		glu.gluOrtho2D(0.0, w, 0.0, h);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
 	}
 
 }
