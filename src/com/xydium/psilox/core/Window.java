@@ -1,6 +1,5 @@
 package com.xydium.psilox.core;
 
-import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -15,16 +14,17 @@ import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
-import com.xydium.psilox.utilities.Log;
 
 public class Window extends JFrame implements GLEventListener {
+
+	private static final long serialVersionUID = 1L;
 	
 	private int width;
 	private int height;
 	private Psilox psilox;
 	
 	private GLU glu;
-	private GLUT glut;
+	//private GLUT glut;
 	private GLCapabilities caps;
 	private GLCanvas canvas;
 	
@@ -74,8 +74,7 @@ public class Window extends JFrame implements GLEventListener {
 	public void init(GLAutoDrawable d) {
 		GL gl = d.getGL();
 		glu = new GLU();
-		glut = new GLUT();
-		Log.info(gl.glGetString(GL.GL_VERSION));
+		//glut = new GLUT();
 		gl.getGL2().glEnableClientState(GL2.GL_VERTEX_ARRAY);
 		gl.getGL2().glEnableClientState(GL2.GL_COLOR_ARRAY);
 		psilox.draw().ready(d.getGL().getGL2());

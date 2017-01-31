@@ -39,6 +39,7 @@ public class Psilox {
 		initIntervals();
 		initWindow();
 		Primitives.initPrimitiveBuffers();
+		config.logConfig(this);
 	}
 	
 	public void start(Node mainNode) {

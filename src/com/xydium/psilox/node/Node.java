@@ -39,7 +39,7 @@ public class Node implements InputListener {
 		this.children = new HashMap<String, Node>();
 		this.tag = tag;
 		this.UID = nextID++;
-		setUpdating(false);
+		setUpdating(true);
 		setVisible(true);
 	}
 	

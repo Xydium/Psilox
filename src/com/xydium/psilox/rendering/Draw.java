@@ -4,7 +4,7 @@ import java.nio.FloatBuffer;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.xydium.psilox.math.Transform;
-import com.xydium.psilox.math.Vec3;
+import com.xydium.psilox.math.Vec;
 
 public class Draw {
 
@@ -36,27 +36,27 @@ public class Draw {
 		gl.glFlush();
 	}
 	
-	public void translate(Vec3 p) {
+	public void translate(Vec p) {
 		gl.glTranslatef(p.x, p.y, p.z);
 	}
 
 	public void rotate(float theta) {
-		rotate(theta, Vec3.Z_UNIT);
+		rotate(theta, Vec.Z_UNIT);
 	}
 	
-	public void rotate(float theta, Vec3 a) {
+	public void rotate(float theta, Vec a) {
 		gl.glRotatef(theta, a.x, a.y, a.z);
 	}
 	
-	public void scale(Vec3 s) {
+	public void scale(Vec s) {
 		gl.glScalef(s.x, s.y, s.z);
 	}
 	
 	public void setTransform(Transform transform) {
-		setTransform(transform.positionGlobal(), transform.rotationGlobal(), Vec3.Z_UNIT, transform.scaleGlobal());
+		setTransform(transform.positionGlobal(), transform.rotationGlobal(), Vec.Z_UNIT, transform.scaleGlobal());
 	}
 	
-	public void setTransform(Vec3 p, float theta, Vec3 a, Vec3 s) {
+	public void setTransform(Vec p, float theta, Vec a, Vec s) {
 		clearTransform();
 		translate(p);
 		rotate(theta, a);
@@ -70,8 +70,8 @@ public class Draw {
 		gl.glScalef(sx, sy, sz);
 	}
 	
-	public void setTransform(Vec3 p, float theta, Vec3 s) {
-		setTransform(p, theta, Vec3.Z_UNIT, s);
+	public void setTransform(Vec p, float theta, Vec s) {
+		setTransform(p, theta, Vec.Z_UNIT, s);
 	}
 	
 	public void combinedBuffers(int renderMode, FloatBuffer vertices, FloatBuffer colors) {
@@ -86,9 +86,9 @@ public class Draw {
 		gl.glDrawArrays(renderMode, 0, vertices.capacity() / 3);
 	}
 	
-	public void fixedFunction(int mode, Vec3[] vertices, Color... colors) {
+	public void fixedFunction(int mode, Vec[] vertices, Color... colors) {
 		gl.glBegin(mode);
-		Vec3 idv;
+		Vec idv;
 		Color idc;
 		for(int i = 0; i < vertices.length; i++) {
 			idv = vertices[i];
@@ -99,9 +99,9 @@ public class Draw {
 		gl.glEnd();
 	}
 	
-	public void fixedFunction(int mode, Color color, Vec3...vertices) {
+	public void fixedFunction(int mode, Color color, Vec...vertices) {
 		gl.glBegin(mode);
-		Vec3 idv;
+		Vec idv;
 		gl.glColor4f(color.r, color.g, color.b, color.a);
 		for(int i = 0; i < vertices.length; i++) {
 			idv = vertices[i];

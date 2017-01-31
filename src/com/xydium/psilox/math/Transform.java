@@ -3,46 +3,46 @@ package com.xydium.psilox.math;
 public class Transform {
 
 	private Transform parent;
-	private Vec3 position;
-	private Vec3 scale;
+	private Vec position;
+	private Vec scale;
 	private float rotation;
 	
-	public Transform(Transform parent, Vec3 position, Vec3 scale, float rotation) {
+	public Transform(Transform parent, Vec position, Vec scale, float rotation) {
 		this.parent = parent;
 		this.position = position;
 		this.scale = scale;
 		this.rotation = rotation;
 	}
 	
-	public Transform(Vec3 position, Vec3 scale, float rotation) {
+	public Transform(Vec position, Vec scale, float rotation) {
 		this(null, position, scale, rotation);
 	}
 	
-	public Transform(Vec3 position, Vec3 scale) {
+	public Transform(Vec position, Vec scale) {
 		this(position, scale, 0);
 	}
 	
-	public Transform(Vec3 position, float rotation) {
-		this(position, new Vec3(1f), rotation);
+	public Transform(Vec position, float rotation) {
+		this(position, new Vec(1f), rotation);
 	}
 	
-	public Transform(Vec3 position) {
+	public Transform(Vec position) {
 		this(position, 0);
 	}
 	
 	public Transform() {
-		this(new Vec3(0f));
+		this(new Vec(0f));
 	}
 	
-	public Vec3 position() {
+	public Vec position() {
 		return position;
 	}
 	
-	public void setPosition(Vec3 position) {
+	public void setPosition(Vec position) {
 		this.position = position;
 	}
 	
-	public Vec3 positionGlobal() {
+	public Vec positionGlobal() {
 		if(parent == null) {
 			return position;
 		}
@@ -50,15 +50,15 @@ public class Transform {
 		return position.sum(parent.positionGlobal());
 	}
 	
-	public Vec3 scale() {
+	public Vec scale() {
 		return scale;
 	}
 	
-	public void setScale(Vec3 scale) {
+	public void setScale(Vec scale) {
 		this.scale = scale;
 	}
 	
-	public Vec3 scaleGlobal() {
+	public Vec scaleGlobal() {
 		if(parent == null) {
 			return scale;
 		}
@@ -86,11 +86,11 @@ public class Transform {
 		this.parent = parent;
 	}
 	
-	public void translate(Vec3 delta) {
+	public void translate(Vec delta) {
 		position = position.sum(delta);
 	}
 	
-	public void rescale(Vec3 delta) {
+	public void rescale(Vec delta) {
 		scale = scale.sum(delta);
 	}
 	
