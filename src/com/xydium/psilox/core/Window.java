@@ -53,9 +53,9 @@ public class Window extends JFrame implements GLEventListener {
 			public void windowClosing(WindowEvent e) { psilox.stop(); }
 		});
 		setResizable(false);
+		setUndecorated(psilox.config.fullscreen | psilox.config.undecorated);
 		if(fullscreen) {
 			setExtendedState(MAXIMIZED_BOTH);
-			setUndecorated(true);
 		} else {
 			setLocationRelativeTo(null);
 		}

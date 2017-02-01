@@ -10,7 +10,7 @@ import com.xydium.psilox.rendering.Primitives;
 
 public class Test extends Node { 
 	
-	private static final int d = 500;
+	private static final int d = 192;
 	
 	private int a = 0, b = d;
 	private Color color;
@@ -22,9 +22,12 @@ public class Test extends Node {
 	public void render() {
 		for(int i = 0; i < 10; i++) {
 			a++; b++;
-			color = new Color((float) Math.sin(a * Math.PI * 2 / 500.0), (float) Math.cos(b * Math.PI * 2 / 500.0), 1);
+			color = new Color((float) Math.sin(a * Math.PI * 2 / d), (float) Math.cos(b * Math.PI * 2 / d), 1);
 			draw().fixedFunction(Primitives.LINE, color, 
-					genPoint(a), genPoint(b)
+					genPoint(a), genPoint(b),
+					genPoint(a + d), genPoint(b + d),
+					genPoint(a + d + d), genPoint(b + d + d),
+					genPoint(a + d + d + d), genPoint(b + d + d + d)
 			);
 		}
 	}
@@ -48,14 +51,23 @@ public class Test extends Node {
 	}
 	
 	public static void main(String[] args) {
+		Psilox.setExclusiveRuntime(false);
 		PsiloxConfig cfg = new PsiloxConfig();
 		cfg.title = "Primrose";
 		cfg.width = d;
 		cfg.height = d;
+		cfg.ups = PsiloxConfig.MANUAL;
 		cfg.fps = 60;
 		cfg.clearscreen = false;
 		cfg.doubleBuffer = false;
-		Psilox.createRuntime(cfg).start(new Test("Main"));
+		cfg.undecorated = true;
+		for(int x = 0; x < 1920; x+=d) {
+			for(int y = 0; y < 1080; y+=d) {
+				Psilox psilox = Psilox.createRuntime(cfg);
+				psilox.window().setLocation(x, y);
+				psilox.start(new Test("Main"));
+			}
+		}
 	}
 	
 }

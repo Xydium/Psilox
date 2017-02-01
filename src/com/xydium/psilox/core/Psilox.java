@@ -9,6 +9,7 @@ import com.xydium.psilox.math.Vec;
 import com.xydium.psilox.node.Node;
 import com.xydium.psilox.rendering.Draw;
 import com.xydium.psilox.rendering.Primitives;
+import com.xydium.psilox.utilities.Audio;
 import com.xydium.psilox.utilities.Log;
 import com.xydium.psilox.utilities.Time;
 
@@ -32,10 +33,13 @@ public class Psilox {
 	private Window window;
 	private Draw draw;
 	private Input input;
+	private Audio audio;
 	private NodeTree tree;
+	private Terminator terminator;
 	
-	private Psilox(PsiloxConfig config) {
+	private Psilox(PsiloxConfig config, int id) {
 		this.config = config;
+		this.id = id;
 		initLog();
 		initIntervals();
 		initWindow();
@@ -70,7 +74,6 @@ public class Psilox {
 	public float deltaTime() {
 		return deltaTime;
 	}
-	
 
 	public int id() {
 		return id;
@@ -92,9 +95,14 @@ public class Psilox {
 		return input;
 	}
 	
+	public Audio audio() {
+		return audio;
+	}
+	
 	private void loop() {
 		long lastUpdate = Time.now() - updateInterval;
 		long lastRender = Time.now() - renderInterval;
+		long lastTerminate = Time.now() - Time.SECOND / 10;
 		
 		while(running()) {
 			if(updateInterval != PsiloxConfig.MANUAL && Time.since(lastUpdate) >= updateInterval) {
@@ -106,6 +114,12 @@ public class Psilox {
 				lastRender = Time.now();
 				window.render();
 			}
+			if(Time.since(lastTerminate) >= Time.SECOND / 10) {
+				lastTerminate = Time.now();
+				if(terminator.shouldTerminate(input())) {
+					Psilox.stopAll();
+				}
+			}
 		}
 		
 		exit();
@@ -113,7 +127,7 @@ public class Psilox {
 	
 	private void exit() {
 		input.dumpListeners();
-		//audio.destroy();
+		audio.destroy();
 		window.dispose();
 		runtimeRegistry.remove(this);
 		if(runtimeRegistry.size() == 0) {
@@ -145,6 +159,8 @@ public class Psilox {
 		clearScreen = config.clearscreen;
 		input = new Input();
 		draw = new Draw();
+		audio = new Audio();
+		terminator = new Terminator(config.terminationSequence);
 		tree = new NodeTree(this);
 		if(config.fullscreen) {
 			Vec w = config.monitorSize();
@@ -171,15 +187,15 @@ public class Psilox {
 	}
 	
 	private static List<Psilox> runtimeRegistry = new ArrayList<Psilox>();
+	private static int nextID = 0;
 	
 	public static Psilox createRuntime(PsiloxConfig config) {
 		if(exclusiveRuntime && Psilox.runtimeRegistry.size() > 0) {
 			Log.error("Attempted to create multiple-runtime scenario with exclusiveRuntime=true. Returning existing.");
 			return Psilox.get();
 		}
-		Psilox runtime = new Psilox(config);
+		Psilox runtime = new Psilox(config, nextID++);
 		runtimeRegistry.add(runtime);
-		runtime.id = runtimeRegistry.indexOf(runtime);
 		return runtime;
 	}
 	
@@ -193,6 +209,12 @@ public class Psilox {
 	
 	public static Psilox get(int id) {
 		return runtimeRegistry.get(id);
+	}
+	
+	public static void stopAll() {
+		for(Psilox p : runtimeRegistry) {
+			p.stop();
+		}
 	}
 	
 }
