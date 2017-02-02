@@ -19,7 +19,7 @@ public class Psilox {
 
 	private int id;
 	
-	public final PsiloxConfig config;
+	private PsiloxConfig config;
 	
 	private long updateInterval;
 	private long renderInterval;
@@ -45,6 +45,20 @@ public class Psilox {
 		initWindow();
 		Primitives.initPrimitiveBuffers();
 		config.logConfig(this);
+	}
+	
+	public void reconfigure(PsiloxConfig config) {
+		this.config = config;
+		initLog();
+		initIntervals();
+		window.dispose();
+		if(config.fullscreen) {
+			Vec w = config.monitorSize();
+			config.width = (int) w.x;
+			config.height = (int) w.y;
+		}
+		window = new Window(config.title, config.width, config.height, config.fullscreen, this);
+		window.setup();
 	}
 	
 	public void start(Node mainNode) {
@@ -81,6 +95,10 @@ public class Psilox {
 	
 	public boolean running() {
 		return running;
+	}
+	
+	public PsiloxConfig config() {
+		return config;
 	}
 	
 	public Window window() {
@@ -169,7 +187,7 @@ public class Psilox {
 		}
 		window = new Window(config.title, config.width, config.height, config.fullscreen, this);
 		window.setup();
-		draw.clearBufferBit = GL.GL_COLOR_BUFFER_BIT;
+		draw.clearBufferBit = GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT;
 	}
 	
 	private void initThread() {

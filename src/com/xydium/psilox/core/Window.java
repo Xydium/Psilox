@@ -37,7 +37,7 @@ public class Window extends JFrame implements GLEventListener {
 		this.psilox = psilox;
 		GLProfile prof = GLProfile.get(GLProfile.GL2);
 		caps = new GLCapabilities(prof);
-		caps.setDoubleBuffered(psilox.config.doubleBuffer);
+		caps.setDoubleBuffered(psilox.config().doubleBuffer);
 		canvas = new GLCanvas(caps);
 		canvas.addGLEventListener(this);
 		getContentPane().add(canvas);
@@ -53,7 +53,7 @@ public class Window extends JFrame implements GLEventListener {
 			public void windowClosing(WindowEvent e) { psilox.stop(); }
 		});
 		setResizable(false);
-		setUndecorated(psilox.config.fullscreen | psilox.config.undecorated);
+		setUndecorated(psilox.config().fullscreen | psilox.config().undecorated);
 		if(fullscreen) {
 			setExtendedState(MAXIMIZED_BOTH);
 		} else {
@@ -85,7 +85,7 @@ public class Window extends JFrame implements GLEventListener {
 		gl.getGL2().glEnableClientState(GL2.GL_VERTEX_ARRAY);
 		gl.getGL2().glEnableClientState(GL2.GL_COLOR_ARRAY);
 		psilox.draw().ready(d.getGL().getGL2());
-		psilox.draw().clearColor(psilox.config.clearColor);
+		psilox.draw().clearColor(psilox.config().clearColor);
 	}
 
 	public void reshape(GLAutoDrawable d, int x, int y, int w, int h) {
