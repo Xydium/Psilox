@@ -12,6 +12,7 @@ public class Primitives {
 	public static final int TRI = GL2.GL_TRIANGLES;
 	public static final int LINE = GL2.GL_LINES;
 	public static final int POINT = GL2.GL_POINTS;
+	public static final int TRI_FAN = GL2.GL_TRIANGLE_FAN; 
 	
 	public static FloatBuffer FB_RECT;
 	public static FloatBuffer FB_C_RECT;
