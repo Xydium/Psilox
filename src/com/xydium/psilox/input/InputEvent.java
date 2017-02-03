@@ -4,10 +4,10 @@ import java.awt.AWTEvent;
 
 public class InputEvent {
 	
-	public InputType type;
-	public int key;
-	public InputState state;
-	public AWTEvent event;
+	public final InputType type;
+	public final int key;
+	public final InputState state;
+	public final AWTEvent event;
 	private boolean halted;
 	
 	public InputEvent(InputType type, int key, InputState state, AWTEvent event) {
@@ -39,6 +39,10 @@ public class InputEvent {
 	
 	public boolean matches(InputType type, int key, InputState state) {
 		return this.type == type && this.key == key && this.state == state;
+	}
+	
+	public boolean matches(InputEvent event) {
+		return matches(event.type, event.key, event.state);
 	}
 	
 	public String toString() {

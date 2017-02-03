@@ -21,4 +21,8 @@ public class Shape extends Node {
 		draw().fixedFunction(mode, shape, colors);
 	}
 	
+	public void setShape(Vec[] shape) {
+		this.shape = shape;
+	}
+	
 }

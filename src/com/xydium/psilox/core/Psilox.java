@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.jogamp.opengl.GL;
 import com.xydium.psilox.input.Input;
+import com.xydium.psilox.input.Key;
+import com.xydium.psilox.input.KeySequence;
 import com.xydium.psilox.math.Vec;
 import com.xydium.psilox.node.Node;
 import com.xydium.psilox.rendering.Draw;
@@ -35,7 +37,7 @@ public class Psilox {
 	private Input input;
 	private Audio audio;
 	private NodeTree tree;
-	private Terminator terminator;
+	private KeySequence terminator;
 	
 	private Psilox(PsiloxConfig config, int id) {
 		this.config = config;
@@ -120,7 +122,6 @@ public class Psilox {
 	private void loop() {
 		long lastUpdate = Time.now() - updateInterval;
 		long lastRender = Time.now() - renderInterval;
-		long lastTerminate = Time.now() - Time.SECOND / 10;
 		
 		while(running()) {
 			if(updateInterval != PsiloxConfig.MANUAL && Time.since(lastUpdate) >= updateInterval) {
@@ -131,12 +132,6 @@ public class Psilox {
 			if(renderInterval != PsiloxConfig.MANUAL && Time.since(lastRender) >= renderInterval) {
 				lastRender = Time.now();
 				window.render();
-			}
-			if(Time.since(lastTerminate) >= Time.SECOND / 10) {
-				lastTerminate = Time.now();
-				if(terminator.shouldTerminate(input())) {
-					Psilox.stopAll();
-				}
 			}
 		}
 		
@@ -178,7 +173,9 @@ public class Psilox {
 		input = new Input();
 		draw = new Draw();
 		audio = new Audio();
-		terminator = new Terminator(config.terminationSequence);
+		if(config.terminationSequence.length > 0) {
+			terminator = new KeySequence(input, this::stop, KeySequence.keysFromNames(config.terminationSequence)).asCombination();
+		}
 		tree = new NodeTree(this);
 		if(config.fullscreen) {
 			Vec w = config.monitorSize();

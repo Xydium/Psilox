@@ -82,6 +82,9 @@ public class Window extends JFrame implements GLEventListener {
 		GL gl = d.getGL();
 		glu = new GLU();
 		//glut = new GLUT();
+		gl.glEnable(GL.GL_CULL_FACE);
+		gl.glEnable(GL.GL_DEPTH_TEST);
+		gl.glDepthMask(true);
 		gl.getGL2().glEnableClientState(GL2.GL_VERTEX_ARRAY);
 		gl.getGL2().glEnableClientState(GL2.GL_COLOR_ARRAY);
 		psilox.draw().ready(d.getGL().getGL2());
