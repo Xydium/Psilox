@@ -61,10 +61,11 @@ public class Draw {
 		if(transform.getParent() != null) {
 			translate(transform.getParent().positionGlobal());
 			rotate(transform.getParent().rotationGlobal(), Vec.Z_UNIT);
+			scale(transform.getParent().scaleGlobal());
 		}
 		translate(transform.position());
 		rotate(transform.rotation());
-		scale(transform.scaleGlobal());
+		scale(transform.scale());
 	}
 	
 	public void setTransform(Vec p, float theta, Vec a, Vec s) {

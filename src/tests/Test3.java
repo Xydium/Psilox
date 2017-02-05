@@ -14,8 +14,8 @@ import com.xydium.psilox.rendering.Primitives;
 
 public class Test3 extends Node {
 	
-	private Polygon triangle;
-	private Rect other;
+	private Rect one;
+	private Rect two;
 	
 	public Test3(String tag) {
 		super(tag);
@@ -25,16 +25,20 @@ public class Test3 extends Node {
 		transform.translate(viewSize().quo(new Vec(2)));
 		transform.setScale(new Vec(50, 50));
 		
-		addChild(other = new Rect("Rect", new Vec(3), true, new Color(255, 0, 255, 127)));
-		other.transform().translate(new Vec(0, 0, 0.1f));
+		addChild(two = new Rect("one", Vec.ONE.scl(3), true, new Color(255, 0, 255, 127)));
+		two.transform().translate(new Vec(0, 0, 0.1f));
 		
-		other.addChild(triangle = new Polygon("Triangle", Primitives.C_EQTRI, new Color(255, 255, 0, 200)));
-		triangle.transform().translate(new Vec(90, 0, 0.2f));
+		two.addChild(one = new Rect("two", Vec.ONE, true, new Color(255, 255, 0, 200)));
+		one.transform().translate(new Vec(1, 0, 0.2f));
+		
+		print(transform);
+		print(two.transform());
+		print(one.transform());
 	}
 	
 	public void update() {
-		other.transform().rotate(1);
-		triangle.transform().rotate(1);
+		two.transform().rotate(1);
+		one.transform().rotate(1);
 	}
 	
 	public static void main(String[] args) {

@@ -94,7 +94,7 @@ public class Node implements InputListener {
 	}
 	
 	public void addChild(Node child) {
-		if(getTree().isIterating()) {
+		if(getTree() != null && getTree().isIterating()) {
 			getTree().queueAddition(this, child);
 			return;
 		}
@@ -220,6 +220,11 @@ public class Node implements InputListener {
 	}
 	
 	public NodeTree getTree() {
+		if(tree == null) {
+			if(parent != null) {
+				return parent.getTree();
+			}
+		}
 		return tree;
 	}
 	
@@ -263,8 +268,8 @@ public class Node implements InputListener {
 		return getTree().input();
 	}
 	
-	public void print(String msg) {
-		Log.info(msg);
+	public void print(Object msg) {
+		Log.info(msg.toString());
 	}
 	
 	public void print(String msg, Object...objects) {
