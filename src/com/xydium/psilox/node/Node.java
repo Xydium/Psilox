@@ -276,4 +276,9 @@ public class Node implements InputListener {
 		Log.info(msg, objects);
 	}
 	
+	public void error(String msg, Exception e) {
+		Log.error(msg);
+		Log.error(e);
+	}
+	
 }

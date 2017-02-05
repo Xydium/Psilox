@@ -4,7 +4,6 @@ import static com.xydium.psilox.rendering.Primitives.*;
 
 import com.xydium.psilox.math.Vec;
 import com.xydium.psilox.rendering.Color;
-import com.xydium.psilox.rendering.GLShape;
 import com.xydium.psilox.rendering.Primitives;
 
 public class Rect extends Shape {

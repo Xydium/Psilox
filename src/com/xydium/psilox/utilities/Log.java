@@ -82,7 +82,11 @@ public class Log {
 
 		if(consoleEnabled)
 		{
-			System.out.println(line);
+			if(level == LogLevel.ERROR) {
+				System.err.println(line);
+			} else {
+				System.out.println(line);
+			}
 		}
 	}
 
