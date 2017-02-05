@@ -10,7 +10,7 @@ public class Draw {
 
 	private GL2 gl;
 	
-	public int clearBufferBit;
+	public int clearBufferBit = GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT;
 	
 	public void ready(GL gl) {
 		this.gl = gl.getGL2();
@@ -56,6 +56,17 @@ public class Draw {
 		setTransform(transform.positionGlobal(), transform.rotationGlobal(), Vec.Z_UNIT, transform.scaleGlobal());
 	}
 	
+	public void transform(Transform transform) {
+		clearTransform();
+		if(transform.getParent() != null) {
+			translate(transform.getParent().positionGlobal());
+			rotate(transform.getParent().rotationGlobal(), Vec.Z_UNIT);
+		}
+		translate(transform.position());
+		rotate(transform.rotation());
+		scale(transform.scaleGlobal());
+	}
+	
 	public void setTransform(Vec p, float theta, Vec a, Vec s) {
 		clearTransform();
 		translate(p);
@@ -65,8 +76,8 @@ public class Draw {
 	
 	public void setTransform(float px, float py, float pz, float theta, float ax, float ay, float az, float sx, float sy, float sz) {
 		clearTransform();
-		gl.glTranslatef(px, py, pz);
 		gl.glRotatef(theta, ax, ay, az);
+		gl.glTranslatef(px, py, pz);
 		gl.glScalef(sx, sy, sz);
 	}
 	

@@ -82,6 +82,10 @@ public class Transform {
 		return parent.rotationGlobal() + rotation;
 	}
 	
+	public Transform getParent() {
+		return parent;
+	}
+	
 	public void setParent(Transform parent) {
 		this.parent = parent;
 	}

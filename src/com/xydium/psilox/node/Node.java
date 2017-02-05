@@ -63,7 +63,7 @@ public class Node implements InputListener {
 		for(Node child : getChildList()) {	
 			if(child.isVisible()) {
 				child.renderChildren();
-				draw().setTransform(child.transform());
+				draw().transform(child.transform());
 				child.render();
 			}
 		}

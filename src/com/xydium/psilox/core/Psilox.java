@@ -54,13 +54,7 @@ public class Psilox {
 		initLog();
 		initIntervals();
 		window.dispose();
-		if(config.fullscreen) {
-			Vec w = config.monitorSize();
-			config.width = (int) w.x;
-			config.height = (int) w.y;
-		}
-		window = new Window(config.title, config.width, config.height, config.fullscreen, this);
-		window.setup();
+		window = new Window(config, this);
 	}
 	
 	public void start(Node mainNode) {
@@ -177,14 +171,7 @@ public class Psilox {
 			terminator = new KeySequence(input, this::stop, KeySequence.keysFromNames(config.terminationSequence)).asCombination();
 		}
 		tree = new NodeTree(this);
-		if(config.fullscreen) {
-			Vec w = config.monitorSize();
-			config.width = (int) w.x;
-			config.height = (int) w.y;
-		}
-		window = new Window(config.title, config.width, config.height, config.fullscreen, this);
-		window.setup();
-		draw.clearBufferBit = GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT;
+		window = new Window(config, this);
 	}
 	
 	private void initThread() {
