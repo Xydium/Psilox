@@ -28,12 +28,13 @@ public class Test3 extends Node {
 		addChild(other = new Rect("Rect", new Vec(3), true, new Color(255, 0, 255, 127)));
 		other.transform().translate(new Vec(0, 0, 0.1f));
 		
-		addChild(triangle = new Polygon("Triangle", Primitives.C_EQTRI, new Color(255, 255, 0, 200)));
+		other.addChild(triangle = new Polygon("Triangle", Primitives.C_EQTRI, new Color(255, 255, 0, 200)));
 		triangle.transform().translate(new Vec(90, 0, 0.2f));
 	}
 	
 	public void update() {
 		other.transform().rotate(1);
+		triangle.transform().rotate(1);
 	}
 	
 	public static void main(String[] args) {

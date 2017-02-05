@@ -6,6 +6,7 @@ import java.util.Map;
 import com.xydium.psilox.input.Input;
 import com.xydium.psilox.node.Node;
 import com.xydium.psilox.rendering.Draw;
+import com.xydium.psilox.utilities.Audio;
 
 public class NodeTree {
 
@@ -86,12 +87,10 @@ public class NodeTree {
 	public Draw draw() {
 		return psilox.draw();
 	}
-	
-	/*
+
 	public Audio audio() {
 		return psilox.audio();
 	}
-	*/
 	
 	public Input input() {
 		return psilox.input();

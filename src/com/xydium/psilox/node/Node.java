@@ -15,6 +15,7 @@ import com.xydium.psilox.math.Random;
 import com.xydium.psilox.math.Transform;
 import com.xydium.psilox.math.Vec;
 import com.xydium.psilox.rendering.Draw;
+import com.xydium.psilox.utilities.Audio;
 import com.xydium.psilox.utilities.Log;
 
 public class Node implements InputListener {
@@ -253,14 +254,21 @@ public class Node implements InputListener {
 	public Vec viewSize() {
 		return new Vec(window().getWidth(), window().getHeight());
 	}
-	
-	/*
+
 	public Audio audio() {
 		return getTree().audio();
-	} */
+	}
 	
 	public Input input() {
 		return getTree().input();
+	}
+	
+	public void print(String msg) {
+		Log.info(msg);
+	}
+	
+	public void print(String msg, Object...objects) {
+		Log.info(msg, objects);
 	}
 	
 }
