@@ -161,5 +161,13 @@ public class Window extends JFrame implements GLEventListener {
 			public void windowClosing(WindowEvent e) { psilox.stop(); }
 		});
 	}
+	
+	public int getWidth() {
+		return width;
+	}
 
+	public int getHeight() {
+		return height;
+	}
+	
 }
