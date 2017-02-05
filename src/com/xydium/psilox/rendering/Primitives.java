@@ -1,8 +1,5 @@
 package com.xydium.psilox.rendering;
 
-import java.nio.FloatBuffer;
-
-import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL2;
 import com.xydium.psilox.math.Vec;
 
@@ -13,13 +10,6 @@ public class Primitives {
 	public static final int LINE = GL2.GL_LINES;
 	public static final int POINT = GL2.GL_POINTS;
 	public static final int TRI_FAN = GL2.GL_TRIANGLE_FAN; 
-	
-	public static FloatBuffer FB_RECT;
-	public static FloatBuffer FB_C_RECT;
-	public static FloatBuffer FB_UTRI;
-	public static FloatBuffer FB_EQTRI;
-	public static FloatBuffer FB_C_UTRI;
-	public static FloatBuffer FB_C_EQTRI;
 	
 	public static final Vec[] RECT = {
 			new Vec(0, 0),
@@ -58,14 +48,5 @@ public class Primitives {
 		new Vec(-.5f, -.433f),
 		new Vec(.5f, -.433f)
 	};
-	
-	public static void initPrimitiveBuffers() {
-		FB_RECT = Buffers.newDirectFloatBuffer(Vec.toFloatArray(RECT));
-		FB_C_RECT = Buffers.newDirectFloatBuffer(Vec.toFloatArray(C_RECT));
-		FB_UTRI = Buffers.newDirectFloatBuffer(Vec.toFloatArray(UTRI));
-		FB_EQTRI = Buffers.newDirectFloatBuffer(Vec.toFloatArray(EQTRI));
-		FB_C_UTRI = Buffers.newDirectFloatBuffer(Vec.toFloatArray(C_UTRI));
-		FB_C_EQTRI = Buffers.newDirectFloatBuffer(Vec.toFloatArray(C_EQTRI));
-	}
 	
 }
