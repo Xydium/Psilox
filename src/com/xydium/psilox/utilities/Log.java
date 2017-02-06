@@ -73,10 +73,19 @@ public class Log {
 		return consoleEnabled;
 	}
 
+	public static void flush() {
+		Data data = new Data("Psilox_" + Time.now() + ".txt");
+		data.setLines(lines.toArray(new String[lines.size()]));
+		data.save();
+		lines.clear();
+	}
+	
 	private static void addLine(LogLevel level, String msg)
 	{
 		if(level.ordinal() > Log.logLevel.ordinal()) return;
-		if(lines.size() > 1000) lines.clear();
+		if(lines.size() > 1000) {
+			flush();
+		}
 		String line = level.tag + " " + msg;
 		lines.add(line);
 
