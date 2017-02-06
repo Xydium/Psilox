@@ -1,41 +1,85 @@
 package com.xydium.psilox.utilities;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.net.URL;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Data {
-
+	
+	private String path;
 	private String[] lines;
 	
-	private Data(String[] lines) {
-		this.lines = lines;
+	public Data(String path) {
+		this.path = path;
+		this.lines = new String[0];
 	}
 	
-	public String getLine(int line) {
-		return lines[line];
+	public void save() {
+		if(path != null) {
+			PrintWriter out = null;
+			try {
+				out = new PrintWriter(new FileWriter(path));
+				for(String s : lines) {
+					out.println(s);
+				}
+				out.close();
+			} catch (IOException e) {
+				Log.error(e);
+			}
+		} else {
+			Log.error("Cannot save file with null path.");
+		}
+	}
+	
+	public void load() {
+		if(path != null) {
+			BufferedReader in = null;
+			try {
+				in = new BufferedReader(new FileReader(path));
+				ArrayList<String> lines = new ArrayList<String>();
+				String s;
+				while((s = in.readLine()) != null) {
+					lines.add(s);
+				}
+				setLines(lines.toArray(new String[lines.size()]));
+				in.close();
+			} catch (IOException e) {
+				Log.error(e);
+			}
+		} else {
+			Log.error("Cannot load file with null path.");
+		}
+	}
+	
+	public String getPath() {
+		return path;
+	}
+	
+	public void setPath(String path) {
+		this.path = path;
+	}
+	
+	public String getLine(int idx) {
+		return lines[idx];
+	}
+	
+	public void setLine(int idx, String line) {
+		lines[idx] = line;
 	}
 	
 	public String[] getLines() {
 		return lines;
 	}
 	
-	public static Data load(String filepath) {
-		try {
-			URL loaded = Data.class.getClassLoader().getResource(filepath); 
-			if(loaded == null) throw new FileNotFoundException();
-			Scanner sc = new Scanner(new File(loaded.getFile()));
-			ArrayList<String> lines = new ArrayList<String>();
-			while(sc.hasNextLine()) {
-				lines.add(sc.nextLine());
-			}
-			Data data = new Data(lines.toArray(new String[lines.size()]));
-			sc.close();
-			return data;
-		} catch (Exception e) { Log.error("Failure to load %s. No such resource.", filepath); }
-		return null;
+	public void setLines(String[] lines) {
+		this.lines = lines;
+	}
+	
+	public int getLineCount() {
+		return lines.length;
 	}
 	
 }
