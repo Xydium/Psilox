@@ -38,6 +38,7 @@ public class Psilox {
 	private Audio audio;
 	private NodeTree tree;
 	private KeySequence terminator;
+	private Node mainNode;
 	
 	private Psilox(PsiloxConfig config, int id) {
 		this.config = config;
@@ -59,7 +60,7 @@ public class Psilox {
 	public void start(Node mainNode) {
 		if(running()) return;
 		initThread();
-		tree.getRoot().addChild(mainNode);
+		this.mainNode = mainNode;
 	}
 	
 	public void stop() {
@@ -116,6 +117,9 @@ public class Psilox {
 		long lastUpdate = Time.now() - updateInterval;
 		long lastRender = Time.now() - renderInterval;
 		
+		window.render();
+		tree.getRoot().addChild(mainNode);
+		
 		while(running()) {
 			if(updateInterval != PsiloxConfig.MANUAL && Time.since(lastUpdate) >= updateInterval) {
 				deltaTime = Time.since(lastUpdate) / (float) Time.SECOND;
@@ -169,8 +173,8 @@ public class Psilox {
 		if(config.terminationSequence.length > 0) {
 			terminator = new KeySequence(input, this::stop, KeySequence.keysFromNames(config.terminationSequence)).asCombination();
 		}
-		tree = new NodeTree(this);
 		window = new Window(config, this);
+		tree = new NodeTree(this);
 	}
 	
 	private void initThread() {

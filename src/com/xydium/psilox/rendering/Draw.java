@@ -5,6 +5,7 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.xydium.psilox.math.Transform;
 import com.xydium.psilox.math.Vec;
+import com.xydium.psilox.utilities.Log;
 
 public class Draw {
 
@@ -22,14 +23,6 @@ public class Draw {
 	
 	public void clear() {
 		gl.glClear(clearBufferBit);
-	}
-	 
-	public void use(Shader shader) {
-		gl.glUseProgram(shader.getProgram());
-	}
-	
-	public void unbindShader() {
-		gl.glUseProgram(0);
 	}
 	
 	public void clearColor(Color c) {
