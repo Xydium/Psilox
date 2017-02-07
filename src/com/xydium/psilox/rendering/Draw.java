@@ -23,6 +23,14 @@ public class Draw {
 	public void clear() {
 		gl.glClear(clearBufferBit);
 	}
+	 
+	public void use(Shader shader) {
+		gl.glUseProgram(shader.getProgram());
+	}
+	
+	public void unbindShader() {
+		gl.glUseProgram(0);
+	}
 	
 	public void clearColor(Color c) {
 		gl.glClearColor(c.r, c.g, c.b, c.a);

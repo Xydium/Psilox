@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class Data {
 	
-	private String path;
-	private String[] lines;
+	protected String path;
+	protected String[] lines;
 	
 	public Data(String path) {
 		this.path = path;
@@ -80,6 +80,14 @@ public class Data {
 	
 	public int getLineCount() {
 		return lines.length;
+	}
+	
+	public String concatenated(char sep) {
+		String res = "";
+		for(String s : lines) {
+			res += s + sep;
+		}
+		return res;
 	}
 	
 }
