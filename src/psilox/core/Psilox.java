@@ -8,6 +8,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
+import psilox.input.Input;
 import psilox.utils.Log;
 import psilox.utils.Time;
 
@@ -53,10 +54,10 @@ public class Psilox {
 		}
 		
 		glBegin(GL_TRIANGLES);
-		glColor3f(.5f, .5f, 1f);
-		glVertex2f(100, 100);
-		glVertex2f(400, 100);
-		glVertex2f(250, 400);
+			glColor3f(.5f, .5f, 1f);
+			glVertex2f(100, 100);
+			glVertex2f(400, 100);
+			glVertex2f(Input.position.x, Input.position.y);
 		glEnd();
 		
 		int error = glGetError();
@@ -130,6 +131,10 @@ public class Psilox {
 			glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, m.width(), m.height(), 60);
 		}
 		
+		glfwSetKeyCallback(window, Input.keyCallback);
+		glfwSetMouseButtonCallback(window, Input.mouseCallback);
+		glfwSetCursorPosCallback(window, Input.cursorCallback);
+		
 		glfwMakeContextCurrent(window);
 		glfwShowWindow(window);
 		GL.createCapabilities();
@@ -150,6 +155,7 @@ public class Psilox {
 		glLoadIdentity();
 		glOrtho(0, config.width, 0, config.height, -1, 1);
 		glMatrixMode(GL_MODELVIEW);
+		Input.WINDOW_HEIGHT = config.height;
 	}
 	
 	private long calculateInterval(int ps) {
