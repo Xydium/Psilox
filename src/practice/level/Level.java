@@ -32,10 +32,10 @@ public class Level {
 	
 	public Level() {
 		float[] vertices = new float[] {
-			-10.0f, -10.0f * 9.0f / 16.0f, 0.0f,
-			-10.0f,  10.0f * 9.0f / 16.0f, 0.0f,
-			  0.0f,  10.0f * 9.0f / 16.0f, 0.0f,
-			  0.0f, -10.0f * 9.0f / 16.0f, 0.0f
+			0, 0, 0.0f,
+			0,  720, 0.0f,
+			  640,  720, 0.0f,
+			  640, 0, 0.0f
 		};
 		
 		byte[] indices = new byte[] {
@@ -146,7 +146,7 @@ public class Level {
 		Shader.BG.setUniform2f("bird", 0, bird.getY());
 		background.bind();
 		for (int i = map; i < map + 4; i++) {
-			Shader.BG.setUniformMat4f("vw_matrix", Matrix4f.translate(new Vector3f(i * 10 + xScroll * 0.03f, 0.0f, 0.0f)));
+			Shader.BG.setUniformMat4f("vw_matrix", Matrix4f.translate(new Vector3f(i * 10 + xScroll, 0.0f, 0.0f)));
 			background.draw();
 		}
 		Shader.BG.disable();
