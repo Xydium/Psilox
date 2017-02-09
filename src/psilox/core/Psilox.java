@@ -1,8 +1,5 @@
 package psilox.core;
 
-import psilox.utils.Log;
-import psilox.utils.Time;
-
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
@@ -10,6 +7,9 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+
+import psilox.utils.Log;
+import psilox.utils.Time;
 
 public class Psilox {
 
@@ -115,6 +115,8 @@ public class Psilox {
 		}
 		
 		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+		glfwWindowHint(GLFW_DOUBLEBUFFER, config.doubleBuffer ? GL_TRUE : GL_FALSE);
+		glfwWindowHint(GLFW_DECORATED, config.undecorated ? GL_FALSE : GL_TRUE);
 		window = glfwCreateWindow(config.width, config.height, config.title, NULL, NULL);
 		if(window == NULL) {
 			Log.error("Creating GLFW window failed.");
@@ -123,6 +125,10 @@ public class Psilox {
 		
 		GLFWVidMode m = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		glfwSetWindowPos(window, (m.width() - config.width) / 2, (m.height() - config.height) / 2);
+		
+		if(config.fullscreen) {
+			glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, m.width(), m.height(), 60);
+		}
 		
 		glfwMakeContextCurrent(window);
 		glfwShowWindow(window);
@@ -135,7 +141,11 @@ public class Psilox {
 		glClearColor(config.clearColor.r, config.clearColor.g, config.clearColor.b, config.clearColor.a);
 		clearScreen = config.clearscreen;
 		
-		glViewport(0, 0, config.width, config.height);
+		if(config.fullscreen) {
+			glViewport(0, 0, m.width(), m.height());
+		} else {
+			glViewport(0, 0, config.width, config.height);
+		}
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0, config.width, 0, config.height, -1, 1);
