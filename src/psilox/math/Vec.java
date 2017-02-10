@@ -26,7 +26,7 @@ public class Vec {
 	}
 	
 	public Vec(float n) {
-		this(n, n, n);
+		this(n, n, 0);
 	}
 	
 	public Vec sum(Vec o) {

@@ -8,7 +8,10 @@ import static org.lwjgl.system.MemoryUtil.*;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
+import psilox.graphics.Color;
+import static psilox.graphics.Draw.*;
 import psilox.input.Input;
+import psilox.math.Vec;
 import psilox.utils.Log;
 import psilox.utils.Time;
 
@@ -49,16 +52,16 @@ public class Psilox {
 	}
 	
 	public void render() {
+		clearTransform();
 		if(clearScreen) {
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			clear();
 		}
 		
-		glBegin(GL_TRIANGLES);
-			glColor3f(.5f, .5f, 1f);
-			glVertex2f(100, 100);
-			glVertex2f(400, 100);
-			glVertex2f(Input.position.x, Input.position.y);
-		glEnd();
+		translate(new Vec(250));
+		ellipse(Color.MAGENTA, new Vec(0, 50), 100, 50, 30);
+		arc(Color.YELLOW, new Vec(0, 150), 100, 50, tick / 2, tick, 30);
+		ellipsef(Color.MAGENTA, new Vec(0, -50), 100, 50, 30);
+		arcf(Color.YELLOW, new Vec(0, -150), 100, 50, tick / 2, tick, 30);
 		
 		int error = glGetError();
 		if(error != GL_NO_ERROR) {
