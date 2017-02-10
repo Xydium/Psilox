@@ -151,10 +151,10 @@ public class Draw {
 		glBegin(mode);
 		glColor4f(c.r, c.g, c.b, c.a);
 		if(mode == GL_TRIANGLE_FAN) {
-			glVertex2f(origin.x, origin.y);
+			glVertex3f(origin.x, origin.y, origin.z);
 		}
 		for(int i = 0; i < segs; i++) {
-			glVertex2f(x + origin.x, y + origin.y);
+			glVertex3f(x + origin.x, y + origin.y, origin.z);
 			float tx = rath * -y;
 			float ty = ratv * x;
 			x += tx * tanFac;

@@ -2,7 +2,6 @@ package psilox.math;
 
 import java.nio.FloatBuffer;
 
-import practice.maths.Vector3f;
 import psilox.utils.BufferUtils;
 
 public class Mat4 {
@@ -43,7 +42,7 @@ public class Mat4 {
 		return result;
 	}
 	
-	public static Mat4 translate(Vector3f vector) {
+	public static Mat4 translate(Vec vector) {
 		Mat4 result = identity();
 		result.elements[0 + 3 * 4] = vector.x;
 		result.elements[1 + 3 * 4] = vector.y;

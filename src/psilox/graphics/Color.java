@@ -10,6 +10,9 @@ public class Color {
 	public static final Color MAGENTA = new Color(255, 0, 255, 255);
 	public static final Color BLACK = new Color(0, 0, 0, 255);
 	public static final Color WHITE = new Color(255, 255, 255, 255);
+	public static final Color DARK_GRAY = new Color(.25f, .25f, .25f, 1.0f);
+	public static final Color MED_GRAY = new Color(.5f, .5f, .5f, 1.0f);
+	public static final Color LIGHT_GRAY = new Color(.75f, .75f, .75f, 1.0f);
 	
 	public final float r, g, b, a;
 	

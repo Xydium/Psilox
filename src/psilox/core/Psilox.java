@@ -58,16 +58,11 @@ public class Psilox {
 			clear();
 		}
 		
-		ellipsef(Color.RED, new Vec(250), 50);
-		
-		/*
 		translate(new Vec(250));
-		rotate(tick);
-		arc(Color.YELLOW, new Vec(0, 150), 50, 50, tick / 2, tick, 30);
-		ellipse(Color.MAGENTA, new Vec(0, 50), 100, 50, 30);
-		ellipsef(Color.MAGENTA, new Vec(0, -50), 150, 50, 30);
-		arcf(Color.YELLOW, new Vec(0, -150), 200, 50, tick / 2, tick, 30);
-		*/
+		glLineWidth(2);
+		arc(Color.LIGHT_GRAY, Vec.ZERO, 20, tick, 360 - (tick % 360), 30);
+		translate(Vec.Z_UNIT);
+		arc(Color.RED, Vec.ZERO, 20, 0, tick, 30);
 		
 		int error = glGetError();
 		if(error != GL_NO_ERROR) {
