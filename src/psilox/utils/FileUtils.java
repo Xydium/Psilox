@@ -1,4 +1,4 @@
-package practice.utils;
+package psilox.utils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

@@ -1,20 +1,21 @@
-package practice.maths;
+package psilox.math;
 
 import java.nio.FloatBuffer;
 
-import practice.utils.BufferUtils;
+import practice.maths.Vector3f;
+import psilox.utils.BufferUtils;
 
-public class Matrix4f {
+public class Mat4 {
 
 	public static final int SIZE = 4 * 4;
 	public float[] elements = new float[SIZE];
 	
-	public Matrix4f() {
+	public Mat4() {
 		
 	}
 	
-	public static Matrix4f identity() {
-		Matrix4f result = new Matrix4f();
+	public static Mat4 identity() {
+		Mat4 result = new Mat4();
 		for (int i = 0; i < SIZE; i++) {
 			result.elements[i] = 0.0f;
 		}
@@ -26,8 +27,8 @@ public class Matrix4f {
 		return result;
 	}
 	
-	public static Matrix4f orthographic(float left, float right, float bottom, float top, float near, float far) {
-		Matrix4f result = identity();
+	public static Mat4 orthographic(float left, float right, float bottom, float top, float near, float far) {
+		Mat4 result = identity();
 		
 		result.elements[0 + 0 * 4] = 2.0f / (right - left);
 
@@ -42,16 +43,16 @@ public class Matrix4f {
 		return result;
 	}
 	
-	public static Matrix4f translate(Vector3f vector) {
-		Matrix4f result = identity();
+	public static Mat4 translate(Vector3f vector) {
+		Mat4 result = identity();
 		result.elements[0 + 3 * 4] = vector.x;
 		result.elements[1 + 3 * 4] = vector.y;
 		result.elements[2 + 3 * 4] = vector.z;
 		return result;
 	}
 	
-	public static Matrix4f rotate(float angle) {
-		Matrix4f result = identity();
+	public static Mat4 rotate(float angle) {
+		Mat4 result = identity();
 		float r = (float) Math.toRadians(angle);
 		float cos = (float) Math.cos(r);
 		float sin = (float) Math.sin(r);
@@ -65,8 +66,8 @@ public class Matrix4f {
 		return result;
 	}
 	
-	public Matrix4f multiply(Matrix4f matrix) {
-		Matrix4f result = new Matrix4f();
+	public Mat4 multiply(Mat4 matrix) {
+		Mat4 result = new Mat4();
 		for (int y = 0; y < 4; y++) {
 			for (int x = 0; x < 4; x++) {
 				float sum = 0.0f;

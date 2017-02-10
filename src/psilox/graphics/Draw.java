@@ -6,6 +6,14 @@ import psilox.math.Vec;
 
 public class Draw {
 
+	private static Shader circle;
+	
+	public static void loadDrawShaders() {
+		if(circle == null) {
+			circle = new Shader("shaders/circle.shd");
+		}
+	}
+	
 	public static void clear() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
@@ -78,6 +86,24 @@ public class Draw {
 	
 	public static void strip(Color c, Vec...verts) {
 		immediate(GL_TRIANGLE_STRIP, c, verts);
+	}
+	
+	public static void ellipsef(Color c, Vec origin, float r) {
+		circle.enable();
+		circle.setUniform3f("u_origin", origin);
+		circle.setUniform1f("u_radius", r);
+		circle.setUniform1i("u_filled", GL_TRUE);
+		quad(c, origin.sum(new Vec(-r)), origin.sum(new Vec(r, -r)), origin.sum(new Vec(r, r)), origin.sum(new Vec(-r, r)));
+		circle.disable();
+	}
+	
+	public static void ellipse(Color c, Vec origin, float r) {
+		circle.enable();
+		circle.setUniform3f("u_origin", origin);
+		circle.setUniform1f("u_radius", r);
+		circle.setUniform1i("u_filled", GL_FALSE);
+		quad(c, origin.sum(new Vec(-r)), origin.sum(new Vec(r, -r)), origin.sum(new Vec(r, r)), origin.sum(new Vec(-r, r)));
+		circle.disable();
 	}
 	
 	public static void ellipsef(Color c, Vec origin, float r, int segs) {

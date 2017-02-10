@@ -1,11 +1,11 @@
-package practice.graphics;
+package psilox.graphics;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
-import practice.utils.BufferUtils;
+import psilox.utils.BufferUtils;
 
 public class VertexArray {
 	

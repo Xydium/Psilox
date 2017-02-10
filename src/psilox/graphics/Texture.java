@@ -1,4 +1,4 @@
-package practice.graphics;
+package psilox.graphics;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import practice.utils.BufferUtils;
+import psilox.utils.BufferUtils;
 
 public class Texture {
 	

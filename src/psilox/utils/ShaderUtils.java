@@ -1,4 +1,4 @@
-package practice.utils;
+package psilox.utils;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -8,9 +8,10 @@ public class ShaderUtils {
 	private ShaderUtils() {
 	}
 	
-	public static int load(String vertPath, String fragPath) {
-		String vert = FileUtils.loadAsString(vertPath); 
-		String frag = FileUtils.loadAsString(fragPath);
+	public static int load(String path) {
+		String src = FileUtils.loadAsString(path);
+		String vert = src.substring(src.indexOf("VERTEX:") + 7, src.indexOf("FRAGMENT:"));
+		String frag = src.substring(src.indexOf("FRAGMENT:") + 9, src.length());
 		return create(vert, frag);
 	}
 	
@@ -38,6 +39,11 @@ public class ShaderUtils {
 		glAttachShader(program, vertID);
 		glAttachShader(program, fragID);
 		glLinkProgram(program);
+		if(glGetProgrami(program, GL_LINK_STATUS) == GL_FALSE) {
+			System.err.println("Failed to link program!");
+			System.err.println(glGetProgramInfoLog(program));
+			return -1;
+		}
 		glValidateProgram(program);
 		
 		glDeleteShader(vertID);

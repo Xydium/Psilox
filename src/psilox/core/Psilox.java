@@ -4,12 +4,13 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.system.MemoryUtil.*;
+import static psilox.graphics.Draw.*;
 
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
 import psilox.graphics.Color;
-import static psilox.graphics.Draw.*;
+import psilox.graphics.Draw;
 import psilox.input.Input;
 import psilox.math.Vec;
 import psilox.utils.Log;
@@ -57,11 +58,16 @@ public class Psilox {
 			clear();
 		}
 		
+		ellipsef(Color.RED, new Vec(250), 50);
+		
+		/*
 		translate(new Vec(250));
+		rotate(tick);
+		arc(Color.YELLOW, new Vec(0, 150), 50, 50, tick / 2, tick, 30);
 		ellipse(Color.MAGENTA, new Vec(0, 50), 100, 50, 30);
-		arc(Color.YELLOW, new Vec(0, 150), 100, 50, tick / 2, tick, 30);
-		ellipsef(Color.MAGENTA, new Vec(0, -50), 100, 50, 30);
-		arcf(Color.YELLOW, new Vec(0, -150), 100, 50, tick / 2, tick, 30);
+		ellipsef(Color.MAGENTA, new Vec(0, -50), 150, 50, 30);
+		arcf(Color.YELLOW, new Vec(0, -150), 200, 50, tick / 2, tick, 30);
+		*/
 		
 		int error = glGetError();
 		if(error != GL_NO_ERROR) {
@@ -94,6 +100,8 @@ public class Psilox {
 		
 		glfwDestroyWindow(window);
 		glfwTerminate();
+		
+		Input.dumpListeners();
 	}
 	
 	private void initLog() {
@@ -159,6 +167,7 @@ public class Psilox {
 		glOrtho(0, config.width, 0, config.height, -1, 1);
 		glMatrixMode(GL_MODELVIEW);
 		Input.WINDOW_HEIGHT = config.height;
+		Draw.loadDrawShaders();
 	}
 	
 	private long calculateInterval(int ps) {

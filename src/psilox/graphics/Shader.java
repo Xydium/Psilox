@@ -1,35 +1,25 @@
-package practice.graphics;
+package psilox.graphics;
 
 import static org.lwjgl.opengl.GL20.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import practice.maths.Matrix4f;
-import practice.maths.Vector3f;
-import practice.utils.ShaderUtils;
+import psilox.math.Mat4;
+import psilox.math.Vec;
+import psilox.utils.ShaderUtils;
 
 public class Shader {
-	
+
 	public static final int VERTEX_ATTRIB = 0;
 	public static final int TCOORD_ATTRIB = 1;
 	
-	public static Shader BG, BIRD, PIPE, FADE;
-	
 	private boolean enabled = false;
-	
 	private final int ID;
 	private Map<String, Integer> locationCache = new HashMap<String, Integer>();
 	
-	public Shader(String vertex, String fragment) {
-		ID = ShaderUtils.load(vertex, fragment);
-	}
-	
-	public static void loadAll() {
-		BG = new Shader("shaders/bg.vert", "shaders/bg.frag");
-		BIRD = new Shader("shaders/bird.vert", "shaders/bird.frag");
-		PIPE = new Shader("shaders/pipe.vert", "shaders/pipe.frag");
-		FADE = new Shader("shaders/fade.vert", "shaders/fade.frag");
+	public Shader(String shader) {
+		ID = ShaderUtils.load(shader);
 	}
 	
 	public int getUniform(String name) {
@@ -59,12 +49,12 @@ public class Shader {
 		glUniform2f(getUniform(name), x, y);
 	}
 	
-	public void setUniform3f(String name, Vector3f vector) {
+	public void setUniform3f(String name, Vec vector) {
 		if (!enabled) enable();
 		glUniform3f(getUniform(name), vector.x, vector.y, vector.z);
 	}
 	
-	public void setUniformMat4f(String name, Matrix4f matrix) {
+	public void setUniformMat4f(String name, Mat4 matrix) {
 		if (!enabled) enable();
 		glUniformMatrix4fv(getUniform(name), false, matrix.toFloatBuffer());
 	}
@@ -78,5 +68,5 @@ public class Shader {
 		glUseProgram(0);
 		enabled = false;
 	}
-
+	
 }

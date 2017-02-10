@@ -1,15 +1,22 @@
 package psilox.input;
 
+import static org.lwjgl.glfw.GLFW.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
-import static org.lwjgl.glfw.GLFW.*;
-
+import psilox.input.InputEvent.InputState;
+import psilox.input.InputEvent.InputType;
 import psilox.math.Vec;
 
 public class Input {
 
+	private static List<InputListener> listeners = new ArrayList<InputListener>();
+	
 	private static final int NUM_KEYS = 1000;
 	private static final int NUM_BUTTONS = 10;
 	private static final byte[] KEYS = new byte[NUM_KEYS];
@@ -25,6 +32,18 @@ public class Input {
 		for(int i = 0; i < BUTTONS.length; i++) {
 			BUTTONS[i] = GLFW_RELEASE;
 		}
+	}
+	
+	public static void addListener(InputListener listener) {
+		listeners.add(listener);
+	}
+	
+	public static void removeListener(InputListener listener) {
+		listeners.remove(listener);
+	}
+	
+	public static void dumpListeners() {
+		listeners.clear();
 	}
 	
 	public static boolean keyDown(int keyCode) {
@@ -58,10 +77,20 @@ public class Input {
 		return true;
 	}
 	
+	private static void dispatchEvent(InputType type, int code, InputState state) {
+		InputEvent ev = new InputEvent(type, code, state);
+		for(InputListener l : listeners) {
+			if(ev.isHalted()) break;
+			l.receiveInput(ev);
+		}
+	}
+	
 	public static final GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
 		public void invoke(long window, int key, int scancode, int action, int mods) {
 			if(key == UNKNOWN) return;
 			KEYS[key] = (byte) action;
+			if(action == GLFW_REPEAT) return;
+			dispatchEvent(InputType.KEYBOARD, key, action == GLFW_RELEASE? InputState.RELEASED : InputState.PRESSED);
 		}
 	};
 	
@@ -69,13 +98,16 @@ public class Input {
 		public void invoke(long window, int button, int action, int mods) {
 			if(button == UNKNOWN) return;
 			BUTTONS[button] = (byte) action;
+			if(action == GLFW_REPEAT) return;
+			dispatchEvent(InputType.MOUSE, button, action == GLFW_RELEASE? InputState.RELEASED : InputState.PRESSED);
 		}
 	};
 	
 	public static final GLFWCursorPosCallback cursorCallback = new GLFWCursorPosCallback() {
 		public void invoke(long window, double x, double y) {
 			position.x = (float) x;
-			position.y = WINDOW_HEIGHT - (float) y; 
+			position.y = WINDOW_HEIGHT - (float) y;
+			dispatchEvent(InputType.MOUSE, 0, InputState.MOVED);
 		}
 	};
 	
