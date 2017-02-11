@@ -50,7 +50,7 @@ public class Mat4 {
 		return result;
 	}
 	
-	public static Mat4 rotate(float angle) {
+	public static Mat4 rotate(float angle, Vec p) {
 		Mat4 result = identity();
 		float r = (float) Math.toRadians(angle);
 		float cos = (float) Math.cos(r);
@@ -61,6 +61,10 @@ public class Mat4 {
 		
 		result.elements[0 + 1 * 4] = -sin;
 		result.elements[1 + 1 * 4] = cos;
+		
+		result.elements[0 + 3 * 4] = (p.x - cos) * (p.x + sin) * p.y * p.z;
+		result.elements[1 + 3 * 4] = (p.y - sin) * (p.x + cos) * p.y * p.z;
+		result.elements[2 + 3 * 4] = p.z * p.x * (p.y - 1) * p.z;
 		
 		return result;
 	}

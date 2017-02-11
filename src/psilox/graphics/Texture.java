@@ -14,12 +14,39 @@ public class Texture {
 	
 	private int width, height;
 	private int texture;
+	private int frameBuffer;
 	
 	public Texture(String path) {
-		texture = load(path);
+		load(path);
 	}
 	
-	private int load(String path) {
+	public Texture(int width, int height) {
+		this.width = width;
+		this.height = height;
+		create(null);
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
+	public int getTexture() {
+		return texture;
+	}
+	
+	public int getFrameBuffer() {
+		return frameBuffer;
+	}
+	
+	void setFrameBuffer(int buffer) {
+		this.frameBuffer = buffer;
+	}
+	
+	private void load(String path) {
 		int[] pixels = null;
 		try {
 			BufferedImage image = ImageIO.read(new FileInputStream(path));
@@ -41,13 +68,20 @@ public class Texture {
 			data[i] = a << 24 | b << 16 | g << 8 | r;
 		}
 		
-		int result = glGenTextures();
-		glBindTexture(GL_TEXTURE_2D, result);
+		create(data);
+	}
+	
+	private void create(int[] data) {
+		texture = glGenTextures();
+		bind();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, BufferUtils.createIntBuffer(data));
-		glBindTexture(GL_TEXTURE_2D, 0);
-		return result;
+		if(data == null) {
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+		} else {
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, BufferUtils.createIntBuffer(data));
+		}
+		unbind();
 	}
 	
 	public void bind() {

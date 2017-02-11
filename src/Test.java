@@ -6,8 +6,8 @@ public class Test {
 	
 	public static void main(String[] args) {
 		Config c = new Config();
-		c.clearColor = new Color(0.2f, 0.3f, 0.8f);
-		c.fps = 60;
+		c.clearColor = new Color(0.2f, 0.5f, 0.9f);
+		c.immediateMode = true;
 		new Psilox(c).start();
 	}
 	

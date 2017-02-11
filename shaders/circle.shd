@@ -11,14 +11,12 @@ void main() {
 	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
 	color = gl_Color;
 	origin = u_origin.xy;
-	
 }
 
 FRAGMENT:
 
 #version 130
 
-uniform bool u_filled;
 uniform float u_radius;
 
 in vec4 color;
@@ -27,16 +25,9 @@ in vec2 origin;
 void main() {
 	float d = distance(gl_FragCoord.xy, origin); 
 	
-	if(u_filled) {
-		if(d <= u_radius) {	
-			gl_FragColor = color;
-			return;
-		}
+	if(d <= u_radius) {	
+		gl_FragColor = color;
 	} else {
-		if(abs(d - u_radius) <= 1) {
-			gl_FragColor = color;
-			return;
-		}
+		gl_FragColor = vec4(0, 0, 0, 0);
 	}
-	gl_FragColor = vec4(0, 0, 0, 0);
 }

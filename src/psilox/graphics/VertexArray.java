@@ -9,7 +9,7 @@ import psilox.utils.BufferUtils;
 
 public class VertexArray {
 	
-	private int vao, vbo, ibo, tbo;
+	private int vao, vbo, ibo, tbo, cbo;
 	private int count;
 	
 	public VertexArray(int count) {
@@ -17,7 +17,7 @@ public class VertexArray {
 		vao = glGenVertexArrays();
 	}
 	
-	public VertexArray(float[] vertices, byte[] indices, float[] textureCoordinates) {
+	public VertexArray(float[] vertices, byte[] indices, float[] textureCoordinates, float[] colors) {
 		count = indices.length;
 		
 		vao = glGenVertexArrays();
@@ -34,6 +34,12 @@ public class VertexArray {
 		glBufferData(GL_ARRAY_BUFFER, BufferUtils.createFloatBuffer(textureCoordinates), GL_STATIC_DRAW);
 		glVertexAttribPointer(Shader.TCOORD_ATTRIB, 2, GL_FLOAT, false, 0, 0);
 		glEnableVertexAttribArray(Shader.TCOORD_ATTRIB);
+		
+		cbo = glGenBuffers();
+		glBindBuffer(GL_ARRAY_BUFFER, cbo);
+		glBufferData(GL_ARRAY_BUFFER, BufferUtils.createFloatBuffer(colors), GL_STATIC_DRAW);
+		glVertexAttribPointer(Shader.VCOLOR_ATTRIB, 4, GL_FLOAT, false, 0, 0);
+		glEnableVertexAttribArray(Shader.VCOLOR_ATTRIB);
 		
 		ibo = glGenBuffers();
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);

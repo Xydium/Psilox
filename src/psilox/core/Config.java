@@ -12,7 +12,7 @@ public class Config {
 	public static final int MANUAL = -1;
 	
 	public int width = 500, height = 500, ups = 60, fps = 60;
-	public boolean fullscreen = false, clearscreen = true, doubleBuffer = true, undecorated = false, console = true;
+	public boolean fullscreen = false, clearscreen = true, doubleBuffer = true, undecorated = false, console = true, immediateMode = false;
 	public String title = "Psilox", logLevel = "DEBUG";
 	public String[] terminationSequence = {"CONTROL", "SHIFT", "Z"};
 	public Color clearColor = new Color(0.0f, 0.0f, 0.0f);
@@ -29,6 +29,7 @@ public class Config {
 		Log.debug("## Clear Color: %.2f, %.2f, %.2f, %.2f", clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 		Log.debug("## Double-Buffering: %b", doubleBuffer);
 		Log.debug("## Undecorated: %b", undecorated);
+		Log.debug("## Immediate-Mode GL: %b", immediateMode);
 		Log.debug("## Using System Printstream: %b", console);
 		Log.debug("## Log Level-of-Detail: %s", logLevel);
 		Log.debug("## Termination Sequence: %s", Stream.of(terminationSequence).collect(Collectors.joining(",","[","]")));

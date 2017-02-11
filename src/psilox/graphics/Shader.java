@@ -13,6 +13,7 @@ public class Shader {
 
 	public static final int VERTEX_ATTRIB = 0;
 	public static final int TCOORD_ATTRIB = 1;
+	public static final int VCOLOR_ATTRIB = 2;
 	
 	private boolean enabled = false;
 	private final int ID;

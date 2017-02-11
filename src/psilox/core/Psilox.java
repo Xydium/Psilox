@@ -2,7 +2,6 @@ package psilox.core;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.system.MemoryUtil.*;
 import static psilox.graphics.Draw.*;
 
@@ -12,6 +11,8 @@ import org.lwjgl.opengl.GL;
 import psilox.graphics.Color;
 import psilox.graphics.Draw;
 import psilox.input.Input;
+import psilox.math.Mat4;
+import psilox.math.Transform;
 import psilox.math.Vec;
 import psilox.utils.Log;
 import psilox.utils.Time;
@@ -57,16 +58,20 @@ public class Psilox {
 		if(clearScreen) {
 			clear();
 		}
+	
+		Transform a = new Transform(new Vec(250), tick);
+		Transform b = new Transform(a, new Vec(150, 0), -tick);
 		
-		translate(new Vec(250));
-		glLineWidth(2);
-		arc(Color.LIGHT_GRAY, Vec.ZERO, 20, tick, 360 - (tick % 360), 30);
-		translate(Vec.Z_UNIT);
-		arc(Color.RED, Vec.ZERO, 20, 0, tick, 30);
+		pushTransform(a);
+		ellipsef(Color.GREEN, Vec.ZERO, 50, 30);
+		line(Color.RED, new Vec(0, 0, 0.1f), Vec.X_UNIT.scl(50));
+		pushTransform(b);
+		ellipsef(Color.GREEN, Vec.ZERO, 50, 30);
+		line(Color.RED, new Vec(0, 0, 0.1f), Vec.X_UNIT.scl(-50));
 		
 		int error = glGetError();
 		if(error != GL_NO_ERROR) {
-			Log.error("%d", error);
+			Log.error("Last GL Error: %d", error);
 		}
 		
 		glfwSwapBuffers(window);
@@ -146,11 +151,12 @@ public class Psilox {
 		GL.createCapabilities();
 		
 		glEnable(GL_DEPTH_TEST);
-		glActiveTexture(GL_TEXTURE1);
+		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glClearColor(config.clearColor.r, config.clearColor.g, config.clearColor.b, config.clearColor.a);
 		clearScreen = config.clearscreen;
+		Draw.immediateMode = config.immediateMode;
 		
 		if(config.fullscreen) {
 			glViewport(0, 0, m.width(), m.height());

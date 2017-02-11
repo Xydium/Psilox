@@ -33,12 +33,36 @@ public class Vec {
 		return new Vec(x + o.x, y + o.y, z + o.z);
 	}
 	
+	public void add(Vec o) {
+		x += o.x;
+		y += o.y;
+		z += o.z;
+	}
+	
 	public Vec dif(Vec o) {
 		return new Vec(x - o.x, y - o.y, z - o.z);
 	}
 	
+	public void sub(Vec o) {
+		x -= o.x;
+		y -= o.y;
+		z -= o.z;
+	}
+	
 	public Vec pro(Vec o) {
 		return new Vec(x * o.x, y * o.y, z * o.z);
+	}
+	
+	public void mul(Vec o) {
+		x *= o.x;
+		y *= o.y;
+		z *= o.z;
+	}
+	
+	public void mul(float o) {
+		x *= o;
+		y *= o;
+		z *= o;
 	}
 	
 	public Vec scl(float d) {
@@ -47,6 +71,18 @@ public class Vec {
 	
 	public Vec quo(Vec o) {
 		return new Vec(x / o.x, y / o.y, z / o.z);
+	}
+	
+	public void div(Vec o) {
+		x /= o.x;
+		y /= o.y;
+		z /= o.z;
+	}
+	
+	public void div(float o) {
+		x *= o;
+		y *= o;
+		z *= o;
 	}
 	
 	public float mag() {
