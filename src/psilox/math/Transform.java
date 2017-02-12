@@ -70,7 +70,13 @@ private Transform parent;
 	}
 	
 	public Mat4 toMatrix() {
-		return Mat4.translate(position).multiply(Mat4.rotate(rotation, position));
+		if(position.equals(Vec.ZERO)) {
+			return Mat4.identity();
+		} else if(rotation == 0) {
+			return Mat4.translate(position);
+		} else {
+			return Mat4.translate(position).multiply(Mat4.rotate(rotation, position));
+		}
 	}
 	
 }

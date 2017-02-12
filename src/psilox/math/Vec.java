@@ -113,6 +113,18 @@ public class Vec {
 		return new Vec(x / mag, y / mag, z / mag);
 	}
 	
+	public boolean btn(Vec o, Vec e) {
+		return x >= o.x && y >= o.y && x <= e.x && y <= e.y;
+	}
+	
+	public float dst(Vec o) {
+		return dif(o).mag();
+	}
+	
+	public float ang() {
+		return (float) Math.atan2(y, x);
+	}
+	
 	public float dot(Vec o) {
 		return x * o.x + y * o.y + z * o.z;
 	}
@@ -129,6 +141,10 @@ public class Vec {
 			i++;
 		}
 		return res;
+	}
+	
+	public boolean equals(Vec o) {
+		return x == o.x && y == o.y && z == o.z;
 	}
 	
 	public String toString() {

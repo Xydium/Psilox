@@ -50,6 +50,7 @@ public class Mat4 {
 		float r = (float) Math.toRadians(angle);
 		float cos = (float) Math.cos(r);
 		float sin = (float) Math.sin(r);
+		p.z = 0;
 		
 		result.elements[0 + 0 * 4] = cos;
 		result.elements[1 + 0 * 4] = sin;

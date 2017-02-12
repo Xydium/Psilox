@@ -146,6 +146,20 @@ public class Draw {
 		glEnd();
 	}
 	
+	public static void immediate(int mode, Color[] colors, Vec[] verts) {
+		if(!immediateEnabled()) return;
+		glBegin(mode);
+		Color idc;
+		Vec idv;
+		for(int i = 0; i < verts.length; i++) {
+			idv = verts[i];
+			idc = colors[i % colors.length];
+			glColor4f(idc.r, idc.g, idc.b, idc.a);
+			glVertex3f(idv.x, idv.y, idv.z);
+		}
+		glEnd();
+	}
+	
 	public static void point(Color c, Vec i) {
 		immediate(GL_POINTS, c, i);
 	}

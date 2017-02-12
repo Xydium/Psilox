@@ -65,7 +65,7 @@ public class NodeTree {
 			parent.addChild(queuedAdditions.get(parent));
 		}
 		for(Node parent : queuedRemovals.keySet()) {
-			parent.removeChild(queuedAdditions.get(parent));
+			parent.removeChild(queuedRemovals.get(parent));
 		}
 		queuedAdditions.clear();
 		queuedRemovals.clear();

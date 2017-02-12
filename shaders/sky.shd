@@ -1,0 +1,35 @@
+VERTEX:
+
+#version 130
+
+void main() {
+	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+}
+
+FRAGMENT:
+
+#version 130
+
+uniform vec4 color;
+uniform float time;
+uniform float threshold;
+
+float rand(float n) {
+	return fract(sin(n) * 43758.5453123);
+}
+
+float noise(float p){
+	float fl = floor(p);
+	float fc = fract(p);
+	return mix(rand(fl), rand(fl + 1.0), fc);
+}
+
+void main() {
+	float noise = noise(gl_FragCoord.x * gl_FragCoord.y);
+	float ntime = time * noise * rand(gl_FragCoord.x);
+	if(noise > threshold) {
+		gl_FragColor = vec4(mod(noise * 10, 1) + -.2, mod(noise * 50, 1) + .3, mod(noise * 100, 1) + .5, sin(sin(ntime - gl_FragCoord.y) * cos(ntime + gl_FragCoord.x)));
+	} else {
+		gl_FragColor = color;
+	}
+}
