@@ -41,7 +41,7 @@ private Transform parent;
 		return position.sum(parent.positionGlobal());
 	}
 	
-	public double rotation() {
+	public float rotation() {
 		return rotation;
 	}
 	
@@ -49,7 +49,7 @@ private Transform parent;
 		this.rotation = rotation;
 	}
 	
-	public double rotationGlobal() {
+	public float rotationGlobal() {
 		if(parent == null) {
 			return rotation;
 		}

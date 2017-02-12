@@ -9,15 +9,10 @@ public class Mat4 {
 	public static final int SIZE = 4 * 4;
 	public float[] elements = new float[SIZE];
 	
-	public Mat4() {
-		
-	}
+	public Mat4() {}
 	
 	public static Mat4 identity() {
 		Mat4 result = new Mat4();
-		for (int i = 0; i < SIZE; i++) {
-			result.elements[i] = 0.0f;
-		}
 		result.elements[0 + 0 * 4] = 1.0f;
 		result.elements[1 + 1 * 4] = 1.0f;
 		result.elements[2 + 2 * 4] = 1.0f;

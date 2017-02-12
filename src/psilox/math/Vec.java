@@ -15,6 +15,10 @@ public class Vec {
 	
 	public float x, y, z;
 	
+	public Vec(double x, double y, double z) {
+		this((float) x, (float) y, (float) z);
+	}
+	
 	public Vec(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
@@ -83,6 +87,20 @@ public class Vec {
 		x *= o;
 		y *= o;
 		z *= o;
+	}
+	
+	public Vec rot(float theta) {
+		theta = (float) Math.toRadians(theta);
+		double sin = Math.sin(theta);
+		double cos = Math.cos(theta);
+		return new Vec(x * cos - y * sin, x * sin + y * cos, z);
+	}
+	
+	public Vec clm(float mag) {
+		if(mag() > mag) {
+			return nrm().scl(mag);
+		}
+		return this;
 	}
 	
 	public float mag() {

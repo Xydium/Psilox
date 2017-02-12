@@ -31,17 +31,21 @@ public class Psilox {
 	private float deltaTime;
 	
 	private long window;
+	private NodeTree tree;
+	private Node mainNode;
 	
 	public Psilox(Config config) {
 		this.config = config;
 		initLog();
 		initIntervals();
 		config.logConfig(this);
+		tree = new NodeTree(this);
 	}
 	
-	public void start() {
+	public void start(Node mainNode) {
 		if(running()) return;
 		initThread();
+		this.mainNode = mainNode;
 	}
 	
 	public void stop() {
@@ -51,6 +55,7 @@ public class Psilox {
 	public void update() {
 		glfwPollEvents();
 		tick++;
+		tree.update();
 	}
 	
 	public void render() {
@@ -58,16 +63,8 @@ public class Psilox {
 		if(clearScreen) {
 			clear();
 		}
-	
-		Transform a = new Transform(new Vec(250), tick);
-		Transform b = new Transform(a, new Vec(150, 0), -tick);
 		
-		pushTransform(a);
-		ellipsef(Color.GREEN, Vec.ZERO, 50, 30);
-		line(Color.RED, new Vec(0, 0, 0.1f), Vec.X_UNIT.scl(50));
-		pushTransform(b);
-		ellipsef(Color.GREEN, Vec.ZERO, 50, 30);
-		line(Color.RED, new Vec(0, 0, 0.1f), Vec.X_UNIT.scl(-50));
+		tree.render();
 		
 		int error = glGetError();
 		if(error != GL_NO_ERROR) {
@@ -82,6 +79,7 @@ public class Psilox {
 		long lastRender = Time.now() - renderInterval;
 		
 		initWindow();
+		tree.getRoot().addChild(mainNode);
 		
 		while(running()) {
 			if(updateInterval != Config.MANUAL && Time.since(lastUpdate) >= updateInterval) {

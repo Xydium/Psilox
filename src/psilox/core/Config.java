@@ -12,7 +12,7 @@ public class Config {
 	public static final int MANUAL = -1;
 	
 	public int width = 500, height = 500, ups = 60, fps = 60;
-	public boolean fullscreen = false, clearscreen = true, doubleBuffer = true, undecorated = false, console = true, immediateMode = false;
+	public boolean fullscreen = false, clearscreen = true, doubleBuffer = true, undecorated = false, console = true, immediateMode = true;
 	public String title = "Psilox", logLevel = "DEBUG";
 	public String[] terminationSequence = {"CONTROL", "SHIFT", "Z"};
 	public Color clearColor = new Color(0.0f, 0.0f, 0.0f);
