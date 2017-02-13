@@ -18,9 +18,14 @@ public class Shader {
 	private boolean enabled = false;
 	private final int ID;
 	private Map<String, Integer> locationCache = new HashMap<String, Integer>();
+	private boolean ignoreTrn, ignoreProj, ignoreTrnProj;
 	
 	public Shader(String shader) {
 		ID = ShaderUtils.load(shader);
+		enable();
+		ignoreTrn = getUniform("transform") == -1;
+		ignoreProj = getUniform("projection") == -1;
+		ignoreTrnProj = getUniform("projection_transform") == -1;
 	}
 	
 	public int getUniform(String name) {
@@ -28,9 +33,7 @@ public class Shader {
 			return locationCache.get(name);
 		
 		int result = glGetUniformLocation(ID, name);
-		if (result == -1) 
-			System.err.println("Could not find uniform variable '" + name + "'!");
-		else
+		if(result != -1)
 			locationCache.put(name, result);
 		return result;
 	}
@@ -68,6 +71,17 @@ public class Shader {
 	public void enable() {
 		glUseProgram(ID);
 		enabled = true;
+		if(!ignoreTrn) {
+			setUniformMat4f("transform", Draw.currentTransform());
+		}
+		
+		if(!ignoreProj) {
+			setUniformMat4f("projection", Draw.projection);
+		}
+		
+		if(!ignoreTrnProj) {
+			setUniformMat4f("projection_transform", Draw.projection.multiply(Draw.currentTransform()));
+		}
 	}
 	
 	public void disable() {

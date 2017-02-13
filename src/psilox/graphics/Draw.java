@@ -4,6 +4,9 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL32.*;
 
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.Stack;
 
 import psilox.math.Mat4;
@@ -83,6 +86,7 @@ public class Draw {
 	}
 	
 	public static Mat4 currentTransform() {
+		if(transforms.size() == 0) transforms.push(Mat4.identity());
 		return transforms.peek();
 	}
 	
@@ -196,11 +200,21 @@ public class Draw {
 	public static void strip(Color c, Vec...verts) {
 		immediate(GL_TRIANGLE_STRIP, c, verts);
 	}
+
+	public static void text(Color c, Font font, Texture texture, String text) {
+		BufferedImage image = new BufferedImage(texture.getWidth(), texture.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = image.getGraphics();
+		g.setFont(font);
+		g.setColor(new java.awt.Color(c.r, c.g, c.b, c.a));
+		g.drawString(text, 0, (int) image.getHeight());
+		texture.setData(image);
+	}
 	
 	public static void texture(Texture tex, Vec i) {
 		if(!immediateEnabled()) return;
 		tex.bind();
 		glBegin(GL_QUADS);
+		glColor4f(1, 1, 1, 1);
 		glTexCoord2f(0, 0);
 		glVertex3f(i.x, i.y, i.z);
 		i.x += tex.getWidth();

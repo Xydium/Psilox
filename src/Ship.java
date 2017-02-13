@@ -1,12 +1,16 @@
 import static psilox.graphics.Draw.*;
 import static psilox.input.Input.*;
 
+import java.awt.Font;
+import java.awt.FontMetrics;
+
 import org.lwjgl.opengl.GL11;
 
 import psilox.core.Config;
 import psilox.core.Node;
 import psilox.core.Psilox;
 import psilox.graphics.Color;
+import psilox.graphics.Texture;
 import psilox.math.Random;
 import psilox.math.Vec;
 
@@ -14,6 +18,8 @@ public class Ship extends Node {
 
 	private Vec velocity = new Vec(0);
 	private boolean accelerating;
+	private Texture text;
+	private Font font;
 	
 	public void added() {
 		getRoot().addChild(new Sky());
@@ -22,6 +28,8 @@ public class Ship extends Node {
 		getRoot().addChild(a);
 		transform.translate(viewSize().scl(.5f));
 		transform.translate(new Vec(0, 0, 0));
+		font = new Font("Arial", Font.PLAIN, 12);
+		text = new Texture(100, 12);
 	}
 	
 	public void update() {
@@ -57,6 +65,8 @@ public class Ship extends Node {
 			immediate(GL11.GL_TRIANGLES, new Color[] {Color.BLUE, Color.YELLOW, Color.RED}, new Vec[] {a, b, d});
 			immediate(GL11.GL_TRIANGLES, new Color[] {Color.BLUE, Color.YELLOW, Color.RED}, new Vec[] {a, c, d});
 		}
+		text(Color.WHITE, font, text, "" + psilox().ticks());
+		texture(text, new Vec(0));
 	}
 	
 	public static void main(String[] args) { 

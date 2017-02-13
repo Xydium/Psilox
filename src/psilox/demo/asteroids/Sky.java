@@ -1,3 +1,5 @@
+package psilox.demo.asteroids;
+
 import psilox.core.Node;
 import psilox.graphics.Color;
 import psilox.graphics.Draw;
@@ -12,16 +14,13 @@ public class Sky extends Node {
 		sky = new Shader("shaders/sky.shd");
 		sky.enable();
 		sky.setUniform4f("color", new Color(2, 2, 10));
-		sky.setUniform1f("threshold", .96f);
-		sky.setUniformMat4f("projection", Draw.projection);
+		sky.setUniform1f("threshold", .97f);
 		sky.disable();
-		transform.translate(new Vec(0, 0, -9));
 	}
 	
 	public void render() {
 		sky.enable();
-		sky.setUniform1f("time", psilox().ticks() / 20.0f);
-		sky.setUniformMat4f("transform", Draw.currentTransform());
+		sky.setUniform1f("time", psilox().ticks() / 40.0f);
 		Draw.quad(Color.WHITE, Vec.ZERO, viewSize());
 		sky.disable();
 	}

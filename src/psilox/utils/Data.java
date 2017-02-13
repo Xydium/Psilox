@@ -54,6 +54,20 @@ public class Data {
 		}
 	}
 	
+	public int find(String contents) {
+		for(int i = 0; i < lines.length; i++) {
+			if(lines[i].contains(contents)) return i;
+		}
+		return -1;
+	}
+	
+	public int find(String contents, int start) {
+		for(int i = start; i < lines.length; i++) {
+			if(lines[i].contains(contents)) return i;
+		}
+		return -1;
+	}
+	
 	public String getPath() {
 		return path;
 	}
@@ -86,6 +100,14 @@ public class Data {
 		String res = "";
 		for(String s : lines) {
 			res += s + sep;
+		}
+		return res;
+	}
+	
+	public String concatenated(char sep, int start, int end) {
+		String res = "";
+		for(int i = start; i < end; i++) {
+			res += lines[i] + sep;
 		}
 		return res;
 	}

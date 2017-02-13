@@ -9,9 +9,27 @@ public class ShaderUtils {
 	}
 	
 	public static int load(String path) {
-		String src = FileUtils.loadAsString(path);
-		String vert = src.substring(src.indexOf("VERTEX:") + 7, src.indexOf("FRAGMENT:"));
-		String frag = src.substring(src.indexOf("FRAGMENT:") + 9, src.length());
+		Data shd = new Data(path);
+		shd.setLines(FileUtils.loadAsString(path).split("\n"));
+		int vertexStartLine = shd.find("VERTEX:");
+		int vertexVersionLine = shd.find("#version", vertexStartLine + 1);
+		int fragmentStartLine = shd.find("FRAGMENT:");
+		int fragmentVersionLine = shd.find("#version", fragmentStartLine + 1);
+		
+		String[] vertHeader = new String[4];
+		vertHeader[0] = shd.getLine(vertexVersionLine);
+		vertHeader[1] = "uniform mat4 projection;";
+		vertHeader[2] = "uniform mat4 transform;";
+		vertHeader[3] = "uniform mat4 projection_transform;";
+		
+		String vert = "";
+		for(String s : vertHeader) {
+			vert += s + '\n';
+		}
+		vert += shd.concatenated('\n', vertexVersionLine + 1, fragmentStartLine);
+		
+		String frag = shd.concatenated('\n', fragmentVersionLine, shd.getLineCount());
+		
 		return create(vert, frag);
 	}
 	
