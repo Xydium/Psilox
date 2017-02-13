@@ -12,6 +12,7 @@ public class Asteroid extends Node {
 	public void added() {
 		velocity = new Vec(Random.floatVal(-2, 2), Random.floatVal(-2, 2));
 		spin = Random.floatVal(-3, 3);
+		transform.translate(new Vec(0, 0, 0));
 	}
 	
 	public void update() {
@@ -26,6 +27,7 @@ public class Asteroid extends Node {
 					Asteroid a = new Asteroid();
 					a.transform().setPosition(new Vec(Random.floatVal(viewSize().x), Random.floatVal(viewSize().y)));
 					getParent().addChild(a);
+					getParent().removeChild(n);
 					getParent().removeChild(this);
 				}
 			}

@@ -21,6 +21,7 @@ public class Ship extends Node {
 		a.transform().setPosition(new Vec(50));
 		getRoot().addChild(a);
 		transform.translate(viewSize().scl(.5f));
+		transform.translate(new Vec(0, 0, 0));
 	}
 	
 	public void update() {

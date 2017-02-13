@@ -18,6 +18,7 @@ public class Draw {
 	private static float[] clearColor = new float[4];
 	private static Stack<Mat4> transforms = new Stack<Mat4>();
 	public static boolean immediateMode = false;
+	public static Mat4 projection;
 	
 	public static void loadDrawShaders() {
 		if(circle == null) {

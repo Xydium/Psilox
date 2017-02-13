@@ -9,7 +9,7 @@ public class Bullet extends Node {
 	
 	public void added() {
 		velocity = new Vec(0, 10).rot(rtn());
-		transform.translate(new Vec(0, 0, 2));
+		transform.translate(new Vec(0, 0, 0));
 	}
 	
 	public void update() {

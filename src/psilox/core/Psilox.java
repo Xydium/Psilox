@@ -164,6 +164,7 @@ public class Psilox {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0, config.width, 0, config.height, -10, 10);
+		Draw.projection = Mat4.orthographic(0, config.width, 0, config.height, -10, 10);
 		glMatrixMode(GL_MODELVIEW);
 		Input.WINDOW_HEIGHT = config.height;
 		Draw.loadDrawShaders();

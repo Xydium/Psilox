@@ -2,8 +2,12 @@ VERTEX:
 
 #version 130
 
+uniform mat4 projection;
+uniform mat4 transform;
+
 void main() {
-	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+	vec4 v = vec4(gl_Vertex.xyz, 1);
+	gl_Position = projection * transform * v;
 }
 
 FRAGMENT:
