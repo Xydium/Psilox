@@ -43,8 +43,8 @@ public class Psilox {
 	
 	public void start(Node mainNode) {
 		if(running()) return;
-		initThread();
 		this.mainNode = mainNode;
+		initThread();
 	}
 	
 	public void stop() {
@@ -116,8 +116,15 @@ public class Psilox {
 	
 	private void initThread() {
 		running = true;
-		thread = new Thread(() -> { loop(); });
-		thread.start();
+		if(System.getProperty("os.name").contains("Mac")) {
+			Log.warning("Macintosh does not support GLFW windows on alternate threads, running Psilox on main thread.");
+			Log.warning("Macintosh does not support OpenGL 2.2+. Using Legacy OpenGL 2.1 instead.");
+			Log.warning("Macintosh does not support GLSL version 130 or higher, use shader version 120 instead.");
+			loop();
+		} else {
+			thread = new Thread(() -> { loop(); });
+			thread.start();
+		}
 	}
 	
 	private void initWindow() {
@@ -169,7 +176,6 @@ public class Psilox {
 		Draw.projection = Mat4.orthographic(0, config.width, 0, config.height, -10, 10);
 		glMatrixMode(GL_MODELVIEW);
 		Input.WINDOW_HEIGHT = config.height;
-		Draw.loadDrawShaders();
 	}
 	
 	private long calculateInterval(int ps) {

@@ -35,6 +35,13 @@ public class Player extends Node {
 		Vec pos = pos();
 		pos.x = (pos.x + velocity.x + ((pos.x < 0) ? viewSize().x : 0)) % viewSize().x;
 		pos.y = (pos.y + velocity.y + ((pos.y < 0) ? viewSize().y : 0)) % viewSize().y;
+		
+		if(keyDown(SPACE) && psilox().ticks() % 10 == 0) {
+			Bullet b = new Bullet();
+			b.transform().setPosition(pos().sum(SHIP_VERTS[0].rot(rtn())));
+			b.transform().setRotation(rtn());
+			getParent().addChild(b);
+		}
 	}
 	
 	public void render() {

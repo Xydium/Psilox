@@ -16,18 +16,11 @@ import psilox.utils.Log;
 
 public class Draw {
 
-	private static Shader circle;
 	private static int[] viewport = new int[4];
 	private static float[] clearColor = new float[4];
 	private static Stack<Mat4> transforms = new Stack<Mat4>();
 	public static boolean immediateMode = false;
 	public static Mat4 projection;
-	
-	public static void loadDrawShaders() {
-		if(circle == null) {
-			circle = new Shader("shaders/circle.shd");
-		}
-	}
 	
 	private static void makeFrameBuffer(Texture tex) {
 		int frameBuffer = glGenFramebuffers();
@@ -232,24 +225,6 @@ public class Draw {
 	
 	public static void ctexture(Texture tex, Vec i) {
 		texture(tex, i.dif(new Vec(tex.getWidth(), -tex.getHeight()).scl(.5f)));
-	}
-	
-	public static void ellipsef(Color c, Vec origin, float r) {
-		circle.enable();
-		circle.setUniform3f("u_origin", origin);
-		circle.setUniform1f("u_radius", r);
-		circle.setUniform1i("u_filled", GL_TRUE);
-		quad(c, origin.sum(new Vec(-r)), origin.sum(new Vec(r, -r)), origin.sum(new Vec(r, r)), origin.sum(new Vec(-r, r)));
-		circle.disable();
-	}
-	
-	public static void ellipse(Color c, Vec origin, float r) {
-		circle.enable();
-		circle.setUniform3f("u_origin", origin);
-		circle.setUniform1f("u_radius", r);
-		circle.setUniform1i("u_filled", GL_FALSE);
-		quad(c, origin.sum(new Vec(-r)), origin.sum(new Vec(r, -r)), origin.sum(new Vec(r, r)), origin.sum(new Vec(-r, r)));
-		circle.disable();
 	}
 	
 	public static void ellipsef(Color c, Vec origin, float r, int segs) {
