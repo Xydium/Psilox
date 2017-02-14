@@ -8,12 +8,10 @@ import static psilox.graphics.Draw.*;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
-import psilox.graphics.Color;
 import psilox.graphics.Draw;
 import psilox.input.Input;
+import psilox.input.KeySequence;
 import psilox.math.Mat4;
-import psilox.math.Transform;
-import psilox.math.Vec;
 import psilox.utils.Log;
 import psilox.utils.Time;
 
@@ -33,6 +31,7 @@ public class Psilox {
 	private long window;
 	private NodeTree tree;
 	private Node mainNode;
+	private KeySequence terminator;
 	
 	public Psilox(Config config) {
 		this.config = config;
@@ -49,7 +48,7 @@ public class Psilox {
 	}
 	
 	public void stop() {
-		running = true;
+		running = false;
 	}
 	
 	public void update() {
@@ -103,6 +102,9 @@ public class Psilox {
 	}
 	
 	private void initLog() {
+		if(config.terminationSequence.length > 0) {
+			terminator = new KeySequence(this::stop, config.terminationSequence).asCombination();
+		}
 		Log.setLogLevel(config.logLevel);
 		Log.setConsoleEnabled(config.console);
 	}

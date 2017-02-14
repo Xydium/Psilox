@@ -20,8 +20,9 @@ public class Game extends Node {
 	
 	public static void main(String[] args) {
 		Config c = new Config();
-		c.width = 1280;
-		c.height = 720;
+		c.fullscreen = true;
+		c.width = 1920;
+		c.height = 1080;
 		new Psilox(c).start(new Game());
 	}
 	

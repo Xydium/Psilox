@@ -1,9 +1,7 @@
 package psilox.core;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import psilox.graphics.Color;
+import psilox.input.Input;
 import psilox.utils.Log;
 
 public class Config {
@@ -14,7 +12,7 @@ public class Config {
 	public int width = 500, height = 500, ups = 60, fps = 60;
 	public boolean fullscreen = false, clearscreen = true, doubleBuffer = true, undecorated = false, console = true, immediateMode = true;
 	public String title = "Psilox", logLevel = "DEBUG";
-	public String[] terminationSequence = {"CONTROL", "SHIFT", "Z"};
+	public int[] terminationSequence = {Input.LEFT_CONTROL, Input.LEFT_SHIFT, Input.Z};
 	public Color clearColor = new Color(0.0f, 0.0f, 0.0f);
 	
 	public void logConfig(Psilox psilox) {
@@ -32,7 +30,11 @@ public class Config {
 		Log.debug("## Immediate-Mode GL: %b", immediateMode);
 		Log.debug("## Using System Printstream: %b", console);
 		Log.debug("## Log Level-of-Detail: %s", logLevel);
-		Log.debug("## Termination Sequence: %s", Stream.of(terminationSequence).collect(Collectors.joining(",","[","]")));
+		String termSeq = "" + terminationSequence[0];
+		for(int i = 1; i < terminationSequence.length; i++) {
+			termSeq += "," + terminationSequence[i];
+		}
+		Log.debug("## Termination Sequence: %s", termSeq);
 		Log.debug("####################################################");
 	}
 	
