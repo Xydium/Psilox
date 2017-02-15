@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import psilox.node.Node;
+import psilox.utils.Log;
 
 public class NodeTree {
 
@@ -60,10 +61,18 @@ public class NodeTree {
 	
 	private void applyChanges() {
 		for(NodePair pair : queuedAdditions) {
-			pair.parent.addChild(pair.child);
+			try {
+				pair.parent.addChild(pair.child);
+			} catch (Exception e) {
+				Log.warning("Something went wrong when deferred adding %s to %s.", pair.child.getTag(), pair.parent.getTag());
+			}
 		}
 		for(NodePair pair : queuedRemovals) {
-			pair.parent.removeChild(pair.child);
+			try {
+				pair.parent.removeChild(pair.child);
+			} catch (Exception e) {
+				Log.warning("Something went wrong when deferred adding %s to %s.", pair.child.getTag(), pair.parent.getTag());
+			}
 		}
 		queuedAdditions.clear();
 		queuedRemovals.clear();

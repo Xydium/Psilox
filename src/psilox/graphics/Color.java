@@ -15,6 +15,7 @@ public class Color {
 	public static final Color LIGHT_GRAY = new Color(.75f, .75f, .75f, 1.0f);
 	public static final Color CLEAR = new Color(0, 0, 0, 0);
 	public static final Color BROWN = new Color(165, 42, 42, 255);
+	public static final Color ORANGE = new Color(255, 150, 0);
 	
 	public final float r, g, b, a;
 	
@@ -39,6 +40,22 @@ public class Color {
 	
 	public Color(int hex) {
 		this((hex >> 24) & 0xFF, (hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0xFF);
+	}
+	
+	public Color rAdj(float r) {
+		return new Color(r, g, b, a);
+	}
+	
+	public Color gAdj(float g) {
+		return new Color(r, g, b, a);
+	}
+	
+	public Color bAdj(float b) {
+		return new Color(r, g, b, a);
+	}
+	
+	public Color aAdj(float a) {
+		return new Color(r, g, b, a);
 	}
 	
 	public static float[] toFloatArray(Color[] colors) { 

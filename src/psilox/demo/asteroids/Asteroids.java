@@ -1,14 +1,7 @@
 package psilox.demo.asteroids;
 
-import static psilox.graphics.Draw.immediate;
-import static psilox.graphics.Draw.outline;
-import static psilox.input.Input.A;
-import static psilox.input.Input.D;
-import static psilox.input.Input.SPACE;
-import static psilox.input.Input.W;
-import static psilox.input.Input.keyDown;
-
-import org.lwjgl.opengl.GL11;
+import static psilox.graphics.Draw.*;
+import static psilox.input.Input.*;
 
 import psilox.core.Config;
 import psilox.core.Psilox;
@@ -27,25 +20,25 @@ public class Asteroids extends Node {
 	private Player player;
 	
 	public void added() {
-		addChild(sky = new Sky());
+		addChildren(sky = new Sky(), player = new Player());
 		sky.transform().translate(new Vec(0, 0, -1));
-		
-		addChild(player = new Player());
 		player.transform().translate(viewSize().scl(.5f));
-		
-		addChild(new Timer("spawner", 6, false, () -> { addChild(new Asteroid()); } ).start());
+		addChild(new Timer("spawner", 4, false, () -> { addChild(new Asteroid(Asteroid.FULL)); } ).start());
 	}
 	
 	public void update() {
 		for(Node a : getChildren(Asteroid.class)) {
-			if(a.pos().dst(player.pos()) < 40) {
+			if(a.pos().dst(player.pos()) < ((Asteroid) a).getRadius() + 10) {
 				removeChild(a);
+				addChild(new Explosion(player.pos(), player.rtn()));
 				player.transform().setPosition(viewSize().scl(.5f));
 				continue;
 			}
 			
 			for(Node b : getChildren(Bullet.class)) {
-				if(a.pos().dst(b.pos()) < 40) {
+				if(a.pos().dst(b.pos()) < ((Asteroid) a).getRadius() + 10) {
+					((Asteroid) a).split();
+					addChild(new Explosion(a.pos(), a.rtn()));
 					removeChild(a);
 					removeChild(b);
 					break;
@@ -74,7 +67,7 @@ class Sky extends Node {
 	
 	public void render() {
 		sky.enable();
-		sky.setUniform1f("time", psilox().ticks() / 40.0f);
+		sky.setUniform1f("time", psilox().ticks() / 10f);
 		Draw.quad(Color.WHITE, Vec.ZERO, viewSize());
 		sky.disable();
 	}
@@ -86,9 +79,9 @@ class Player extends Node {
 	private static final Vec ACCELERATION = new Vec(0, .1f);
 	private static final float ROTATION = 3;
 	
-	private static final Vec[] SHIP_VERTS = { new Vec(0, 20), new Vec(-10, -20), new Vec(0, -10), new Vec(10, -20) };
-	private static final Vec[] FLAME_VERTS = { new Vec(0, -10), new Vec(-5, -15), new Vec(5, -15) };
-	private static final Color[] FLAME_COLORS = { Color.BLUE, Color.YELLOW, Color.RED };
+	private static final Vec[] SHIP_VERTS = { new Vec(0, 20), new Vec(-10, -20), Vec.ZERO, new Vec(10, -20) };
+	private static final Vec[] FLAME_VERTS = { SHIP_VERTS[2], SHIP_VERTS[1], SHIP_VERTS[3] };
+	private static final Color[] FLAME_COLORS = { Color.BLUE.aAdj(.5f), Color.YELLOW.aAdj(.7f), Color.RED };
 	
 	private Vec velocity = new Vec(0);
 	private boolean accelerating;
@@ -117,9 +110,9 @@ class Player extends Node {
 	public void render() {
 		outline(Color.WHITE, SHIP_VERTS);
 		if(accelerating) {
-			Vec off = new Vec(Random.intVal(-3, 4), -25 + Random.intVal(-5, 6));
-			immediate(GL11.GL_TRIANGLES, FLAME_COLORS, new Vec[] { FLAME_VERTS[0], FLAME_VERTS[1], off });
-			immediate(GL11.GL_TRIANGLES, FLAME_COLORS, new Vec[] { FLAME_VERTS[0], FLAME_VERTS[2], off });
+			Vec off = new Vec(Random.intVal(-3, 4), -40 + Random.intVal(-5, 6));
+			immediate(4, FLAME_COLORS, new Vec[] { FLAME_VERTS[0], FLAME_VERTS[1], off });
+			immediate(4, FLAME_COLORS, new Vec[] { FLAME_VERTS[0], FLAME_VERTS[2], off });
 		}
 	}
 	
@@ -149,12 +142,23 @@ class Bullet extends Node {
 
 class Asteroid extends Node {
 	
+	public static final int FULL = 40;
+	public static final int HALF = FULL / 2;
+	
 	private Vec velocity;
 	private float spin;
+	private int radius;
+	
+	public Asteroid(int radius) {
+		super();
+		this.radius = radius;
+	}
 	
 	public void added() {
 		velocity = new Vec(Random.intVal(-2, 2), Random.intVal(-2, 2));
-		transform.setPosition(viewSize().pro(new Vec(Random.floatVal(1), Random.floatVal(1))));
+		if(radius == FULL) {
+			transform.setPosition(viewSize().pro(new Vec(Random.floatVal(1), Random.floatVal(1))));
+		}
 		spin = Random.floatVal(-5, 5);
 	}
 	
@@ -167,8 +171,57 @@ class Asteroid extends Node {
 		pos.y = (pos.y + velocity.y + ((pos.y < 0) ? viewSize().y : 0)) % viewSize().y;
 	}
 	
+	public void split() {
+		if(radius == FULL) {
+			Asteroid a = new Asteroid(HALF);
+			Asteroid b = new Asteroid(HALF);
+			a.transform.setPosition(pos().sum(new Vec(20, 20)));
+			b.transform.setPosition(pos().sum(new Vec(-20, -20)));
+			getParent().addChildren(a, b);
+		}
+	}
+	
+	public float getRadius() {
+		return radius;
+	}
+	
 	public void render() {
-		Draw.ellipse(Color.BROWN, Vec.ZERO, 40, 10);
+		Draw.ellipse(Color.BROWN, Vec.ZERO, radius, 10);
+	}
+	
+}
+
+class Explosion extends Node {
+	
+	private static final float delta = 40;
+	
+	private float distanceOut;
+	private float distanceIn;
+	
+	public Explosion(Vec pos, float rot) {
+		super();
+		transform.setPosition(pos);
+		transform.setRotation(rot);
+	}
+	
+	public void update() {
+		if(distanceOut < viewSize().x) {
+			distanceOut += 1.5f * delta;
+		}
+		if(distanceIn < viewSize().x) {
+			distanceIn += delta;
+		} else {
+			freeSelf();
+		}
+	}
+	
+	public void render() {
+		Vec[] points = new Vec[16];
+		for(int i = 0; i < points.length; i += 2) {
+			points[i] = Vec.angMag(i / 2 * 45, distanceIn);
+			points[i + 1] = Vec.angMag(i / 2 * 45, distanceOut);
+		}
+		Draw.immediate(1, Color.ORANGE.aAdj(.5f), points);
 	}
 	
 }

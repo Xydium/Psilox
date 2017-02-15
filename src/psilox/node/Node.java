@@ -32,10 +32,13 @@ public class Node implements InputListener {
 	private long UID;
 	
 	public Node() {
-		this("" + Random.intVal());
+		this(null);
 	}
 	
 	public Node(String tag) {
+		if(tag == null) {
+			tag = getClass().getSimpleName() + (nextID + 1);
+		}
 		this.transform = new Transform();
 		this.children = new HashMap<String, Node>();
 		this.tag = tag;

@@ -41,5 +41,37 @@ public class Timer extends Node {
 	public void stop() {
 		setUpdating(false);
 	}
+
+	public float getDuration() {
+		return duration;
+	}
+
+	public void setDuration(float duration) {
+		this.duration = duration;
+	}
+
+	public float getElapsed() {
+		return elapsed;
+	}
+
+	public void setElapsed(float elapsed) {
+		this.elapsed = elapsed;
+	}
+
+	public boolean isOneshot() {
+		return oneshot;
+	}
+
+	public void setOneshot(boolean oneshot) {
+		this.oneshot = oneshot;
+	}
+
+	public Function getConnection() {
+		return connection;
+	}
+
+	public void setConnection(Function connection) {
+		this.connection = connection;
+	}
 	
 }

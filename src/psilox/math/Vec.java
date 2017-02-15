@@ -24,9 +24,17 @@ public class Vec {
 		this.y = y;
 		this.z = z;
 	}
+
+	public Vec(double x, double y) {
+		this((float) x, (float) y);
+	}
 	
 	public Vec(float x, float y) {
 		this(x, y, 0);
+	}
+	
+	public Vec(double n) {
+		this((float) n);
 	}
 	
 	public Vec(float n) {
@@ -122,11 +130,18 @@ public class Vec {
 	}
 	
 	public float ang() {
-		return (float) Math.atan2(y, x);
+		return (float) Math.toDegrees(Math.atan2(y, x));
 	}
 	
 	public float dot(Vec o) {
 		return x * o.x + y * o.y + z * o.z;
+	}
+
+	public static Vec angMag(float angle, float mag) {
+		angle = (float) Math.toRadians(angle);
+		Vec res = new Vec(Math.cos(angle), Math.sin(angle));
+		res.mul(mag);
+		return res;
 	}
 	
 	public static float[] toFloatArray(Vec[] vertices) { 
