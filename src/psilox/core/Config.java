@@ -15,6 +15,17 @@ public class Config {
 	public int[] terminationSequence = {Input.LEFT_CONTROL, Input.LEFT_SHIFT, Input.Z};
 	public Color clearColor = new Color(0.0f, 0.0f, 0.0f);
 	
+	public Config() {
+		
+	}
+	
+	public Config(String title, int width, int height, boolean fullscreen) {
+		this.title = title;
+		this.width = width;
+		this.height = height;
+		this.fullscreen = fullscreen;
+	}
+	
 	public void logConfig(Psilox psilox) {
 		Log.debug("###### Psilox Started, Reviewing Configuration...###");
 		Log.debug("## Width: %d", width);

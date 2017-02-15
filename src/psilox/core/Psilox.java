@@ -117,9 +117,10 @@ public class Psilox {
 	private void initThread() {
 		running = true;
 		if(System.getProperty("os.name").contains("Mac")) {
-			Log.warning("Macintosh does not support GLFW windows on alternate threads, running Psilox on main thread.");
-			Log.warning("Macintosh does not support OpenGL 2.2+. Using Legacy OpenGL 2.1 instead.");
-			Log.warning("Macintosh does not support GLSL version 130 or higher, use shader version 120 instead.");
+			Log.warning("Mac OSX does not support GLFW windows on alternate threads, running Psilox on main thread.");
+			Log.warning("Mac OSX does not support OpenGL 2.2+ with Fixed-Function. Using Legacy OpenGL 2.1 instead.");
+			Log.warning("Mac OSX GL 2.1 does not support GLSL version 130 or higher, use shader version 120 instead.");
+			Log.warning("Do yourself a favor: Stop spending $3000 on outdated hardware with obnoxiously restrictive software.");
 			loop();
 		} else {
 			thread = new Thread(() -> { loop(); });
@@ -196,6 +197,10 @@ public class Psilox {
 	
 	public Config config() {
 		return config;
+	}
+	
+	public static Psilox defaults() {
+		return new Psilox(new Config());
 	}
 	
 }

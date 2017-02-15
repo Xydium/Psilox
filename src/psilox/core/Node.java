@@ -144,6 +144,10 @@ public class Node implements InputListener {
 		return children.get(tag);
 	}
 	
+	public void freeSelf() {
+		getParent().removeChild(this);
+	}
+	
 	public List<Node> getChildren(String tagPart) {
 		List<Node> nodes = new ArrayList<Node>();
 		for(String tag : children.keySet()) {
