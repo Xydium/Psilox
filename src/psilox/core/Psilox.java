@@ -12,6 +12,7 @@ import psilox.graphics.Draw;
 import psilox.input.Input;
 import psilox.input.KeySequence;
 import psilox.math.Mat4;
+import psilox.node.Node;
 import psilox.utils.Log;
 import psilox.utils.Time;
 

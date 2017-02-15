@@ -14,6 +14,7 @@ public class Color {
 	public static final Color MED_GRAY = new Color(.5f, .5f, .5f, 1.0f);
 	public static final Color LIGHT_GRAY = new Color(.75f, .75f, .75f, 1.0f);
 	public static final Color CLEAR = new Color(0, 0, 0, 0);
+	public static final Color BROWN = new Color(165, 42, 42, 255);
 	
 	public final float r, g, b, a;
 	

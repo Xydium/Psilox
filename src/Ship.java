@@ -7,12 +7,12 @@ import java.awt.FontMetrics;
 import org.lwjgl.opengl.GL11;
 
 import psilox.core.Config;
-import psilox.core.Node;
 import psilox.core.Psilox;
 import psilox.graphics.Color;
 import psilox.graphics.Texture;
 import psilox.math.Random;
 import psilox.math.Vec;
+import psilox.node.Node;
 
 public class Ship extends Node {
 

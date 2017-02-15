@@ -1,10 +1,13 @@
-package psilox.core;
+package psilox.node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import psilox.core.Config;
+import psilox.core.NodeTree;
+import psilox.core.Psilox;
 import psilox.graphics.Draw;
 import psilox.input.Input;
 import psilox.input.InputEvent;
@@ -145,7 +148,7 @@ public class Node implements InputListener {
 	}
 	
 	public void freeSelf() {
-		getParent().removeChild(this);
+		getParent().removeChild(this.getTag());
 	}
 	
 	public List<Node> getChildren(String tagPart) {

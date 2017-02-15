@@ -1,12 +1,16 @@
 package psilox.demo.asteroids;
 
-import static psilox.graphics.Draw.*;
-import static psilox.input.Input.*;
+import static psilox.graphics.Draw.immediate;
+import static psilox.graphics.Draw.outline;
+import static psilox.input.Input.A;
+import static psilox.input.Input.D;
+import static psilox.input.Input.SPACE;
+import static psilox.input.Input.W;
+import static psilox.input.Input.keyDown;
 
 import org.lwjgl.opengl.GL11;
 
 import psilox.core.Config;
-import psilox.core.Node;
 import psilox.core.Psilox;
 import psilox.graphics.Color;
 import psilox.graphics.Draw;
@@ -14,6 +18,8 @@ import psilox.graphics.Shader;
 import psilox.math.Random;
 import psilox.math.Transform;
 import psilox.math.Vec;
+import psilox.node.Node;
+import psilox.node.Timer;
 
 public class Asteroids extends Node {
 
@@ -26,6 +32,26 @@ public class Asteroids extends Node {
 		
 		addChild(player = new Player());
 		player.transform().translate(viewSize().scl(.5f));
+		
+		addChild(new Timer("spawner", 6, false, () -> { addChild(new Asteroid()); } ).start());
+	}
+	
+	public void update() {
+		for(Node a : getChildren(Asteroid.class)) {
+			if(a.pos().dst(player.pos()) < 40) {
+				removeChild(a);
+				player.transform().setPosition(viewSize().scl(.5f));
+				continue;
+			}
+			
+			for(Node b : getChildren(Bullet.class)) {
+				if(a.pos().dst(b.pos()) < 40) {
+					removeChild(a);
+					removeChild(b);
+					break;
+				}
+			}
+		}
 	}
 	
 	public static void main(String[] args) {
@@ -105,7 +131,6 @@ class Bullet extends Node {
 	
 	public void added() {
 		velocity = new Vec(0, 10).rot(rtn());
-		transform.translate(new Vec(0, 0, 0));
 	}
 	
 	public void update() {
@@ -118,6 +143,32 @@ class Bullet extends Node {
 	
 	public void render() {
 		Draw.line(Color.RED, Vec.ZERO, new Vec(0, 5));
+	}
+	
+}
+
+class Asteroid extends Node {
+	
+	private Vec velocity;
+	private float spin;
+	
+	public void added() {
+		velocity = new Vec(Random.intVal(-2, 2), Random.intVal(-2, 2));
+		transform.setPosition(viewSize().pro(new Vec(Random.floatVal(1), Random.floatVal(1))));
+		spin = Random.floatVal(-5, 5);
+	}
+	
+	public void update() {
+		transform.translate(velocity);
+		transform.rotate(spin);
+		
+		Vec pos = pos();
+		pos.x = (pos.x + velocity.x + ((pos.x < 0) ? viewSize().x : 0)) % viewSize().x;
+		pos.y = (pos.y + velocity.y + ((pos.y < 0) ? viewSize().y : 0)) % viewSize().y;
+	}
+	
+	public void render() {
+		Draw.ellipse(Color.BROWN, Vec.ZERO, 40, 10);
 	}
 	
 }

@@ -1,25 +1,23 @@
 package psilox.core;
 
-import java.awt.Window;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-import psilox.graphics.Draw;
-import psilox.input.Input;
+import psilox.node.Node;
 
 public class NodeTree {
 
 	private boolean iterating;
 	
-	private Map<Node, Node> queuedAdditions;
-	private Map<Node, Node> queuedRemovals;
+	private List<NodePair> queuedAdditions;
+	private List<NodePair> queuedRemovals;
 	
 	private Node root;
 	private Psilox psilox;
 	
 	public NodeTree(Psilox psilox) {
-		this.queuedAdditions = new HashMap<Node, Node>();
-		this.queuedRemovals = new HashMap<Node, Node>();
+		this.queuedAdditions = new ArrayList<NodePair>();
+		this.queuedRemovals = new ArrayList<NodePair>();
 		this.psilox = psilox;
 		this.root = new Node("root");
 		root.setTree(this);
@@ -53,19 +51,19 @@ public class NodeTree {
 	}
 	
 	public void queueAddition(Node parent, Node child) {
-		queuedAdditions.put(parent, child);
+		queuedAdditions.add(new NodePair(parent, child));
 	}
 	
 	public void queueRemoval(Node parent, Node child) {
-		queuedRemovals.put(parent, child);
+		queuedRemovals.add(new NodePair(parent, child));
 	}
 	
 	private void applyChanges() {
-		for(Node parent : queuedAdditions.keySet()) {
-			parent.addChild(queuedAdditions.get(parent));
+		for(NodePair pair : queuedAdditions) {
+			pair.parent.addChild(pair.child);
 		}
-		for(Node parent : queuedRemovals.keySet()) {
-			parent.removeChild(queuedRemovals.get(parent));
+		for(NodePair pair : queuedRemovals) {
+			pair.parent.removeChild(pair.child);
 		}
 		queuedAdditions.clear();
 		queuedRemovals.clear();
@@ -88,5 +86,15 @@ public class NodeTree {
 		return psilox.audio();
 	}
 	*/
+	
+	private class NodePair {
+		public Node parent;
+		public Node child;
+		
+		public NodePair(Node p, Node c) {
+			this.parent = p;
+			this.child = c;
+		}
+	}
 	
 }

@@ -1,7 +1,7 @@
-import psilox.core.Node;
 import psilox.graphics.Color;
 import psilox.graphics.Draw;
 import psilox.math.Vec;
+import psilox.node.Node;
 
 public class Bullet extends Node {
 

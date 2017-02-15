@@ -1,8 +1,8 @@
-import psilox.core.Node;
 import psilox.graphics.Color;
 import psilox.graphics.Draw;
 import psilox.math.Random;
 import psilox.math.Vec;
+import psilox.node.Node;
 
 public class Asteroid extends Node {
 
