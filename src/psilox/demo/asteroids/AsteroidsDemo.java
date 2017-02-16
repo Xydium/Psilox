@@ -4,6 +4,8 @@ import static psilox.graphics.Draw.*;
 import static psilox.input.Input.*;
 
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
 
 import psilox.audio.Audio;
 import psilox.core.Config;
@@ -18,7 +20,15 @@ import psilox.math.Vec;
 import psilox.node.Node;
 import psilox.node.Timer;
 
-public class Asteroids extends Node {
+public class AsteroidsDemo {
+	
+	public static void main(String[] args) {
+		new Psilox(new Config("Asteroids", 1280, 720, false)).start(new Game());
+	}
+	
+}
+
+class Game extends Node {
 
 	private Sky sky;
 	private Player player;
@@ -26,6 +36,7 @@ public class Asteroids extends Node {
 	private int score;
 	private boolean updateText = true;
 	private Font scoreFont;
+	private float deathScreenAlpha;
 	
 	public void added() {
 		addChildren(sky = new Sky(), player = new Player());
@@ -41,7 +52,7 @@ public class Asteroids extends Node {
 		scoreFont = new Font("Verdana", Font.PLAIN, 16);
 	}
 	
-	public void update() {
+	public void update() {		
 		for(Node a : getChildren(Asteroid.class)) {
 			if(a.pos().dst(player.pos()) < ((Asteroid) a).getRadius() + 10) {
 				removeChild(a);
@@ -50,6 +61,7 @@ public class Asteroids extends Node {
 				Audio.playSound("crash", .5);
 				score = 0;
 				updateText = true;
+				deathScreenAlpha = 1;
 				continue;
 			}
 			
@@ -59,8 +71,8 @@ public class Asteroids extends Node {
 					score += ((Asteroid) a).getRadius();
 					updateText = true;
 					addChild(new Explosion(a.pos(), a.rtn()));
-					removeChild(a);
 					removeChild(b);
+					removeChild(a);
 					Audio.playSound("rock", .5);
 					break;
 				}
@@ -74,10 +86,10 @@ public class Asteroids extends Node {
 			updateText = false;
 		}
 		texture(scoreLabel, new Vec(10, viewSize().y - 10));
-	}
-	
-	public static void main(String[] args) {
-		new Psilox(new Config("Asteroids", 1280, 720, false)).start(new Asteroids());
+		if(deathScreenAlpha > 0) {
+			quad(Color.RED.aAdj(deathScreenAlpha), Vec.ZERO.sum(new Vec(0, 0, 1)), viewSize());
+			deathScreenAlpha -= psilox().deltaTime() * 2;
+		}
 	}
 	
 }

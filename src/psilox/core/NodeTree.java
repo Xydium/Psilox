@@ -61,6 +61,7 @@ public class NodeTree {
 	
 	private void applyChanges() {
 		for(NodePair pair : queuedAdditions) {
+			if(pair.child.getTree() != null) continue;
 			try {
 				pair.parent.addChild(pair.child);
 			} catch (Exception e) {
@@ -68,6 +69,7 @@ public class NodeTree {
 			}
 		}
 		for(NodePair pair : queuedRemovals) {
+			if(pair.child.getTree() == null) continue;
 			try {
 				pair.parent.removeChild(pair.child);
 			} catch (Exception e) {
