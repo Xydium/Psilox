@@ -71,7 +71,7 @@ public class NodeTree {
 			try {
 				pair.parent.removeChild(pair.child);
 			} catch (Exception e) {
-				Log.warning("Something went wrong when deferred adding %s to %s.", pair.child.getTag(), pair.parent.getTag());
+				Log.warning("Something went wrong when deferred removing %s from %s.", pair.child.getTag(), pair.parent.getTag());
 			}
 		}
 		queuedAdditions.clear();
@@ -89,12 +89,6 @@ public class NodeTree {
 	public Config config() {
 		return psilox.config();
 	}
-	
-	/*
-	public Audio audio() {
-		return psilox.audio();
-	}
-	*/
 	
 	private class NodePair {
 		public Node parent;

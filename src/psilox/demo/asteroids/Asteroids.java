@@ -3,11 +3,15 @@ package psilox.demo.asteroids;
 import static psilox.graphics.Draw.*;
 import static psilox.input.Input.*;
 
+import java.awt.Font;
+
+import psilox.audio.Audio;
 import psilox.core.Config;
 import psilox.core.Psilox;
 import psilox.graphics.Color;
 import psilox.graphics.Draw;
 import psilox.graphics.Shader;
+import psilox.graphics.Texture;
 import psilox.math.Random;
 import psilox.math.Transform;
 import psilox.math.Vec;
@@ -18,12 +22,23 @@ public class Asteroids extends Node {
 
 	private Sky sky;
 	private Player player;
+	private Texture scoreLabel;
+	private int score;
+	private boolean updateText = true;
+	private Font scoreFont;
 	
 	public void added() {
 		addChildren(sky = new Sky(), player = new Player());
 		sky.transform().translate(new Vec(0, 0, -1));
 		player.transform().translate(viewSize().scl(.5f));
 		addChild(new Timer("spawner", 4, false, () -> { addChild(new Asteroid(Asteroid.FULL)); } ).start());
+		
+		Audio.addSound("rock", "psilox/demo/asteroids/rock.wav");
+		Audio.addSound("crash", "psilox/demo/asteroids/crash.wav");
+		
+		scoreLabel = new Texture(200, 15);
+		score = 0;
+		scoreFont = new Font("Verdana", Font.PLAIN, 16);
 	}
 	
 	public void update() {
@@ -32,19 +47,33 @@ public class Asteroids extends Node {
 				removeChild(a);
 				addChild(new Explosion(player.pos(), player.rtn()));
 				player.transform().setPosition(viewSize().scl(.5f));
+				Audio.playSound("crash", .5);
+				score = 0;
+				updateText = true;
 				continue;
 			}
 			
 			for(Node b : getChildren(Bullet.class)) {
 				if(a.pos().dst(b.pos()) < ((Asteroid) a).getRadius() + 10) {
 					((Asteroid) a).split();
+					score += ((Asteroid) a).getRadius();
+					updateText = true;
 					addChild(new Explosion(a.pos(), a.rtn()));
 					removeChild(a);
 					removeChild(b);
+					Audio.playSound("rock", .5);
 					break;
 				}
 			}
 		}
+	}
+	
+	public void render() {
+		if(updateText) {
+			text(Color.WHITE, scoreFont, scoreLabel, "Score: " + score);
+			updateText = false;
+		}
+		texture(scoreLabel, new Vec(10, viewSize().y - 10));
 	}
 	
 	public static void main(String[] args) {
@@ -67,7 +96,7 @@ class Sky extends Node {
 	
 	public void render() {
 		sky.enable();
-		sky.setUniform1f("time", psilox().ticks() / 10f);
+		sky.setUniform1f("time", psilox().ticks() / 15f);
 		Draw.quad(Color.WHITE, Vec.ZERO, viewSize());
 		sky.disable();
 	}
@@ -86,9 +115,21 @@ class Player extends Node {
 	private Vec velocity = new Vec(0);
 	private boolean accelerating;
 	
+	public void added() {
+		Audio.addMusic("engine", "psilox/demo/asteroids/engine.wav");
+		Audio.addSound("laser", "psilox/demo/asteroids/laser.wav");
+	}
+	
 	public void update() {
+		boolean wasAccelerating = accelerating;
 		if(accelerating = keyDown(W))  {
 			velocity = velocity.sum(ACCELERATION.rot(rtn())).clm(10);
+		}
+		
+		if(wasAccelerating && !accelerating) {
+			Audio.stopMusic("engine");
+		} else if(!wasAccelerating && accelerating) {
+			Audio.loopMusic("engine");
 		}
 		
 		if (keyDown(A))
@@ -102,8 +143,9 @@ class Player extends Node {
 		
 		if(keyDown(SPACE) && psilox().ticks() % 10 == 0) {
 			Bullet b = new Bullet();
-			b.setTransform(new Transform(null, pos().sum(SHIP_VERTS[0].rot(rtn())), rtn()));
+			b.setTransform(new Transform(null, pos().sum(SHIP_VERTS[0].sum(new Vec(0, 25)).rot(rtn())), rtn()));
 			getParent().addChild(b);
+			Audio.playSound("laser");
 		}
 	}
 	
@@ -121,21 +163,28 @@ class Player extends Node {
 class Bullet extends Node {
 	
 	private Vec velocity;
+	private int lifetime;
 	
 	public void added() {
-		velocity = new Vec(0, 10).rot(rtn());
+		velocity = new Vec(0, 40).rot(rtn());
+		lifetime = 5;
 	}
 	
 	public void update() {
 		transform.translate(velocity);
+		lifetime++;
+	
+		Vec tailPoint = new Vec(0, -lifetime * 10).rot(rtn()).sum(pos());
 		
-		if(!pos().btn(Vec.ZERO, viewSize())) {
+		if(!tailPoint.btn(Vec.ZERO, viewSize())) {
 			freeSelf();
 		}
 	}
 	
+	
+	
 	public void render() {
-		Draw.line(Color.RED, Vec.ZERO, new Vec(0, 5));
+		Draw.line(Color.RED, Vec.ZERO, new Vec(0, -lifetime * 5));
 	}
 	
 }
@@ -155,7 +204,7 @@ class Asteroid extends Node {
 	}
 	
 	public void added() {
-		velocity = new Vec(Random.intVal(-2, 2), Random.intVal(-2, 2));
+		velocity = new Vec(Random.floatVal(-2, 2), Random.floatVal(-2, 2));
 		if(radius == FULL) {
 			transform.setPosition(viewSize().pro(new Vec(Random.floatVal(1), Random.floatVal(1))));
 		}

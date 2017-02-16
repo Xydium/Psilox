@@ -8,6 +8,7 @@ import static psilox.graphics.Draw.*;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
+import psilox.audio.Audio;
 import psilox.graphics.Draw;
 import psilox.input.Input;
 import psilox.input.KeySequence;
@@ -100,6 +101,7 @@ public class Psilox {
 		glfwTerminate();
 		
 		Input.dumpListeners();
+		Audio.shutdown();
 	}
 	
 	private void initLog() {
@@ -178,6 +180,7 @@ public class Psilox {
 		Draw.projection = Mat4.orthographic(0, config.width, 0, config.height, -10, 10);
 		glMatrixMode(GL_MODELVIEW);
 		Input.WINDOW_HEIGHT = config.height;
+		Audio.init();
 	}
 	
 	private long calculateInterval(int ps) {
