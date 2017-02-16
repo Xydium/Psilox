@@ -1,11 +1,18 @@
 package psilox.demo.asteroids;
 
-import static psilox.graphics.Draw.*;
-import static psilox.input.Input.*;
+import static psilox.graphics.Draw.immediate;
+import static psilox.graphics.Draw.outline;
+import static psilox.graphics.Draw.quad;
+import static psilox.graphics.Draw.text;
+import static psilox.graphics.Draw.texture;
+import static psilox.input.Input.A;
+import static psilox.input.Input.D;
+import static psilox.input.Input.SPACE;
+import static psilox.input.Input.W;
+import static psilox.input.Input.keyDown;
 
 import java.awt.Font;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.GraphicsEnvironment;
 
 import psilox.audio.Audio;
 import psilox.core.Config;
@@ -19,6 +26,7 @@ import psilox.math.Transform;
 import psilox.math.Vec;
 import psilox.node.Node;
 import psilox.node.Timer;
+import psilox.utils.Log;
 
 public class AsteroidsDemo {
 	
@@ -47,12 +55,11 @@ class Game extends Node {
 		Audio.addSound("rock", "psilox/demo/asteroids/rock.wav");
 		Audio.addSound("crash", "psilox/demo/asteroids/crash.wav");
 		
-		scoreLabel = new Texture(200, 15);
-		score = 0;
-		scoreFont = new Font("Verdana", Font.PLAIN, 16);
+		scoreLabel = new Texture(200, 40);
+		scoreFont = new Font("Verdana", Font.PLAIN, 32);
 	}
 	
-	public void update() {		
+	public void update() {
 		for(Node a : getChildren(Asteroid.class)) {
 			if(a.pos().dst(player.pos()) < ((Asteroid) a).getRadius() + 10) {
 				removeChild(a);
@@ -85,7 +92,7 @@ class Game extends Node {
 			text(Color.WHITE, scoreFont, scoreLabel, "Score: " + score);
 			updateText = false;
 		}
-		texture(scoreLabel, new Vec(10, viewSize().y - 10));
+		texture(scoreLabel, new Vec(10, viewSize().y + 3));
 		if(deathScreenAlpha > 0) {
 			quad(Color.RED.aAdj(deathScreenAlpha), Vec.ZERO.sum(new Vec(0, 0, 1)), viewSize());
 			deathScreenAlpha -= psilox().deltaTime() * 2;
@@ -192,8 +199,6 @@ class Bullet extends Node {
 			freeSelf();
 		}
 	}
-	
-	
 	
 	public void render() {
 		Draw.line(Color.RED, Vec.ZERO, new Vec(0, -lifetime * 5));

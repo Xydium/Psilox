@@ -97,8 +97,8 @@ public class Node implements InputListener {
 	}
 	
 	public void addChild(Node child) {
-		if(tree.isIterating()) {
-			tree.queueAddition(this, child);
+		if(getTree().isIterating()) {
+			getTree().queueAddition(this, child);
 			return;
 		}
 		child.setParent(this);
