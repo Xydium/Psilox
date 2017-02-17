@@ -1,18 +1,9 @@
 package psilox.demo.asteroids;
 
-import static psilox.graphics.Draw.immediate;
-import static psilox.graphics.Draw.outline;
-import static psilox.graphics.Draw.quad;
-import static psilox.graphics.Draw.text;
-import static psilox.graphics.Draw.texture;
-import static psilox.input.Input.A;
-import static psilox.input.Input.D;
-import static psilox.input.Input.SPACE;
-import static psilox.input.Input.W;
-import static psilox.input.Input.keyDown;
+import static psilox.graphics.Draw.*;
+import static psilox.input.Input.*;
 
 import java.awt.Font;
-import java.awt.GraphicsEnvironment;
 
 import psilox.audio.Audio;
 import psilox.core.Config;
@@ -26,7 +17,6 @@ import psilox.math.Transform;
 import psilox.math.Vec;
 import psilox.node.Node;
 import psilox.node.Timer;
-import psilox.utils.Log;
 
 public class AsteroidsDemo {
 	
@@ -63,13 +53,15 @@ class Game extends Node {
 		for(Node a : getChildren(Asteroid.class)) {
 			if(a.pos().dst(player.pos()) < ((Asteroid) a).getRadius() + 10) {
 				removeChild(a);
+				removeChildren(Asteroid.class);
+				removeChildren(Bullet.class);
 				addChild(new Explosion(player.pos(), player.rtn()));
 				player.transform().setPosition(viewSize().scl(.5f));
 				Audio.playSound("crash", .5);
 				score = 0;
 				updateText = true;
 				deathScreenAlpha = 1;
-				continue;
+				break;
 			}
 			
 			for(Node b : getChildren(Bullet.class)) {
@@ -160,7 +152,7 @@ class Player extends Node {
 		pos.x = (pos.x + velocity.x + ((pos.x < 0) ? viewSize().x : 0)) % viewSize().x;
 		pos.y = (pos.y + velocity.y + ((pos.y < 0) ? viewSize().y : 0)) % viewSize().y;
 		
-		if(keyDown(SPACE) && psilox().ticks() % 10 == 0) {
+		if(keyDown(SPACE) && psilox().ticks() % 20 == 0) {
 			Bullet b = new Bullet();
 			b.setTransform(new Transform(null, pos().sum(SHIP_VERTS[0].sum(new Vec(0, 25)).rot(rtn())), rtn()));
 			getParent().addChild(b);

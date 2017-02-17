@@ -5,19 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import psilox.core.Config;
 import psilox.core.NodeTree;
 import psilox.core.Psilox;
 import psilox.graphics.Draw;
 import psilox.input.Input;
 import psilox.input.InputEvent;
 import psilox.input.InputListener;
-import psilox.math.Random;
 import psilox.math.Transform;
-import psilox.math.Vec;
 import psilox.utils.Log;
 
-public class Node implements InputListener {
+public class Node implements InputListener, Shortcuts {
 		
 	private static long nextID = 0;
 	
@@ -146,6 +143,15 @@ public class Node implements InputListener {
 		}
 	}
 	
+	public void removeChildren(Class<? extends Node> type) {
+		for(String tag : children.keySet()) {
+			Node n = children.get(tag); 
+			if(n.getClass().equals(type)) {
+				removeChild(n);
+			}
+		}
+	}
+	
 	public Node getChild(String tag) {
 		return children.get(tag);
 	}
@@ -248,35 +254,6 @@ public class Node implements InputListener {
 	
 	public Psilox psilox() {
 		return getTree().psilox();
-	}
-	
-	public Config config() {
-		return getTree().config();
-	}
-	
-	public Vec viewSize() {
-		return new Vec(config().width, config().height);
-	}
-	
-	public void print(Object msg) {
-		Log.info(msg.toString());
-	}
-	
-	public void print(String msg, Object...objects) {
-		Log.info(msg, objects);
-	}
-	
-	public void error(String msg, Exception e) {
-		Log.error(msg);
-		Log.error(e);
-	}
-	
-	public Vec pos() {
-		return transform.position();
-	}
-	
-	public float rtn() {
-		return transform.rotation();
 	}
 	
 }

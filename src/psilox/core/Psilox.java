@@ -120,7 +120,7 @@ public class Psilox {
 		
 		initWindow();
 		tree.getRoot().addChild(mainNode);
-		Log.info("Commencing Loop...");
+		Log.internal("Commencing Loop...");
 		
 		while(running()) {
 			if(updateInterval != Config.MANUAL && Time.since(lastUpdate) >= updateInterval) {
