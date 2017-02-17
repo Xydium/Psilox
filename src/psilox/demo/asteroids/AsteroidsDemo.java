@@ -38,8 +38,10 @@ class Game extends Node {
 	
 	public void added() {
 		addChildren(sky = new Sky(), player = new Player());
-		sky.transform().translate(new Vec(0, 0, -1));
-		player.transform().translate(viewSize().scl(.5f));
+		
+		sky.setLayer(-1);
+		player.pos().add(viewSize().scl(.5f));
+		
 		addChild(new Timer("spawner", 4, false, () -> { addChild(new Asteroid(Asteroid.FULL)); } ).start());
 		
 		Audio.addSound("rock", "psilox/demo/asteroids/rock.wav");
@@ -81,7 +83,7 @@ class Game extends Node {
 	
 	public void render() {
 		if(updateText) {
-			text(Color.WHITE, scoreFont, scoreLabel, "Score: " + score);
+			text(Color.WHITE, scoreFont, scoreLabel, "Scoreg: " + score);
 			updateText = false;
 		}
 		texture(scoreLabel, new Vec(10, viewSize().y + 3));

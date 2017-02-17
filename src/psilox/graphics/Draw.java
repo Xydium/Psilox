@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL32.*;
 
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Stack;
@@ -197,9 +198,10 @@ public class Draw {
 	public static void text(Color c, Font font, Texture texture, String text) {
 		BufferedImage image = new BufferedImage(texture.getWidth(), texture.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
+		FontMetrics m = g.getFontMetrics(font);
 		g.setFont(font);
 		g.setColor(new java.awt.Color(c.r, c.g, c.b, c.a));
-		g.drawString(text, 0, (int) image.getHeight());
+		g.drawString(text, 0, (int) image.getHeight() / 2 + m.getAscent() / 2);
 		texture.setData(image);
 	}
 	

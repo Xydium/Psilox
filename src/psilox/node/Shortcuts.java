@@ -40,4 +40,8 @@ public interface Shortcuts {
 		return transform().rotation();
 	}
 	
+	default public void setLayer(float layer) {
+		pos().z = layer;
+	}
+	
 }
