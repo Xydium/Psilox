@@ -1,6 +1,7 @@
-package psilox.node;
+package psilox.node.utility;
 
 import psilox.input.Function;
+import psilox.node.Node;
 
 public class Timer extends Node {
 
@@ -14,7 +15,7 @@ public class Timer extends Node {
 		this.duration = duration;
 		this.oneshot = oneshot;
 		this.connection = connection;
-		setUpdating(false);
+		setUpdatable(false);
 		setVisible(false);
 	}
 	
@@ -34,12 +35,12 @@ public class Timer extends Node {
 	
 	public Timer start() {
 		elapsed = 0;
-		setUpdating(true);
+		setUpdatable(true);
 		return this;
 	}
 	
 	public void stop() {
-		setUpdating(false);
+		setUpdatable(false);
 	}
 
 	public float getDuration() {

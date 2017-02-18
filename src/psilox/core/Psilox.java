@@ -153,8 +153,8 @@ public class Psilox {
 	}
 	
 	private void initIntervals() {
-		updateInterval = calculateInterval(config.ups);
-		renderInterval = calculateInterval(config.fps);
+		updateInterval = calculateInterval(config.updateRate);
+		renderInterval = calculateInterval(config.frameRate);
 	}
 	
 	private void initThread() {

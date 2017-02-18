@@ -9,7 +9,7 @@ public class Config {
 	public static final int UNLIMITED = 0;
 	public static final int MANUAL = -1;
 	
-	public int width = 500, height = 500, ups = 60, fps = 60;
+	public int width = 500, height = 500, updateRate = 60, frameRate = 60;
 	public boolean fullscreen = false, clearscreen = true, doubleBuffer = true, undecorated = false, console = true, immediateMode = true;
 	public String title = "Psilox", logLevel = "DEBUG";
 	public int[] terminationSequence = {Input.LEFT_CONTROL, Input.LEFT_SHIFT, Input.Z};
@@ -31,8 +31,8 @@ public class Config {
 		Log.debug("## Width: %d", width);
 		Log.debug("## Height: %d", height);
 		Log.debug("## Title: %s", title);
-		Log.debug("## Update Rate: %d/sec", ups);
-		Log.debug("## Frame Rate: %d/sec", fps);
+		Log.debug("## Update Rate: %d/sec", updateRate);
+		Log.debug("## Frame Rate: %d/sec", frameRate);
 		Log.debug("## Full Screen: %b", fullscreen);
 		Log.debug("## Clear Screen: %b", clearscreen);
 		Log.debug("## Clear Color: %.2f, %.2f, %.2f, %.2f", clearColor.r, clearColor.g, clearColor.b, clearColor.a);

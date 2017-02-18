@@ -1,0 +1,7 @@
+package psilox.node;
+
+public enum Anchor {
+	BOTTOM_LEFT, MIDDLE_LEFT, TOP_LEFT,
+	BOTTOM_MIDDLE, CENTER, TOP_MIDDLE,
+	BOTTOM_RIGHT, MIDDLE_RIGHT, TOP_RIGHT;
+}

@@ -16,7 +16,7 @@ import psilox.math.Random;
 import psilox.math.Transform;
 import psilox.math.Vec;
 import psilox.node.Node;
-import psilox.node.Timer;
+import psilox.node.utility.Timer;
 
 public class AsteroidsDemo {
 	
@@ -36,7 +36,7 @@ class Game extends Node {
 	private Font scoreFont;
 	private float deathScreenAlpha;
 	
-	public void added() {
+	public void enteredTree() {
 		addChildren(sky = new Sky(), player = new Player());
 		
 		sky.setLayer(-1);
@@ -47,7 +47,7 @@ class Game extends Node {
 		Audio.addSound("rock", "psilox/demo/asteroids/rock.wav");
 		Audio.addSound("crash", "psilox/demo/asteroids/crash.wav");
 		
-		scoreLabel = new Texture(200, 40);
+		scoreLabel = new Texture(200, 50);
 		scoreFont = new Font("Verdana", Font.PLAIN, 32);
 	}
 	
@@ -99,7 +99,7 @@ class Sky extends Node {
 	
 	private Shader sky;
 	
-	public void added() {
+	public void enteredTree() {
 		sky = new Shader("shaders/sky.shd");
 		sky.enable();
 		sky.setUniform4f("color", new Color(2, 2, 10));
@@ -128,7 +128,7 @@ class Player extends Node {
 	private Vec velocity = new Vec(0);
 	private boolean accelerating;
 	
-	public void added() {
+	public void enteredTree() {
 		Audio.addMusic("engine", "psilox/demo/asteroids/engine.wav");
 		Audio.addSound("laser", "psilox/demo/asteroids/laser.wav");
 	}
@@ -178,7 +178,7 @@ class Bullet extends Node {
 	private Vec velocity;
 	private int lifetime;
 	
-	public void added() {
+	public void enteredTree() {
 		velocity = new Vec(0, 40).rot(rtn());
 		lifetime = 5;
 	}
@@ -214,7 +214,7 @@ class Asteroid extends Node {
 		this.radius = radius;
 	}
 	
-	public void added() {
+	public void enteredTree() {
 		velocity = new Vec(Random.floatVal(-2, 2), Random.floatVal(-2, 2));
 		if(radius == FULL) {
 			transform.setPosition(viewSize().pro(new Vec(Random.floatVal(1), Random.floatVal(1))));
@@ -276,10 +276,10 @@ class Explosion extends Node {
 	}
 	
 	public void render() {
-		Vec[] points = new Vec[16];
+		Vec[] points = new Vec[32];
 		for(int i = 0; i < points.length; i += 2) {
-			points[i] = Vec.angMag(i / 2 * 45, distanceIn);
-			points[i + 1] = Vec.angMag(i / 2 * 45, distanceOut);
+			points[i] = Vec.angMag(i / 2 * 22.5f, distanceIn);
+			points[i + 1] = Vec.angMag(i / 2 * 22.5f, distanceOut);
 		}
 		Draw.immediate(1, Color.ORANGE.aAdj(.5f), points);
 	}

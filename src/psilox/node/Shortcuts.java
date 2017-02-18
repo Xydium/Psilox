@@ -44,4 +44,43 @@ public interface Shortcuts {
 		pos().z = layer;
 	}
 	
+	default public void anchorAt(Anchor anchor, Vec dimension, Vec margin) {
+		Vec p = pos();
+		switch(anchor) {
+		case BOTTOM_LEFT:
+			p.add(new Vec(margin.x, margin.y));
+			break;
+		case BOTTOM_MIDDLE:
+			p.add(new Vec(dimension.x / 2, margin.y));
+			break;
+		case BOTTOM_RIGHT:
+			p.add(new Vec(dimension.x - margin.x, margin.y));
+			break;
+		case CENTER:
+			p.add(new Vec(dimension.x / 2, dimension.y / 2));
+			break;
+		case MIDDLE_LEFT:
+			p.add(new Vec(margin.x, dimension.y / 2));
+			break;
+		case MIDDLE_RIGHT:
+			p.add(new Vec(dimension.x - margin.x, dimension.y / 2));
+			break;
+		case TOP_LEFT:
+			p.add(new Vec(margin.x, dimension.y - margin.y));
+			break;
+		case TOP_MIDDLE:
+			p.add(new Vec(dimension.x / 2, dimension.y - margin.y));
+			break;
+		case TOP_RIGHT:
+			p.add(new Vec(dimension.x - margin.x, dimension.y - margin.y));
+			break;
+		default:
+			break;
+		}
+	}
+	
+	default public void anchorPoint(Anchor anchor, Vec dimensions) {
+		anchorAt(anchor, dimensions.scl(-1), Vec.ZERO);
+	}
+	
 }

@@ -21,12 +21,13 @@ public class Node implements InputListener, Shortcuts {
 	protected Transform transform;
 	private Node parent;
 	private NodeTree tree;
-	private Map<String, Node> children;
+	Map<String, Node> children;
 	private String tag;
-	private boolean updating;
+	private boolean updatable;
 	private boolean visible;
 	private boolean inputListening;
 	private long UID;
+	private boolean locked;
 	
 	public Node() {
 		this(null);
@@ -40,19 +41,19 @@ public class Node implements InputListener, Shortcuts {
 		this.children = new HashMap<String, Node>();
 		this.tag = tag;
 		this.UID = nextID++;
-		setUpdating(true);
+		setUpdatable(true);
 		setVisible(true);
 	}
 	
-	public void added() {}
-	public void removed() {}
+	public void enteredTree() {}
+	public void exitedTree() {}
 	public void update() {}
 	public void render() {}
 	public void receiveInput(InputEvent ev) {}
 	
 	public void updateChildren() {
 		for(Node child : getChildList()) {	
-			if(child.isUpdating()) {
+			if(child.isUpdatable()) {
 				child.updateChildren();
 				child.update();
 			}
@@ -89,11 +90,8 @@ public class Node implements InputListener, Shortcuts {
 		this.parent = parent;
 	}
 	
-	public Map<String, Node> getChildren() {
-		return children;
-	}
-	
 	public void addChild(Node child) {
+		if(locked) return;
 		if(getTree().isIterating()) {
 			getTree().queueAddition(this, child);
 			return;
@@ -102,7 +100,7 @@ public class Node implements InputListener, Shortcuts {
 		child.transform().setParent(transform());
 		child.setTree(tree);
 		if(children.putIfAbsent(child.getTag(), child) == null) {
-			child.added();
+			child.enteredTree();
 		}
 		else 
 			Log.error(String.format("Failed to add duplicate tagged node %s to %s", child.getTag(), tag));
@@ -115,6 +113,7 @@ public class Node implements InputListener, Shortcuts {
 	}
 	
 	public void removeChild(String tag) {
+		if(locked) return;
 		if(getTree().isIterating()) {
 			getTree().queueRemoval(this, children.get(tag));
 			return;
@@ -124,7 +123,7 @@ public class Node implements InputListener, Shortcuts {
 		child.transform().setParent(null);
 		child.setTree(null);
 		children.remove(tag);
-		child.removed();
+		child.exitedTree();
 	}
 	
 	public void removeChildren(String... tags) {
@@ -203,12 +202,12 @@ public class Node implements InputListener, Shortcuts {
 		return tag;
 	}
 	
-	public boolean isUpdating() {
-		return updating;
+	public boolean isUpdatable() {
+		return updatable;
 	}
 	
-	public void setUpdating(boolean updating) {
-		this.updating = updating;
+	public void setUpdatable(boolean updatable) {
+		this.updatable = updatable;
 	}
 	
 	public boolean isVisible() {
@@ -230,6 +229,10 @@ public class Node implements InputListener, Shortcuts {
 		} else {
 			Input.removeListener(this);
 		}
+	}
+	
+	public void lock() {
+		locked = true;
 	}
 	
 	public NodeTree getTree() {
