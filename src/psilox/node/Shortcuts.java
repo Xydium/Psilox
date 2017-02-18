@@ -45,6 +45,7 @@ public interface Shortcuts {
 	}
 	
 	default public void anchorAt(Anchor anchor, Vec dimension, Vec margin) {
+		transform().setPosition(new Vec(0));
 		Vec p = pos();
 		switch(anchor) {
 		case BOTTOM_LEFT:

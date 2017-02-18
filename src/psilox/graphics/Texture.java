@@ -101,6 +101,8 @@ public class Texture {
 	
 	public void setData(BufferedImage image) {
 		bind();
+		width = image.getWidth();
+		height = image.getHeight();
 		int[] pixels = new int[width * height];
 		image.getRGB(0, 0, width, height, pixels, 0, width);
 		int[] data = new int[width * height];
@@ -135,6 +137,10 @@ public class Texture {
 	
 	public void unbind() {
 		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+	
+	public void dispose() {
+		glDeleteTextures(texture);
 	}
 
 }

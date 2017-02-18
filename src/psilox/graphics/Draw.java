@@ -19,6 +19,7 @@ public class Draw {
 
 	private static int[] viewport = new int[4];
 	private static float[] clearColor = new float[4];
+	private static final Graphics gDefault = new BufferedImage(1, 1, 1).getGraphics();
 	private static Stack<Mat4> transforms = new Stack<Mat4>();
 	public static boolean immediateMode = false;
 	public static Mat4 projection;
@@ -196,33 +197,38 @@ public class Draw {
 	}
 
 	public static void text(Color c, Font font, Texture texture, String text) {
-		BufferedImage image = new BufferedImage(texture.getWidth(), texture.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		FontMetrics m = gDefault.getFontMetrics(font);
+		BufferedImage image = new BufferedImage(m.stringWidth(text), m.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
-		FontMetrics m = g.getFontMetrics(font);
 		g.setFont(font);
 		g.setColor(new java.awt.Color(c.r, c.g, c.b, c.a));
-		g.drawString(text, 0, (int) image.getHeight() / 2 + m.getAscent() / 2);
+		g.drawString(text, 0, image.getHeight() - m.getMaxDescent());
 		texture.setData(image);
 	}
 	
-	public static void texture(Texture tex, Vec i) {
+	public static void texture(Texture tex, Vec i, Color mod) {
 		if(!immediateEnabled()) return;
+		i = new Vec(i);
 		tex.bind();
 		glBegin(GL_QUADS);
-		glColor4f(1, 1, 1, 1);
-		glTexCoord2f(0, 0);
+		glColor4f(mod.r, mod.g, mod.b, mod.a);
+		glTexCoord2f(0, 1);
 		glVertex3f(i.x, i.y, i.z);
 		i.x += tex.getWidth();
-		glTexCoord2f(1, 0);
-		glVertex3f(i.x, i.y, i.z);
-		i.y -= tex.getHeight();
 		glTexCoord2f(1, 1);
 		glVertex3f(i.x, i.y, i.z);
+		i.y += tex.getHeight();
+		glTexCoord2f(1, 0);
+		glVertex3f(i.x, i.y, i.z);
 		i.x -= tex.getWidth();
-		glTexCoord2f(0, 1);
+		glTexCoord2f(0, 0);
 		glVertex3f(i.x, i.y, i.z);
 		glEnd();
 		tex.unbind();
+	}
+	
+	public static void texture(Texture tex, Vec i) {
+		texture(tex, i, Color.WHITE);
 	}
 	
 	public static void ctexture(Texture tex, Vec i) {

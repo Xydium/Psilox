@@ -1,50 +1,49 @@
 package psilox.demo.ui;
 
+import java.awt.Font;
+
 import psilox.core.Config;
 import psilox.core.Psilox;
 import psilox.graphics.Color;
-import psilox.graphics.Draw;
 import psilox.math.Vec;
 import psilox.node.Anchor;
 import psilox.node.Node;
 import psilox.node.ui.Container;
+import psilox.node.ui.Label;
 
 public class UIDemo extends Node {
-
+	
+	private static final Font f = new Font("Arial", Font.PLAIN, 36);
+	
 	private Container container;
-	private Point[] points;
 	
 	public void enteredTree() {
-		addChild(container = new Container("container", viewSize(), new Vec(5)));
+		addChild(container = new Container("container", viewSize(), new Vec(100)));
 		
-		points = new Point[container.anchors.length];
-		
-		for(int i = 0; i < points.length; i++) {
-			container.anchors[i].addChild(points[i] = new Point(Color.RED, 10));
-			points[i].anchorPoint(Anchor.values()[i], new Vec(10));
+		for(int i = 0; i < 9; i++) {
+			container.anchors[i].addChild(new Label(null, Anchor.values()[i], Color.WHITE, f, "KEK") {
+				public void pressed() {
+					setColor(Color.GREEN);
+				}
+				
+				public void released() {
+					setColor(Color.RED);
+					setText(getText().equals("PEPE") ? "KEK" : "PEPE");
+				}
+				
+				public void mouseEntered() {
+					setColor(Color.RED);
+				}
+				
+				public void mouseExited() {
+					setColor(Color.WHITE);
+				}
+			});
 		}
 	}
 	
 	public static void main(String[] args) {
-		Config c = new Config();
-		new Psilox(c).start(new UIDemo());
-	}
-	
-}
-
-class Point extends Node {
-	
-	private Color c;
-	private Vec size;
-	
-	public Point(Color c, int size) {
-		super();
-		this.c = c;
-		this.size = new Vec(size);
-	}
-	
-	public void render() {
-		Draw.quad(c, Vec.ZERO, size);
+		new Psilox(new Config("UIDemo", 600, 400, false)).start(new UIDemo());
 	}
 	
 }

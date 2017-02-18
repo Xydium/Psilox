@@ -41,6 +41,10 @@ public class Vec {
 		this(n, n, 0);
 	}
 	
+	public Vec(Vec o) {
+		this(o.x, o.y, o.z);
+	}
+	
 	public Vec sum(Vec o) {
 		return new Vec(x + o.x, y + o.y, z + o.z);
 	}
