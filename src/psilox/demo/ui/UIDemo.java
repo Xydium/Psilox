@@ -11,22 +11,28 @@ import psilox.input.InputEvent.InputState;
 import psilox.math.Vec;
 import psilox.node.Anchor;
 import psilox.node.Node;
+import psilox.node.ui.Button;
 import psilox.node.ui.Container;
 import psilox.node.ui.Label;
+import psilox.utils.Log;
 
 public class UIDemo extends Node {
 	
-	private static final Font f = new Font("Arial", Font.PLAIN, 36);
+	private static final Font f = new Font("Arial", Font.PLAIN, 18);
 	
 	private Container container;
 	private Label label;
 	private StringBuilder text;
+	private Button a, b;
 	
 	public void enteredTree() {
 		setInputListening(true);
 		addChild(container = new Container("container", viewSize(), new Vec(50)));
 		container.center.addChild(label = new Label("label", Anchor.CENTER, Color.WHITE, f, ""));
 		text = new StringBuilder();
+		container.topLeft.addChild(a = new Button(null, new Vec(200, 50), Anchor.TOP_LEFT, "Button One", () -> { label.setText("l33t sk1llz"); }));
+		container.topLeft.addChild(b = new Button(null, new Vec(200, 50), Anchor.TOP_LEFT, "Button Two", () -> { label.setText("thanks"); }));
+		b.pos().sub(new Vec(0, 60));
 	}
 	
 	public void receiveInput(InputEvent ev) {
@@ -42,7 +48,7 @@ public class UIDemo extends Node {
 	}
 	
 	public static void main(String[] args) {
-		new Psilox(new Config("UIDemo", 600, 400, false)).start(new UIDemo());
+		new Psilox(new Config("UIDemo", 1280, 720, false)).start(new UIDemo());
 	}
 	
 }

@@ -7,6 +7,8 @@ import static org.lwjgl.opengl.GL32.*;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.Stack;
 
@@ -19,7 +21,7 @@ public class Draw {
 
 	private static int[] viewport = new int[4];
 	private static float[] clearColor = new float[4];
-	private static final Graphics gDefault = new BufferedImage(1, 1, 1).getGraphics();
+	private static final Graphics2D gDefault = new BufferedImage(1, 1, 1).createGraphics();
 	private static Stack<Mat4> transforms = new Stack<Mat4>();
 	public static boolean immediateMode = false;
 	public static Mat4 projection;
@@ -196,6 +198,10 @@ public class Draw {
 		immediate(GL_TRIANGLE_STRIP, c, verts);
 	}
 
+	public static FontMetrics getFontMetrics(Font f) {
+		return gDefault.getFontMetrics(f);
+	}
+	
 	public static void text(Color c, Font font, Texture texture, String text) {
 		FontMetrics m = gDefault.getFontMetrics(font);
 		BufferedImage image = new BufferedImage(m.stringWidth(text) + (text.isEmpty() ? 1 : 0), m.getHeight(), BufferedImage.TYPE_INT_ARGB);
