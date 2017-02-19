@@ -20,7 +20,7 @@ public class InputEvent {
 	}
 	
 	public enum InputState {
-		PRESSED, RELEASED, MOVED;
+		PRESSED, RELEASED, MOVED, CHARACTER, REPEAT;
 	}
 	
 	public void halt() {

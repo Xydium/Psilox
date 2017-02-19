@@ -1,5 +1,6 @@
 package psilox.node.ui;
 
+import psilox.input.Function;
 import psilox.input.Input;
 import psilox.input.InputEvent;
 import psilox.input.InputEvent.InputState;
@@ -10,10 +11,17 @@ import psilox.node.Node;
 
 public class Panel extends Node {
 
+	private static Panel focusedPanel;
+	
 	private Vec dimensions;
 	private Anchor anchor;
 	private boolean mouseWasInside;
 	private boolean pressed;
+	
+	private Function onMouseEnter = () -> {};
+	private Function onMouseExit = () -> {};
+	private Function onPressed = () -> {};
+	private Function onReleased = () -> {};
 	
 	public Panel(String tag, Vec dimensions, Anchor anchor) {
 		super(tag);
@@ -41,11 +49,12 @@ public class Panel extends Node {
 		anchorPoint(anchor, dimensions);
 	}
 
-	public void mouseEntered() {}
-	public void mouseExited() {}
-	public void pressed() {}
-	public void released() {}
-
+	public void mouseEntered() { onMouseEnter.execute(); }
+	public void mouseExited() { onMouseExit.execute(); }
+	public void pressed() { onPressed.execute(); }
+	public void released() { onReleased.execute(); }
+	public void lostFocus() {}
+	
 	public boolean isMouseInside() {
 		return Input.position.btn(transform().positionGlobal(), transform.positionGlobal().sum(dimensions));
 	}
@@ -69,6 +78,7 @@ public class Panel extends Node {
 				}
 			} else if(ev.state == InputState.PRESSED && mouseWasInside) {
 				pressed = true;
+				requestFocus();
 				pressed();
 			} else if(ev.state == InputState.RELEASED && mouseWasInside) {
 				if(pressed) {
@@ -77,6 +87,37 @@ public class Panel extends Node {
 				}
 			}
 		}
+	}
+
+	public void setOnMouseEnter(Function onMouseEnter) {
+		this.onMouseEnter = onMouseEnter;
+	}
+
+	public void setOnMouseExit(Function onMouseExit) {
+		this.onMouseExit = onMouseExit;
+	}
+
+	public void setOnPressed(Function onPressed) {
+		this.onPressed = onPressed;
+	}
+
+	public void setOnReleased(Function onReleased) {
+		this.onReleased = onReleased;
+	}
+	
+	public void requestFocus() {
+		if(focusedPanel != null) {
+			focusedPanel.lostFocus();
+		}
+		focusedPanel = this;
+	}
+	
+	public boolean hasFocus() {
+		return focusedPanel == this;
+	}
+	
+	public static Panel getFocused() {
+		return focusedPanel;
 	}
 	
 }

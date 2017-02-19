@@ -198,7 +198,7 @@ public class Draw {
 
 	public static void text(Color c, Font font, Texture texture, String text) {
 		FontMetrics m = gDefault.getFontMetrics(font);
-		BufferedImage image = new BufferedImage(m.stringWidth(text), m.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(m.stringWidth(text) + (text.isEmpty() ? 1 : 0), m.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
 		g.setFont(font);
 		g.setColor(new java.awt.Color(c.r, c.g, c.b, c.a));

@@ -48,5 +48,23 @@ public class Container extends Node {
 		middleRight.anchorAt(Anchor.MIDDLE_RIGHT, dimension, margin);
 		topRight.anchorAt(Anchor.TOP_RIGHT, dimension, margin);
 	}
+
+	public Vec getDimension() {
+		return dimension;
+	}
+
+	public void setDimension(Vec dimension) {
+		this.dimension = dimension;
+		positionAnchors();
+	}
+
+	public Vec getMargin() {
+		return margin;
+	}
+
+	public void setMargin(Vec margin) {
+		this.margin = margin;
+		positionAnchors();
+	}
 	
 }

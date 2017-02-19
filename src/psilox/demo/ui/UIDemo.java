@@ -5,6 +5,9 @@ import java.awt.Font;
 import psilox.core.Config;
 import psilox.core.Psilox;
 import psilox.graphics.Color;
+import psilox.input.Input;
+import psilox.input.InputEvent;
+import psilox.input.InputEvent.InputState;
 import psilox.math.Vec;
 import psilox.node.Anchor;
 import psilox.node.Node;
@@ -16,29 +19,25 @@ public class UIDemo extends Node {
 	private static final Font f = new Font("Arial", Font.PLAIN, 36);
 	
 	private Container container;
+	private Label label;
+	private StringBuilder text;
 	
 	public void enteredTree() {
-		addChild(container = new Container("container", viewSize(), new Vec(100)));
-		
-		for(int i = 0; i < 9; i++) {
-			container.anchors[i].addChild(new Label(null, Anchor.values()[i], Color.WHITE, f, "KEK") {
-				public void pressed() {
-					setColor(Color.GREEN);
-				}
-				
-				public void released() {
-					setColor(Color.RED);
-					setText(getText().equals("PEPE") ? "KEK" : "PEPE");
-				}
-				
-				public void mouseEntered() {
-					setColor(Color.RED);
-				}
-				
-				public void mouseExited() {
-					setColor(Color.WHITE);
-				}
-			});
+		setInputListening(true);
+		addChild(container = new Container("container", viewSize(), new Vec(50)));
+		container.center.addChild(label = new Label("label", Anchor.CENTER, Color.WHITE, f, ""));
+		text = new StringBuilder();
+	}
+	
+	public void receiveInput(InputEvent ev) {
+		if(ev.state == InputState.CHARACTER) {
+			text.append((char) ev.key);
+			label.setText(text.toString());
+		} else if (ev.state == InputState.PRESSED || ev.state == InputState.REPEAT) {
+			if(ev.key == Input.BACKSPACE && text.length() > 0) {
+				text.deleteCharAt(text.length() - 1);
+				label.setText(text.toString());
+			}
 		}
 	}
 	

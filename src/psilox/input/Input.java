@@ -5,6 +5,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.glfw.GLFWCharCallback;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
@@ -89,8 +90,11 @@ public class Input {
 		public void invoke(long window, int key, int scancode, int action, int mods) {
 			if(key == UNKNOWN) return;
 			KEYS[key] = (byte) action;
-			if(action == GLFW_REPEAT) return;
-			dispatchEvent(InputType.KEYBOARD, key, action == GLFW_RELEASE? InputState.RELEASED : InputState.PRESSED);
+			if(action == GLFW_REPEAT) {
+				dispatchEvent(InputType.KEYBOARD, key, InputState.REPEAT);
+			} else {
+				dispatchEvent(InputType.KEYBOARD, key, action == GLFW_RELEASE? InputState.RELEASED : InputState.PRESSED);
+			}
 		}
 	};
 	
@@ -109,6 +113,14 @@ public class Input {
 			position.y = WINDOW_HEIGHT - (float) y;
 			dispatchEvent(InputType.MOUSE, 0, InputState.MOVED);
 		}
+	};
+	
+	public static final GLFWCharCallback charCallback = new GLFWCharCallback() {
+
+		public void invoke(long window, int character) {
+			dispatchEvent(InputType.KEYBOARD, character, InputState.CHARACTER);
+		}
+		
 	};
 	
 	public static final int UNKNOWN         =   -1                 ;
