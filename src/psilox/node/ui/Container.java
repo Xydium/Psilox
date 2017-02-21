@@ -25,6 +25,12 @@ public class Container extends Node {
 		bottomRight, middleRight, topRight
 	};
 	
+	public final Node[][] anchorsMat = {
+			{topLeft, topMiddle, topRight},
+			{middleLeft, center, middleRight},
+			{bottomLeft, bottomMiddle, bottomRight}
+	};
+	
 	public Container(String tag, Vec dimension, Vec margin) {
 		super(tag);
 		this.dimension = dimension;

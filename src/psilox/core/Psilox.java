@@ -125,6 +125,7 @@ public class Psilox {
 			Log.warning("Mac OSX GL 2.1 does not support GLSL version 130 or higher, use shader version 120 instead.");
 			System.setProperty("java.awt.headless", "true");
 			Log.warning("AWT cannot start it's event loop since GLFW is confined to the main thread. Resolving this causes an error you can safely ignore.");
+			Log.warning("Drawing to custom framebuffers fails on OpenGL 2.1, do not attempt.");
 			Log.warning("Do yourself a favor: Stop spending $3000 on outdated hardware with obnoxiously restrictive software.");
 			loop();
 		} else {

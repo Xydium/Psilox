@@ -205,7 +205,8 @@ public class Draw {
 	public static void text(Color c, Font font, Texture texture, String text) {
 		FontMetrics m = gDefault.getFontMetrics(font);
 		BufferedImage image = new BufferedImage(m.stringWidth(text) + (text.isEmpty() ? 1 : 0), m.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = image.getGraphics();
+		Graphics2D g = image.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 		g.setFont(font);
 		g.setColor(new java.awt.Color(c.r, c.g, c.b, c.a));
 		g.drawString(text, 0, image.getHeight() - m.getMaxDescent());
@@ -215,6 +216,7 @@ public class Draw {
 	public static void texture(Texture tex, Vec i, Color mod) {
 		if(!immediateEnabled()) return;
 		i = new Vec(i);
+		if(mod == null) { mod = Color.WHITE; }
 		tex.bind();
 		glBegin(GL_QUADS);
 		glColor4f(mod.r, mod.g, mod.b, mod.a);
