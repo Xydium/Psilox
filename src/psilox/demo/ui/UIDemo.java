@@ -14,7 +14,6 @@ import psilox.node.Node;
 import psilox.node.ui.Button;
 import psilox.node.ui.Container;
 import psilox.node.ui.Label;
-import psilox.utils.Log;
 
 public class UIDemo extends Node {
 	
@@ -48,7 +47,7 @@ public class UIDemo extends Node {
 	}
 	
 	public static void main(String[] args) {
-		new Psilox(new Config("UIDemo", 1280, 720, false)).start(new UIDemo());
+		Psilox.start(new Config("UIDemo", 1280, 720, false), new UIDemo());
 	}
 	
 }

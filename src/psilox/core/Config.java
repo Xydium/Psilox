@@ -26,7 +26,7 @@ public class Config {
 		this.fullscreen = fullscreen;
 	}
 	
-	public void logConfig(Psilox psilox) {
+	public void logConfig() {
 		Log.debug("###### Psilox Started, Reviewing Configuration...###");
 		Log.debug("## Width: %d", width);
 		Log.debug("## Height: %d", height);

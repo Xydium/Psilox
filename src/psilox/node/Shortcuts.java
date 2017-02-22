@@ -1,22 +1,16 @@
 package psilox.node;
 
-import psilox.core.Config;
 import psilox.core.Psilox;
 import psilox.math.Transform;
 import psilox.math.Vec;
 import psilox.utils.Log;
 
 public interface Shortcuts {
-	
-	public Psilox psilox();
+
 	public Transform transform();
 	
-	default public Config config() {
-		return psilox().config();
-	}
-	
 	default public Vec viewSize() {
-		return new Vec(config().width, config().height);
+		return new Vec(Psilox.config().width, Psilox.config().height);
 	}
 	
 	default public void print(Object msg) {

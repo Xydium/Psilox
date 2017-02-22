@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import psilox.core.NodeTree;
-import psilox.core.Psilox;
 import psilox.graphics.Draw;
 import psilox.input.Input;
 import psilox.input.InputEvent;
@@ -15,12 +13,12 @@ import psilox.math.Transform;
 import psilox.utils.Log;
 
 public class Node implements InputListener, Shortcuts {
-		
+	
 	private static long nextID = 0;
 	
 	protected Transform transform;
 	private Node parent;
-	private NodeTree tree;
+	private Node root;
 	Map<String, Node> children;
 	private String tag;
 	private boolean updatable;
@@ -28,6 +26,7 @@ public class Node implements InputListener, Shortcuts {
 	private boolean inputListening;
 	private long UID;
 	private boolean locked;
+	private boolean iterating;
 	
 	public Node() {
 		this(null);
@@ -41,6 +40,7 @@ public class Node implements InputListener, Shortcuts {
 		this.children = new HashMap<String, Node>();
 		this.tag = tag;
 		this.UID = nextID++;
+		refreshRoot();
 		setUpdatable(true);
 		setVisible(true);
 	}
@@ -52,15 +52,18 @@ public class Node implements InputListener, Shortcuts {
 	public void receiveInput(InputEvent ev) {}
 	
 	public void updateChildren() {
+		iterating = true;
 		for(Node child : getChildList()) {	
 			if(child.isUpdatable()) {
 				child.updateChildren();
 				child.update();
 			}
 		}
+		iterating = false;
 	}
 	
 	public void renderChildren() {
+		iterating = true;
 		for(Node child : getChildList()) {	
 			if(child.isVisible()) {
 				Draw.pushTransform(child.transform);
@@ -69,6 +72,7 @@ public class Node implements InputListener, Shortcuts {
 				Draw.popTransform();
 			}
 		}
+		iterating = false;
 	}
 	
 	public Transform transform() {
@@ -92,13 +96,13 @@ public class Node implements InputListener, Shortcuts {
 	
 	public void addChild(Node child) {
 		if(locked) return;
-		if(getTree().isIterating()) {
-			getTree().queueAddition(this, child);
+		if(iterating) {
+			queueAddition(this, child);
 			return;
 		}
 		child.setParent(this);
 		child.transform().setParent(transform());
-		child.setTree(tree);
+		child.refreshRoot();
 		if(children.putIfAbsent(child.getTag(), child) == null) {
 			child.enteredTree();
 		}
@@ -114,14 +118,14 @@ public class Node implements InputListener, Shortcuts {
 	
 	public void removeChild(String tag) {
 		if(locked) return;
-		if(getTree().isIterating()) {
-			getTree().queueRemoval(this, children.get(tag));
+		if(iterating) {
+			queueRemoval(this, children.get(tag));
 			return;
 		}
 		Node child = children.get(tag);
 		child.setParent(null);
+		child.refreshRoot();
 		child.transform().setParent(null);
-		child.setTree(null);
 		children.remove(tag);
 		child.exitedTree();
 	}
@@ -143,8 +147,7 @@ public class Node implements InputListener, Shortcuts {
 	}
 	
 	public void removeChildren(Class<? extends Node> type) {
-		for(String tag : children.keySet()) {
-			Node n = children.get(tag); 
+		for(Node n : getChildList()) { 
 			if(n.getClass().equals(type)) {
 				removeChild(n);
 			}
@@ -169,12 +172,12 @@ public class Node implements InputListener, Shortcuts {
 		return nodes;
 	}
 	
-	public List<Node> getChildren(Class<? extends Node> type) {
-		List<Node> nodes = new ArrayList<Node>();
+	public <T extends Node> List<T> getChildren(Class<T> type) {
+		List<T> nodes = new ArrayList<T>();
 		for(String tag : children.keySet()) {
 			Node n = children.get(tag);
 			if(n.getClass().equals(type)) {
-				nodes.add(n);
+				nodes.add((T) n);
 			}
 		}
 		return nodes;
@@ -235,16 +238,23 @@ public class Node implements InputListener, Shortcuts {
 		locked = true;
 	}
 	
-	public NodeTree getTree() {
-		return tree;
-	}
-	
 	public Node getRoot() {
-		return tree.getRoot();
+		return root;
 	}
 	
-	public void setTree(NodeTree tree) {
-		this.tree = tree;
+	public void refreshRoot() {
+		if(parent == null) {
+			root = this;
+		} else {
+			root = parent;
+			while(root.getParent() != null) {
+				root = root.getParent();
+			}
+		}
+		
+		for(Node n : getChildList()) {
+			n.refreshRoot();
+		}
 	}
 	
 	public long getUID() {
@@ -255,8 +265,41 @@ public class Node implements InputListener, Shortcuts {
 		return String.format("Node %s: Type=%s, Parent=%s, UID=%s", tag, getClass().getSimpleName(), parent == null ? "null" : parent.getTag(), UID);
 	}
 	
-	public Psilox psilox() {
-		return getTree().psilox();
+	private static List<NodePair> queuedChanges = new ArrayList<NodePair>();
+	
+	private static void queueAddition(Node parent, Node child) {
+		queuedChanges.add(new NodePair(parent, child, true));
+	}
+	
+	private static void queueRemoval(Node parent, Node child) {
+		queuedChanges.add(new NodePair(parent, child, false));
+	}
+	
+	public static void applyChanges() {
+		for(NodePair p : queuedChanges) {
+			try {
+				if(p.adding) {
+					p.parent.addChild(p.child);
+				} else {
+					p.parent.removeChild(p.child);
+				}
+			} catch(Exception e) {
+				Log.warning("Error applying queued change parent=%s, child=%s, adding=%b", p.parent.getTag(), p.child.getTag(), p.adding);
+			}
+		}
+		queuedChanges.clear();
+	}
+	
+	private static class NodePair {
+		public Node parent;
+		public Node child;
+		public boolean adding;
+		
+		public NodePair(Node p, Node c, boolean a) {
+			this.parent = p;
+			this.child = c;
+			this.adding = a;
+		}
 	}
 	
 }

@@ -1,5 +1,6 @@
 package psilox.node.utility;
 
+import psilox.core.Psilox;
 import psilox.input.Function;
 import psilox.node.Node;
 
@@ -20,7 +21,7 @@ public class Timer extends Node {
 	}
 	
 	public void update() {
-		elapsed += psilox().deltaTime();
+		elapsed += Psilox.deltaTime();
 		
 		if(elapsed >= duration) {
 			connection.execute();

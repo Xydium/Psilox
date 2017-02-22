@@ -16,6 +16,12 @@ import psilox.node.ui.Label;
 
 public class TicTacToe extends Node {
 
+	public static void main(String[] args) {
+		Config c = new Config("Tic Tac Toe", 500, 500, false);
+		c.clearColor = new Color(20, 20, 30);
+		Psilox.start(c, new TicTacToe());
+	}
+	
 	private Container container;
 	private Tile[][] tiles;
 	private Label nextMove;
@@ -25,8 +31,8 @@ public class TicTacToe extends Node {
 	
 	public void enteredTree() {
 		addChild(container = new Container("container", viewSize(), new Vec(100)));
-		
 		container.topMiddle.addChild(nextMove = new Label(null, Anchor.CENTER, Color.WHITE, new Font("Verdana", Font.PLAIN, 16), "Next Move: X"));
+		
 		nextMove.pos().y = 65;
 		nextMove.setLayer(2);
 		
@@ -43,7 +49,7 @@ public class TicTacToe extends Node {
 		ArrayList<Tile> xtiles = getTilesWithText("X");
 		ArrayList<Tile> otiles = getTilesWithText("O");
 		
-		if(didWin(xtiles) || didWin(otiles)) {
+		if(didWin(xtiles) || didWin(otiles) || xtiles.size() + otiles.size() == 9) {
 			for(Tile t : xtiles) {
 				t.getLabel().setText("");
 			}
@@ -97,10 +103,6 @@ public class TicTacToe extends Node {
 		return result;
 	}
 	
-	public static void main(String[] args) {
-		new Psilox(new Config("Tic Tac Toe", 500, 500, false)).start(new TicTacToe());
-	}
-	
 }
 
 class Tile extends Button {
@@ -115,14 +117,10 @@ class Tile extends Button {
 				tag, 
 				dimensions, 
 				Anchor.CENTER, 
-				"", 
-				Color.DARK_GRAY, 
-				Color.LIGHT_GRAY, 
-				Color.WHITE, 
-				Color.BLACK, 
-				FONT, 
+				"",
 				() -> {}
 		);
+		getLabel().setFont(FONT);
 		this.game = game;
 		this.coord = coord;
 		setOnReleased(this::flipTile);
@@ -152,7 +150,7 @@ class VictoryScreen extends Node {
 	
 	public void render() {
 		Draw.quad(Color.GREEN.aAdj(alpha), Vec.ZERO, viewSize());
-		alpha -= psilox().deltaTime();
+		alpha -= Psilox.deltaTime();
 		if(alpha < 0) {
 			freeSelf();
 		}

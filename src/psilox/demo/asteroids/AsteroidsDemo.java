@@ -11,17 +11,18 @@ import psilox.core.Psilox;
 import psilox.graphics.Color;
 import psilox.graphics.Draw;
 import psilox.graphics.Shader;
-import psilox.graphics.Texture;
 import psilox.math.Random;
 import psilox.math.Transform;
 import psilox.math.Vec;
+import psilox.node.Anchor;
 import psilox.node.Node;
+import psilox.node.ui.Label;
 import psilox.node.utility.Timer;
 
 public class AsteroidsDemo {
 	
 	public static void main(String[] args) {
-		new Psilox(new Config("Asteroids", 1280, 720, false)).start(new Game());
+		Psilox.start(new Config("Asteroids", 1280, 720, false), new Game());
 	}
 	
 }
@@ -30,10 +31,9 @@ class Game extends Node {
 
 	private Sky sky;
 	private Player player;
-	private Texture scoreLabel;
+	private Label scoreLabel;
+	private Node rel;
 	private int score;
-	private boolean updateText = true;
-	private Font scoreFont;
 	private float deathScreenAlpha;
 	
 	public void enteredTree() {
@@ -47,13 +47,17 @@ class Game extends Node {
 		Audio.addSound("rock", "psilox/demo/asteroids/rock.wav");
 		Audio.addSound("crash", "psilox/demo/asteroids/crash.wav");
 		
-		scoreLabel = new Texture(200, 50);
-		scoreFont = new Font("Verdana", Font.PLAIN, 32);
+		scoreLabel = new Label("score", Anchor.TOP_LEFT, Color.WHITE, new Font("Verdana", Font.PLAIN, 32), "Score: 0");
+		rel = new Node();
+		rel.pos().add(new Vec(100, 100, 1));
+		addChild(rel);
+		rel.addChild(scoreLabel);
+		rel.setVisible(false);
 	}
 	
 	public void update() {
-		for(Node a : getChildren(Asteroid.class)) {
-			if(a.pos().dst(player.pos()) < ((Asteroid) a).getRadius() + 10) {
+		for(Asteroid a : getChildren(Asteroid.class)) {
+			if(a.pos().dst(player.pos()) < a.getRadius() + 10) {
 				removeChild(a);
 				removeChildren(Asteroid.class);
 				removeChildren(Bullet.class);
@@ -61,16 +65,16 @@ class Game extends Node {
 				player.transform().setPosition(viewSize().scl(.5f));
 				Audio.playSound("crash", .5);
 				score = 0;
-				updateText = true;
+				scoreLabel.setText("Score: " + score);
 				deathScreenAlpha = 1;
 				break;
 			}
 			
-			for(Node b : getChildren(Bullet.class)) {
-				if(a.pos().dst(b.pos()) < ((Asteroid) a).getRadius() + 10) {
-					((Asteroid) a).split();
-					score += ((Asteroid) a).getRadius();
-					updateText = true;
+			for(Bullet b : getChildren(Bullet.class)) {
+				if(a.pos().dst(b.pos()) < a.getRadius() + 10) {
+					a.split();
+					score += a.getRadius();
+					scoreLabel.setText("Score: " + score);
 					addChild(new Explosion(a.pos(), a.rtn()));
 					removeChild(b);
 					removeChild(a);
@@ -82,14 +86,13 @@ class Game extends Node {
 	}
 	
 	public void render() {
-		if(updateText) {
-			text(Color.WHITE, scoreFont, scoreLabel, "Scoreg: " + score);
-			updateText = false;
-		}
-		texture(scoreLabel, new Vec(10, viewSize().y + 3));
+		Draw.pushTransform(rel.transform());
+		rel.renderChildren();
+		Draw.popTransform();
+		
 		if(deathScreenAlpha > 0) {
-			quad(Color.RED.aAdj(deathScreenAlpha), Vec.ZERO.sum(new Vec(0, 0, 1)), viewSize());
-			deathScreenAlpha -= psilox().deltaTime() * 2;
+			quad(Color.RED.aAdj(deathScreenAlpha), Vec.ZERO.sum(new Vec(0, 0, 5)), viewSize());
+			deathScreenAlpha -= Psilox.deltaTime() * 2;
 		}
 	}
 	
@@ -109,7 +112,7 @@ class Sky extends Node {
 	
 	public void render() {
 		sky.enable();
-		sky.setUniform1f("time", psilox().ticks() / 15f);
+		sky.setUniform1f("time", Psilox.ticks() / 15f);
 		Draw.quad(Color.WHITE, Vec.ZERO, viewSize());
 		sky.disable();
 	}
@@ -154,7 +157,7 @@ class Player extends Node {
 		pos.x = (pos.x + velocity.x + ((pos.x < 0) ? viewSize().x : 0)) % viewSize().x;
 		pos.y = (pos.y + velocity.y + ((pos.y < 0) ? viewSize().y : 0)) % viewSize().y;
 		
-		if(keyDown(SPACE) && psilox().ticks() % 20 == 0) {
+		if(keyDown(SPACE) && Psilox.ticks() % 20 == 0) {
 			Bullet b = new Bullet();
 			b.setTransform(new Transform(null, pos().sum(SHIP_VERTS[0].sum(new Vec(0, 25)).rot(rtn())), rtn()));
 			getParent().addChild(b);

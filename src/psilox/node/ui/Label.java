@@ -47,6 +47,7 @@ public class Label extends Panel {
 
 	public void setFont(Font font) {
 		this.font = font;
+		setText(getText());
 	}
 
 	public Texture getLabel() {

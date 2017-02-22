@@ -19,53 +19,51 @@ import psilox.utils.Time;
 
 public class Psilox {
 
-	private Config config;
+	private static Config config;
 	
-	private long updateInterval;
-	private long renderInterval;
+	private static long updateInterval;
+	private static long renderInterval;
 	
-	private Thread thread;
-	private boolean running;
-	private boolean clearScreen;
-	private long tick;
-	private float deltaTime;
+	private static Thread thread;
+	private static boolean running;
+	private static boolean clearScreen;
+	private static long tick;
+	private static float deltaTime;
 	
-	private long window;
-	private NodeTree tree;
-	private Node mainNode;
-	private KeySequence terminator;
+	private static long window;
+	private static Node root;
+	private static Node mainNode;
+	private static KeySequence terminator;
 	
-	public Psilox(Config config) {
-		this.config = config;
+	public static void start(Config config, Node mainNode) {
+		Psilox.config = config;
 		initLog();
 		initIntervals();
-		config.logConfig(this);
-		tree = new NodeTree(this);
-	}
-	
-	public void start(Node mainNode) {
+		config.logConfig();
 		if(running()) return;
-		this.mainNode = mainNode;
+		root = new Node("root");
+		Psilox.mainNode = mainNode;
 		initThread();
 	}
 	
-	public void stop() {
+	public static void stop() {
 		running = false;
 	}
 	
-	public void update() {
+	public static void update() {
 		glfwPollEvents();
 		tick++;
-		tree.update();
+		root.updateChildren();
+		Node.applyChanges();
 	}
 	
-	public void render() {
+	public static void render() {
 		clearTransform();
 		if(clearScreen) {
 			clear();
 		}
 		
-		tree.render();
+		root.renderChildren();
 		
 		int error = glGetError();
 		if(error != GL_NO_ERROR) {
@@ -75,12 +73,12 @@ public class Psilox {
 		glfwSwapBuffers(window);
 	}
 	
-	private void loop() {
+	private static void loop() {
 		long lastUpdate = Time.now() - updateInterval;
 		long lastRender = Time.now() - renderInterval;
 		
 		initWindow();
-		tree.getRoot().addChild(mainNode);
+		root.addChild(mainNode);
 		
 		while(running()) {
 			if(updateInterval != Config.MANUAL && Time.since(lastUpdate) >= updateInterval) {
@@ -104,20 +102,20 @@ public class Psilox {
 		Audio.shutdown();
 	}
 	
-	private void initLog() {
+	private static void initLog() {
 		if(config.terminationSequence.length > 0) {
-			terminator = new KeySequence(this::stop, config.terminationSequence).asCombination();
+			terminator = new KeySequence(Psilox::stop, config.terminationSequence).asCombination();
 		}
 		Log.setLogLevel(config.logLevel);
 		Log.setConsoleEnabled(config.console);
 	}
 	
-	private void initIntervals() {
+	private static void initIntervals() {
 		updateInterval = calculateInterval(config.updateRate);
 		renderInterval = calculateInterval(config.frameRate);
 	}
 	
-	private void initThread() {
+	private static void initThread() {
 		running = true;
 		if(System.getProperty("os.name").contains("Mac")) {
 			Log.warning("Mac OSX does not support GLFW windows on alternate threads, running Psilox on main thread.");
@@ -134,7 +132,7 @@ public class Psilox {
 		}
 	}
 	
-	private void initWindow() {
+	private static void initWindow() {
 		if(!glfwInit()) {
 			Log.error("Initializing GLFW failed.");
 			return;
@@ -187,28 +185,24 @@ public class Psilox {
 		Audio.init();
 	}
 	
-	private long calculateInterval(int ps) {
+	private static long calculateInterval(int ps) {
 		return ps <= 0 ? ps : (long) (Time.SECOND / ps);
 	}
 	
-	public long ticks() {
+	public static long ticks() {
 		return tick;
 	}
 	
-	public float deltaTime() {
+	public static float deltaTime() {
 		return deltaTime;
 	}
 	
-	public boolean running() {
+	public static boolean running() {
 		return running;
 	}
 	
-	public Config config() {
+	public static Config config() {
 		return config;
-	}
-	
-	public static Psilox defaults() {
-		return new Psilox(new Config());
 	}
 	
 }
