@@ -3,6 +3,7 @@ package psilox.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import psilox.core.Psilox;
 import psilox.graphics.Draw;
 import psilox.input.Input;
 import psilox.input.InputEvent;
@@ -64,8 +65,8 @@ public class Node implements InputListener {
 		for(Node c : children) {
 			if(c.visible) {
 				Draw.pushTransform(Mat4.transform(c.anchoredPosition(), c.rotation));
-				c.renderChildren();
 				c.render();
+				c.renderChildren();
 				Draw.popTransform();
 			}
 		}
@@ -215,6 +216,10 @@ public class Node implements InputListener {
 	
 	public String toString() {
 		return String.format("Node: Type=%s, UID=%s", getClass().getSimpleName(), UID);
+	}
+	
+	public Vec viewSize() {
+		return new Vec(Psilox.config().width, Psilox.config().height);
 	}
 	
 	private static List<NodePair> queuedChanges = new ArrayList<NodePair>();
