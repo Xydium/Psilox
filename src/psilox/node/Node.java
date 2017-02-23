@@ -1,48 +1,45 @@
 package psilox.node;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import psilox.graphics.Draw;
 import psilox.input.Input;
 import psilox.input.InputEvent;
 import psilox.input.InputListener;
-import psilox.math.Transform;
+import psilox.math.Mat4;
+import psilox.math.Vec;
 import psilox.utils.Log;
 
-public class Node implements InputListener, Shortcuts {
+public class Node implements InputListener {
 	
 	private static long nextID = 0;
+
+	public final long UID;
 	
-	protected Transform transform;
+	public final Vec position;
+	private Anchor anchor;
+	public float rotation;
+	
 	private Node parent;
 	private Node root;
-	Map<String, Node> children;
-	private String tag;
-	private boolean updatable;
-	private boolean visible;
+	
+	private final ArrayList<Node> children;
+	
+	public boolean updatable;
+	public boolean visible;
 	private boolean inputListening;
-	private long UID;
-	private boolean locked;
+	public boolean locked;
 	private boolean iterating;
 	
 	public Node() {
-		this(null);
-	}
-	
-	public Node(String tag) {
-		if(tag == null) {
-			tag = getClass().getSimpleName() + (nextID + 1);
-		}
-		this.transform = new Transform();
-		this.children = new HashMap<String, Node>();
-		this.tag = tag;
-		this.UID = nextID++;
-		refreshRoot();
-		setUpdatable(true);
-		setVisible(true);
+		UID = nextID++;
+		position = new Vec(0);
+		anchor = Anchor.BL;
+		rotation = 0;
+		children = new ArrayList<Node>();
+		updatable = true;
+		visible = true;
 	}
 	
 	public void enteredTree() {}
@@ -53,10 +50,10 @@ public class Node implements InputListener, Shortcuts {
 	
 	public void updateChildren() {
 		iterating = true;
-		for(Node child : getChildList()) {	
-			if(child.isUpdatable()) {
-				child.updateChildren();
-				child.update();
+		for(Node c : children) {
+			if(c.updatable) {
+				c.update();
+				c.updateChildren();
 			}
 		}
 		iterating = false;
@@ -64,33 +61,60 @@ public class Node implements InputListener, Shortcuts {
 	
 	public void renderChildren() {
 		iterating = true;
-		for(Node child : getChildList()) {	
-			if(child.isVisible()) {
-				Draw.pushTransform(child.transform);
-				child.renderChildren();
-				child.render();
+		for(Node c : children) {
+			if(c.visible) {
+				Draw.pushTransform(Mat4.transform(c.anchoredPosition(), c.rotation));
+				c.render();
+				c.renderChildren();
 				Draw.popTransform();
 			}
 		}
 		iterating = false;
 	}
 	
-	public Transform transform() {
-		return transform;
+	public Vec globalPosition() {
+		if(parent == null) {
+			return position;
+		}
+		
+		return position.sum(parent.globalPosition());
 	}
 	
-	public void setTransform(Transform transform) {
-		if(parent != null) {
-			transform.setParent(parent.transform);
+	public float globalRotation() {
+		if(parent == null) {
+			return rotation;
 		}
-		this.transform = transform;
+		
+		return rotation + parent.globalRotation();
+	}
+	
+	public Vec anchoredPosition() {
+		return position.dif(anchor.calculate(getDimensions(), getMargins()));
+	}
+	
+	public Vec getDimensions() {
+		return new Vec(0);
+	}
+	
+	public Vec getMargins() {
+		return new Vec(0);
+	}
+	
+	public void setPosition(Vec position) {
+		this.position.x = position.x;
+		this.position.y = position.y;
+		this.position.z = position.z;
+	}
+	
+	public void setAnchor() {
+		
 	}
 	
 	public Node getParent() {
 		return parent;
 	}
 	
-	public void setParent(Node parent) { 
+	public void setParent(Node parent) {
 		this.parent = parent;
 	}
 	
@@ -101,81 +125,50 @@ public class Node implements InputListener, Shortcuts {
 			return;
 		}
 		child.setParent(this);
-		child.transform().setParent(transform());
-		child.refreshRoot();
-		if(children.putIfAbsent(child.getTag(), child) == null) {
-			child.enteredTree();
-		}
-		else 
-			Log.error(String.format("Failed to add duplicate tagged node %s to %s", child.getTag(), tag));
+		child.refreshRoot(null);
+		children.add(child);
+		child.enteredTree();
 	}
 	
-	public void addChildren(Node... children) {
+	public void addChildren(Node...children) {
 		for(Node n : children) {
 			addChild(n);
 		}
 	}
 	
-	public void removeChild(String tag) {
+	public void removeChild(Node child) {
 		if(locked) return;
 		if(iterating) {
-			queueRemoval(this, children.get(tag));
+			queueRemoval(this, child);
 			return;
 		}
-		Node child = children.get(tag);
 		child.setParent(null);
-		child.refreshRoot();
-		child.transform().setParent(null);
-		children.remove(tag);
+		child.refreshRoot(null);
+		children.remove(child);
 		child.exitedTree();
 	}
 	
-	public void removeChildren(String... tags) {
-		for(String t : tags) {
-			removeChild(t);
-		}
-	}
-	
-	public void removeChild(Node child) {
-		removeChild(child.getTag());
-	}
-	
-	public void removeChildren(Node... children) {
+	public void removeChildren(Node...children) {
 		for(Node n : children) {
 			removeChild(n);
 		}
 	}
 	
 	public void removeChildren(Class<? extends Node> type) {
-		for(Node n : getChildList()) { 
+		for(Node n : children) {
 			if(n.getClass().equals(type)) {
 				removeChild(n);
 			}
 		}
 	}
 	
-	public Node getChild(String tag) {
-		return children.get(tag);
-	}
-	
-	public void freeSelf() {
-		getParent().removeChild(this.getTag());
-	}
-	
-	public List<Node> getChildren(String tagPart) {
-		List<Node> nodes = new ArrayList<Node>();
-		for(String tag : children.keySet()) {
-			if(tag.contains(tagPart)) {
-				nodes.add(children.get(tag));
-			}
-		}
-		return nodes;
+	public Node getChild(int index) {
+		return children.get(index);
 	}
 	
 	public <T extends Node> List<T> getChildren(Class<T> type) {
 		List<T> nodes = new ArrayList<T>();
-		for(String tag : children.keySet()) {
-			Node n = children.get(tag);
+		for(Node n : children) {
 			if(n.getClass().equals(type)) {
 				nodes.add((T) n);
 			}
@@ -183,42 +176,8 @@ public class Node implements InputListener, Shortcuts {
 		return nodes;
 	}
 	
-	public List<Node> getChildList() {
-		List<Node> nodes = new ArrayList<Node>();
-		for(String tag : children.keySet()) {
-			nodes.add(children.get(tag));
-		}
-		return nodes;
-	}
-	
-	public Node getNode(String nodePath) {
-		String[] childrenSequence = nodePath.split("\\.");
-		Node n = this;
-		for(String s : childrenSequence) {
-			n = n.getChild(s);
-			if(n == null) break;
-		}
-		return n;
-	}
-	
-	public String getTag() {
-		return tag;
-	}
-	
-	public boolean isUpdatable() {
-		return updatable;
-	}
-	
-	public void setUpdatable(boolean updatable) {
-		this.updatable = updatable;
-	}
-	
-	public boolean isVisible() {
-		return visible;
-	}
-	
-	public void setVisible(boolean visible) {
-		this.visible = visible;
+	public List<Node> getChildren() {
+		return new ArrayList<Node>(children);
 	}
 	
 	public boolean isInputListening() {
@@ -226,43 +185,40 @@ public class Node implements InputListener, Shortcuts {
 	}
 	
 	public void setInputListening(boolean inputListening) {
-		this.inputListening = inputListening;
-		if(inputListening) {
-			Input.addListener(this);
-		} else {
+		if(this.inputListening && !inputListening) {
 			Input.removeListener(this);
+		} else if(!this.inputListening && inputListening) {
+			Input.addListener(this);
 		}
-	}
-	
-	public void lock() {
-		locked = true;
+		this.inputListening = inputListening;
 	}
 	
 	public Node getRoot() {
 		return root;
 	}
 	
-	public void refreshRoot() {
+	public void refreshRoot(Node parentRoot) {
+		if(parentRoot != null) {
+			root = parentRoot;
+			return;
+		}
+		
 		if(parent == null) {
 			root = this;
 		} else {
 			root = parent;
-			while(root.getParent() != null) {
-				root = root.getParent();
+			while(root.parent != null) {
+				root = root.parent;
 			}
 		}
 		
-		for(Node n : getChildList()) {
-			n.refreshRoot();
+		for(Node n : children) {
+			n.refreshRoot(root);
 		}
 	}
 	
-	public long getUID() {
-		return UID;
-	}
-	
 	public String toString() {
-		return String.format("Node %s: Type=%s, Parent=%s, UID=%s", tag, getClass().getSimpleName(), parent == null ? "null" : parent.getTag(), UID);
+		return String.format("Node: Type=%s, UID=%s", getClass().getSimpleName(), UID);
 	}
 	
 	private static List<NodePair> queuedChanges = new ArrayList<NodePair>();
@@ -284,7 +240,7 @@ public class Node implements InputListener, Shortcuts {
 					p.parent.removeChild(p.child);
 				}
 			} catch(Exception e) {
-				Log.warning("Error applying queued change parent=%s, child=%s, adding=%b", p.parent.getTag(), p.child.getTag(), p.adding);
+				Log.warning("Error applying queued change parent=%s, child=%s, adding=%b", p.parent.UID, p.child.UID, p.adding);
 			}
 		}
 		queuedChanges.clear();
@@ -299,6 +255,29 @@ public class Node implements InputListener, Shortcuts {
 			this.parent = p;
 			this.child = c;
 			this.adding = a;
+		}
+	}
+
+	public static enum Anchor {
+		BL(0, 0, 1, 1), 
+		ML(0, .5, 1, 0), 
+		TL(0, 1, 1, -1), 
+		BM(.5, 0, 0, 1), 
+		MM(.5, .5, 0, 0), 
+		TM(.5, 1, 0, -1), 
+		BR(1, 0, -1, 1), 
+		MR(1, .5, -1, 0), 
+		TR(1, 1, -1, -1);
+		
+		private Vec dimMult, margMult;
+		
+		private Anchor(double dx, double dy, double mx, double my) {
+			dimMult = new Vec(dx, dy, 0);
+			margMult = new Vec(mx, my, 0);
+		}
+		
+		public Vec calculate(Vec dim, Vec marg) {
+			return dim.pro(dimMult).sum(marg.pro(margMult)); 
 		}
 	}
 	

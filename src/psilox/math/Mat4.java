@@ -65,6 +65,10 @@ public class Mat4 {
 		return result;
 	}
 	
+	public static Mat4 transform(Vec p, float angle) {
+		return Mat4.translate(p).multiply(Mat4.rotate(angle, p));
+	}
+	
 	public Mat4 multiply(Mat4 matrix) {
 		Mat4 result = new Mat4();
 		for (int y = 0; y < 4; y++) {

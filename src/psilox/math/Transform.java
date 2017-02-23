@@ -1,7 +1,5 @@
 package psilox.math;
 
-import psilox.node.Anchor;
-
 public class Transform {
 
 private Transform parent;
