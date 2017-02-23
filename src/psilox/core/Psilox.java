@@ -41,7 +41,7 @@ public class Psilox {
 		initIntervals();
 		config.logConfig();
 		if(running()) return;
-		root = new Node("root");
+		root = new Node();
 		Psilox.mainNode = mainNode;
 		initThread();
 	}

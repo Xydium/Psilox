@@ -64,8 +64,8 @@ public class Node implements InputListener {
 		for(Node c : children) {
 			if(c.visible) {
 				Draw.pushTransform(Mat4.transform(c.anchoredPosition(), c.rotation));
-				c.render();
 				c.renderChildren();
+				c.render();
 				Draw.popTransform();
 			}
 		}
@@ -89,14 +89,10 @@ public class Node implements InputListener {
 	}
 	
 	public Vec anchoredPosition() {
-		return position.dif(anchor.calculate(getDimensions(), getMargins()));
+		return position.dif(anchor.calculate(getDimensions(), Vec.ZERO));
 	}
 	
 	public Vec getDimensions() {
-		return new Vec(0);
-	}
-	
-	public Vec getMargins() {
 		return new Vec(0);
 	}
 	
@@ -106,8 +102,8 @@ public class Node implements InputListener {
 		this.position.z = position.z;
 	}
 	
-	public void setAnchor() {
-		
+	public void setAnchor(Anchor anchor) {
+		this.anchor = anchor;
 	}
 	
 	public Node getParent() {
