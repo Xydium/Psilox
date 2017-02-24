@@ -17,6 +17,7 @@ public class Node implements InputListener {
 	private static long nextID = 0;
 
 	public final long UID;
+	public String tag = "";
 	
 	public final Vec position;
 	private Anchor anchor;
@@ -212,12 +213,36 @@ public class Node implements InputListener {
 		}
 	}
 	
+	public void print(Object msg) {
+		Log.info(msg.toString());
+	}
+	
+	public void print(String msg, Object...objects) {
+		Log.info(msg, objects);
+	}
+	
+	public void error(String msg, Exception e) {
+		Log.error(msg);
+		Log.error(e);
+	}
+	
 	public String toString() {
-		return String.format("Node: Type=%s, UID=%s", getClass().getSimpleName(), UID);
+		return String.format("%s, UID=%s", tag.equals("") ? getClass().getSimpleName() : tag, UID);
 	}
 	
 	public Vec viewSize() {
 		return new Vec(Psilox.config().width, Psilox.config().height);
+	}
+	
+	public static void printTree(Node node) {
+		printTree(node, "");
+	}
+	
+	private static void printTree(Node node, String indent) {
+		Log.info(indent + node.toString());
+		for(Node n : node.children) {
+			printTree(n, indent + "    ");
+		}
 	}
 	
 	private static List<NodePair> queuedChanges = new ArrayList<NodePair>();

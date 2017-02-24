@@ -31,7 +31,7 @@ public class Psilox {
 	private static float deltaTime;
 	
 	private static long window;
-	private static Node root;
+	public static final Node root = new Node();
 	private static Node mainNode;
 	private static KeySequence terminator;
 	
@@ -41,7 +41,7 @@ public class Psilox {
 		initIntervals();
 		config.logConfig();
 		if(running()) return;
-		root = new Node();
+		root.tag = "Root";
 		Psilox.mainNode = mainNode;
 		initThread();
 	}

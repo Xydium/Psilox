@@ -19,7 +19,7 @@ public class Label extends Panel implements PointerUpdateListener {
 	private Texture label;
 	
 	public Label(Color color, Font font, String text) {
-		this(color, font, "", new StringPointer(text));
+		this(color, font, "%s", new StringPointer(text));
 	}
 	
 	public Label(Color color, Font font, String prefix, Pointer text) {
@@ -38,7 +38,7 @@ public class Label extends Panel implements PointerUpdateListener {
 	}
 	
 	public String getText() {
-		return prefix + text.get().toString();
+		return String.format(prefix, text.get().toString());
 	}
 	
 	public void setPrefix(String prefix) {
@@ -51,7 +51,7 @@ public class Label extends Panel implements PointerUpdateListener {
 	}
 	
 	private void refresh() {
-		Draw.text(Color.WHITE, font, label, prefix + text.get().toString());
+		Draw.text(Color.WHITE, font, label, getText());
 		setDimensions(new Vec(label.getWidth(), label.getHeight()));
 	}
 	
