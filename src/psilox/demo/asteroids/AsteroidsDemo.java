@@ -1,5 +1,9 @@
 package psilox.demo.asteroids;
 
+import static psilox.input.Input.*;
+
+import java.awt.Font;
+
 import psilox.core.Config;
 import psilox.core.Psilox;
 import psilox.graphics.Color;
@@ -8,8 +12,9 @@ import psilox.graphics.Shader;
 import psilox.math.Random;
 import psilox.math.Vec;
 import psilox.node.Node;
-
-import static psilox.input.Input.*;
+import psilox.node.ui.Container;
+import psilox.node.ui.Label;
+import psilox.utils.Pointer.IntPointer;
 
 public class AsteroidsDemo {
 
@@ -21,17 +26,51 @@ public class AsteroidsDemo {
 
 class Game extends Node {
 	
+	private Container UI;
 	private Sky sky;
 	private Player player;
 	
+	private IntPointer score;
+	
 	public void enteredTree() {
+		UI = new Container(viewSize(), new Vec(10));
+		UI.position.z = 2;
+		
 		sky = new Sky();
 		sky.position.z = -1;
 		
 		player = new Player();
-		player.setPosition(viewSize().scl(.5f));
+		player.position.set(viewSize().scl(.5f));
 		
-		addChildren(sky, player);
+		score = new IntPointer(0);
+		
+		Label label = new Label(Color.WHITE, new Font("Verdana", Font.PLAIN, 32), "Score: ", score);
+		label.setAnchor(Anchor.TL);
+		UI.topLeft.addChild(label);
+		
+		Label quit = new Label(new Color(255, 155, 155), new Font("Verdana", Font.BOLD, 48), "Press CTRL-SHIFT-Z to Quit") {
+			private float life;
+			
+			public void update() {
+				life += Psilox.deltaTime();
+				
+				if(life > 4) {
+					if(life > 5) {
+						freeSelf();
+					} else {
+						setColor(getColor().aAdj(1.0f - (life - 4)));
+					}
+				}
+			}
+		};
+		quit.setAnchor(Anchor.MM);
+		UI.center.addChild(quit);
+		
+		addChildren(sky, player, UI);
+	}
+	
+	public void update() {
+		score.add(1);
 	}
 	
 }

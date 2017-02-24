@@ -38,7 +38,7 @@ private Transform parent;
 			return position;
 		}
 		
-		return position.sum(parent.positionGlobal());
+		return position.rot(parent.rotationGlobal()).sum(parent.positionGlobal());
 	}
 	
 	public float rotation() {

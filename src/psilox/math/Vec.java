@@ -141,6 +141,34 @@ public class Vec {
 		return x * o.x + y * o.y + z * o.z;
 	}
 
+	public void set(float x, float y, float z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+	
+	public void set(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	public void setXY(float n) {
+		this.x = n;
+		this.y = n;
+	}
+	
+	public void set(float n) {
+		this.x = n;
+		this.y = n;
+		this.z = n;
+	}
+	
+	public void set(Vec o) {
+		this.x = o.x;
+		this.y = o.y;
+		this.z = o.z;
+	}
+	
 	public static Vec angMag(float angle, float mag) {
 		angle = (float) Math.toRadians(angle);
 		Vec res = new Vec(Math.cos(angle), Math.sin(angle));

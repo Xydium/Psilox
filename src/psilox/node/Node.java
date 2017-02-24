@@ -78,7 +78,7 @@ public class Node implements InputListener {
 			return position;
 		}
 		
-		return position.sum(parent.globalPosition());
+		return position.rot(parent.globalRotation()).sum(parent.globalPosition());
 	}
 	
 	public float globalRotation() {
@@ -95,12 +95,6 @@ public class Node implements InputListener {
 	
 	public Vec getDimensions() {
 		return new Vec(0);
-	}
-	
-	public void setPosition(Vec position) {
-		this.position.x = position.x;
-		this.position.y = position.y;
-		this.position.z = position.z;
 	}
 	
 	public void setAnchor(Anchor anchor) {
@@ -157,6 +151,10 @@ public class Node implements InputListener {
 				removeChild(n);
 			}
 		}
+	}
+	
+	public void freeSelf() {
+		parent.removeChild(this);
 	}
 	
 	public Node getChild(int index) {
