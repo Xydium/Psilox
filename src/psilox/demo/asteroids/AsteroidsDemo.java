@@ -45,8 +45,9 @@ class Game extends Node {
 		
 		score = new IntPointer(0);
 		
-		Label label = new Label(Color.WHITE, new Font("Verdana", Font.PLAIN, 32), "Score: %s pts", score);
+		Label label = new Label(new Color(155, 155, 255), new Font("Verdana", Font.PLAIN, 32), "Score: %s", score);
 		label.setAnchor(Anchor.TL);
+		label.position.y += 8;
 		UI.topLeft.addChild(label);
 		
 		Label quit = new Label(new Color(255, 155, 155), new Font("Verdana", Font.BOLD, 48), "Press CTRL-SHIFT-Z to Quit");
@@ -55,6 +56,7 @@ class Game extends Node {
 			quit.setColor(quit.getColor().aAdj(v));
 		});
 		
+		quitFade.setOnEnd(quit::freeSelf);
 		quitFade.addKeyFrames(0, 1,   4, 1,   5, 0);
 		quitFade.start();
 		
@@ -62,10 +64,6 @@ class Game extends Node {
 		UI.center.addChild(quit);
 		
 		addChildren(sky, player, UI);
-	}
-	
-	public void update() {
-		score.add(1);
 	}
 	
 }
@@ -98,7 +96,7 @@ class Mover extends Node {
 	private Vec velocity = new Vec(0);
 	
 	public void accelerate(float amount, float maxSpeed) {
-		velocity = velocity.sum(ACCELERATION.rot(rotation).scl(amount)).clm(10);
+		velocity = velocity.sum(ACCELERATION.rot(rotation).scl(amount)).clm(maxSpeed);
 	}
 	
 	public void move() {
@@ -138,6 +136,17 @@ class Player extends Mover {
 		
 		move();
 		wrapPosition();
+		
+		fire();
+	}
+	
+	private void fire() {
+		if(keyDown(SPACE) && Psilox.ticks() % 20 == 0) {
+			Bullet b = new Bullet();
+			b.position.set(position.sum(SHIP_VERTS[0].sum(new Vec(0, 25)).rot(rotation)));
+			b.rotation = rotation;
+			getParent().addChild(b);
+		}
 	}
 	
 	public void render() {
@@ -147,6 +156,30 @@ class Player extends Mover {
 			Draw.immediate(4, FLAME_COLORS, new Vec[] { FLAME_VERTS[0], FLAME_VERTS[1], FLAME_VERTS[3] });
 			Draw.immediate(4, FLAME_COLORS, new Vec[] { FLAME_VERTS[0], FLAME_VERTS[2], FLAME_VERTS[3] });
 		}
+	}
+	
+}
+
+class Bullet extends Mover {
+	
+	private int lifetime;
+	
+	public void enteredTree() {
+		accelerate(40, 40);
+	}
+	
+	public void update() {
+		move();
+		
+		lifetime++;
+		
+		if(lifetime * 40 > viewSize().mag()) {
+			freeSelf();
+		}
+	}
+	
+	public void render() {
+		Draw.line(Color.RED, Vec.ZERO, new Vec(0, -(lifetime + 5) * 5));
 	}
 	
 }

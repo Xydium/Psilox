@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import psilox.core.Psilox;
+import psilox.input.Function;
 
 public class Interpolator extends Node {
 
 	private List<KeyFrame> keyFrames;
 	private InterpolatorCallback callback;
+	private Function onEnd = () -> {};
 	private int currentFrame;
 	private float elapsedTime;
 	private boolean discrete;
@@ -33,6 +35,7 @@ public class Interpolator extends Node {
 			advanced = true;
 			if(currentFrame == keyFrames.size() - 1) {
 				stop();
+				onEnd.execute();
 			}
 		}
 		
@@ -58,6 +61,10 @@ public class Interpolator extends Node {
 	
 	public void stop() {
 		updatable = false;
+	}
+	
+	public void setOnEnd(Function onEnd) {
+		this.onEnd = onEnd;
 	}
 	
 	public void addKeyFrame(KeyFrame frame) {
