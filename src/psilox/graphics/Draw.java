@@ -6,14 +6,12 @@ import static org.lwjgl.opengl.GL32.*;
 
 import java.awt.Font;
 import java.awt.FontMetrics;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.Stack;
 
 import psilox.math.Mat4;
-import psilox.math.Transform;
 import psilox.math.Vec;
 import psilox.utils.Log;
 
@@ -76,10 +74,6 @@ public class Draw {
 		if(immediateMode) {
 			glLoadMatrixf(currentTransform().elements);
 		}
-	}
-	
-	public static void pushTransform(Transform transform) {
-		pushTransform(transform.toMatrix());
 	}
 	
 	public static Mat4 currentTransform() {
