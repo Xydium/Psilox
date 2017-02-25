@@ -94,6 +94,10 @@ public class Node implements InputListener {
 		return position.dif(anchor.calculate(getDimensions(), Vec.ZERO));
 	}
 	
+	public Vec globalAnchoredPosition() {
+		return globalPosition().dif(anchor.calculate(getDimensions(), Vec.ZERO));
+	}
+	
 	public Vec getDimensions() {
 		return new Vec(0);
 	}

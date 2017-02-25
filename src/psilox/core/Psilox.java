@@ -28,7 +28,9 @@ public class Psilox {
 	private static boolean running;
 	private static boolean clearScreen;
 	private static long tick;
-	private static float deltaTime;
+	public static float deltaTime;
+	public static float updateTime;
+	public static float renderTime;
 	
 	private static long window;
 	public static final Node root = new Node();
@@ -85,10 +87,12 @@ public class Psilox {
 				deltaTime = Time.since(lastUpdate) / (float) Time.SECOND;
 				lastUpdate = Time.now();
 				update();
+				updateTime = (Time.now() - lastUpdate) / (float) Time.SECOND;
 			}
 			if(renderInterval != Config.MANUAL && Time.since(lastRender) >= renderInterval) {
 				lastRender = Time.now();
 				render();
+				renderTime = (Time.now() - lastRender) / (float) Time.SECOND;
 			}
 			if(glfwWindowShouldClose(window)) {
 				running = false;

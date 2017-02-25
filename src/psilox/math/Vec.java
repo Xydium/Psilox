@@ -101,6 +101,10 @@ public class Vec {
 		z *= o;
 	}
 	
+	public Vec half() {
+		return scl(.5f);
+	}
+	
 	public Vec rot(float theta) {
 		theta = (float) Math.toRadians(theta);
 		double sin = Math.sin(theta);

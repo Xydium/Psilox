@@ -13,11 +13,14 @@ import psilox.graphics.Shader;
 import psilox.math.Random;
 import psilox.math.Vec;
 import psilox.node.Node;
+import psilox.node.ui.Button;
 import psilox.node.ui.Container;
 import psilox.node.ui.Label;
 import psilox.node.utility.Interpolator;
 import psilox.node.utility.Timer;
+import psilox.utils.Time;
 import psilox.utils.Pointer.IntPointer;
+import psilox.utils.Pointer.StringPointer;
 
 public class AsteroidsDemo {
 
@@ -34,6 +37,7 @@ class Game extends Node {
 	private Player player;
 	private Node projectileList;
 	
+	private StringPointer sprofile;
 	private IntPointer score;
 	
 	public void enteredTree() {
@@ -58,7 +62,7 @@ class Game extends Node {
 		label.position.y += 8;
 		UI.topLeft.addChild(label);
 		
-		Label quit = new Label(new Color(255, 155, 155), new Font("Verdana", Font.BOLD, 48), "Press CTRL-SHIFT-Z to Quit");
+		Label quit = new Label(new Color(255, 155, 155), new Font("Verdana", Font.BOLD, 48), "Press CTRL-SHIFT-Z or 'Quit' to Quit");
 		
 		Interpolator quitFade = new Interpolator(v -> {
 			quit.setColor(quit.getColor().aAdj(v));
@@ -71,16 +75,30 @@ class Game extends Node {
 		quit.setAnchor(Anchor.MM);
 		UI.center.addChild(quit);
 		
-		Timer spawner = new Timer(4, false, () -> { projectileList.addChild(new Asteroid(Asteroid.FULL)); }).start();
+		Button b = new Button(new Vec(150, 25), "Quit", () -> { Psilox.stop(); });
+		b.setAnchor(Anchor.BR);
+		UI.bottomRight.addChild(b);
+		
+		Timer spawner = new Timer(.1f, false, () -> { projectileList.addChild(new Asteroid(Asteroid.FULL)); }).start();
+		
+		Label profile = new Label(Color.WHITE, new Font("Verdana", Font.PLAIN, 18), "Psilox Performance - %s", sprofile = new StringPointer(""));
+		UI.bottomLeft.addChild(profile);
 		
 		addChildren(sky, projectileList, player, UI, spawner);
 	}
 	
 	public void update() {
+		if(Psilox.ticks() % 60 == 0) 
+			sprofile.set(String.format("Ut: %d, Ft: %d, Ct: %d", 
+					(long) (1 / Psilox.updateTime), 
+					(long) (1 / Psilox.renderTime), 
+					(long) (1 / (Psilox.updateTime + Psilox.renderTime))));
+		
 		List<Asteroid> asteroids = projectileList.getChildren(Asteroid.class);
 		List<Bullet> bullets = projectileList.getChildren(Bullet.class);
 		
 		for(Asteroid a : asteroids) {
+			if(a.getRadius() < 30) continue;
 			for(Bullet b : bullets) {
 				if(a.position.dst(b.position) < a.getRadius() + 10) {
 					a.split();
@@ -90,12 +108,13 @@ class Game extends Node {
 				}
 			}
 			
-			if(a.position.dst(player.position) < a.getRadius() + 10) {
-				projectileList.removeAllChildren();
-				player.position.set(viewSize().scl(.5f));
-				score.set(0);
-				break;
-			}
+//			if(a.position.dst(player.position) < a.getRadius() + 10) {
+//				projectileList.removeAllChildren();
+//				player.position.set(viewSize().scl(.5f));
+//				score.set(0);
+//				addChild(new DeathScreen());
+//				break;
+//			}
 		}
 	}
 	
@@ -267,6 +286,28 @@ class Asteroid extends Mover {
 	
 	public float getRadius() {
 		return radius;
+	}
+	
+}
+
+class DeathScreen extends Node {
+	
+	private Color color; 
+	
+	public void enteredTree() {
+		position.z = 10;
+		color = new Color(1f, 0, 0);
+		Interpolator l = new Interpolator(v -> {
+			color = color.aAdj(v);
+		});
+		l.addKeyFrames(0, 1,   2, 0);
+		l.setOnEnd(this::freeSelf);
+		l.start();
+		addChild(l);
+	}
+	
+	public void render()  {
+		Draw.quad(color, Vec.ZERO, viewSize());
 	}
 	
 }

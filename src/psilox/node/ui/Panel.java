@@ -1,5 +1,7 @@
 package psilox.node.ui;
 
+import psilox.graphics.Color;
+import psilox.graphics.Draw;
 import psilox.input.Function;
 import psilox.input.Input;
 import psilox.input.InputEvent;
@@ -15,6 +17,7 @@ public class Panel extends Node {
 	private Vec dimensions;
 	private boolean mouseWasInside;
 	private boolean pressed;
+	private Color color;
 	
 	private Function onMouseEnter = () -> {};
 	private Function onMouseExit = () -> {};
@@ -42,7 +45,8 @@ public class Panel extends Node {
 	public void lostFocus() {}
 	
 	public boolean isMouseInside() {
-		return Input.position.btn(globalPosition(), globalPosition().sum(dimensions));
+		Vec gap = globalAnchoredPosition();
+		return Input.position.btn(gap, gap.sum(dimensions));
 	}
 	
 	public boolean getIsMouseInside() {
@@ -51,6 +55,12 @@ public class Panel extends Node {
 	
 	public boolean isPressed() {
 		return pressed;
+	}
+	
+	public void render() {
+		if(color != null) {
+			Draw.quad(color, Vec.ZERO, dimensions);
+		}
 	}
 	
 	public void receiveInput(InputEvent ev) {
@@ -89,6 +99,14 @@ public class Panel extends Node {
 
 	public void setOnReleased(Function onReleased) {
 		this.onReleased = onReleased;
+	}
+	
+	public Color getColor() {
+		return color;
+	}
+	
+	public void setColor(Color color) {
+		this.color = color;
 	}
 	
 	public void requestFocus() {
