@@ -1,10 +1,11 @@
-package psilox.node;
+package psilox.node.utility;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import psilox.core.Psilox;
 import psilox.input.Function;
+import psilox.node.Node;
 
 public class Interpolator extends Node {
 
@@ -21,7 +22,6 @@ public class Interpolator extends Node {
 		this.callback = callback;
 		currentFrame = 0;
 		elapsedTime = 0;
-		Psilox.root.addChild(this);
 		updatable = false;
 	}
 	

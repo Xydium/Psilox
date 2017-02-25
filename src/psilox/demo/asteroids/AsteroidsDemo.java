@@ -3,6 +3,7 @@ package psilox.demo.asteroids;
 import static psilox.input.Input.*;
 
 import java.awt.Font;
+import java.util.List;
 
 import psilox.core.Config;
 import psilox.core.Psilox;
@@ -11,10 +12,11 @@ import psilox.graphics.Draw;
 import psilox.graphics.Shader;
 import psilox.math.Random;
 import psilox.math.Vec;
-import psilox.node.Interpolator;
 import psilox.node.Node;
 import psilox.node.ui.Container;
 import psilox.node.ui.Label;
+import psilox.node.utility.Interpolator;
+import psilox.node.utility.Timer;
 import psilox.utils.Pointer.IntPointer;
 
 public class AsteroidsDemo {
@@ -30,6 +32,7 @@ class Game extends Node {
 	private Container UI;
 	private Sky sky;
 	private Player player;
+	private Node projectileList;
 	
 	private IntPointer score;
 	
@@ -40,8 +43,13 @@ class Game extends Node {
 		sky = new Sky();
 		sky.position.z = -1;
 		
+		projectileList = new Node();
+		
 		player = new Player();
 		player.position.set(viewSize().scl(.5f));
+		
+		player.bulletList = projectileList;
+		Asteroid.asteroidList = projectileList;
 		
 		score = new IntPointer(0);
 		
@@ -59,11 +67,36 @@ class Game extends Node {
 		quitFade.setOnEnd(quit::freeSelf);
 		quitFade.addKeyFrames(0, 1,   4, 1,   5, 0);
 		quitFade.start();
-		
+		quit.addChild(quitFade);	
 		quit.setAnchor(Anchor.MM);
 		UI.center.addChild(quit);
 		
-		addChildren(sky, player, UI);
+		Timer spawner = new Timer(4, false, () -> { projectileList.addChild(new Asteroid(Asteroid.FULL)); }).start();
+		
+		addChildren(sky, projectileList, player, UI, spawner);
+	}
+	
+	public void update() {
+		List<Asteroid> asteroids = projectileList.getChildren(Asteroid.class);
+		List<Bullet> bullets = projectileList.getChildren(Bullet.class);
+		
+		for(Asteroid a : asteroids) {
+			for(Bullet b : bullets) {
+				if(a.position.dst(b.position) < a.getRadius() + 10) {
+					a.split();
+					b.freeSelf();
+					score.add((int) a.getRadius());
+					break;
+				}
+			}
+			
+			if(a.position.dst(player.position) < a.getRadius() + 10) {
+				projectileList.removeAllChildren();
+				player.position.set(viewSize().scl(.5f));
+				score.set(0);
+				break;
+			}
+		}
 	}
 	
 }
@@ -93,7 +126,7 @@ class Mover extends Node {
 
 	private static final Vec ACCELERATION = new Vec(0, 1);
 	
-	private Vec velocity = new Vec(0);
+	protected Vec velocity = new Vec(0);
 	
 	public void accelerate(float amount, float maxSpeed) {
 		velocity = velocity.sum(ACCELERATION.rot(rotation).scl(amount)).clm(maxSpeed);
@@ -126,6 +159,8 @@ class Player extends Mover {
 	
 	private boolean accelerating;
 	
+	public Node bulletList;
+	
 	public void update() {
 		if(accelerating = keyDown(W)) {
 			accelerate(ACCELERATION, MAX_SPEED);
@@ -141,11 +176,11 @@ class Player extends Mover {
 	}
 	
 	private void fire() {
-		if(keyDown(SPACE) && Psilox.ticks() % 20 == 0) {
+		if(keyDown(SPACE) && Psilox.ticks() % 15 == 0) {
 			Bullet b = new Bullet();
 			b.position.set(position.sum(SHIP_VERTS[0].sum(new Vec(0, 25)).rot(rotation)));
 			b.rotation = rotation;
-			getParent().addChild(b);
+			bulletList.addChild(b);
 		}
 	}
 	
@@ -180,6 +215,58 @@ class Bullet extends Mover {
 	
 	public void render() {
 		Draw.line(Color.RED, Vec.ZERO, new Vec(0, -(lifetime + 5) * 5));
+	}
+	
+}
+
+class Asteroid extends Mover {
+	
+	public static final int FULL = 40;
+	public static final int HALF = FULL / 2;
+	
+	private float spin;
+	private int radius;
+	public static Node asteroidList;
+	
+	public Asteroid(int radius) {
+		super();
+		this.radius = radius;
+		if(radius == FULL)
+			rotation = Random.intVal(360);
+	}
+	
+	public void enteredTree() {
+		accelerate(Random.floatVal(1, 3), 3);
+		if(radius == FULL) {
+			position.set(viewSize().pro(new Vec(Random.floatVal(1), Random.floatVal(1))));
+		}
+		spin = Random.floatVal(-5, 5);
+	}
+	
+	public void update() {
+		move();
+		rotation += spin;
+		wrapPosition();
+	}
+	
+	public void render() {
+		Draw.ellipse(Color.BROWN, Vec.ZERO, radius, 10);
+	}
+	
+	public void split() {
+		if(radius == FULL) {
+			Asteroid a = new Asteroid(HALF), b = new Asteroid(HALF);
+			a.position.set(position.sum(new Vec(20, 20)));
+			b.position.set(position.sum(new Vec(-20, -20)));
+			a.rotation = velocity.ang() + 10;
+			b.rotation = velocity.ang() - 10;
+			asteroidList.addChildren(a, b);
+		}
+		freeSelf();
+	}
+	
+	public float getRadius() {
+		return radius;
 	}
 	
 }

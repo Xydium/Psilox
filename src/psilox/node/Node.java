@@ -154,8 +154,16 @@ public class Node implements InputListener {
 		}
 	}
 	
+	public void removeAllChildren() {
+		iterating = true;
+		for(Node n : children) {
+			removeChild(n);
+		}
+		iterating = false;
+	}
+	
 	public void freeSelf() {
-		parent.removeChild(this);
+		if(parent != null) parent.removeChild(this);
 	}
 	
 	public Node getChild(int index) {
@@ -174,6 +182,10 @@ public class Node implements InputListener {
 	
 	public List<Node> getChildren() {
 		return new ArrayList<Node>(children);
+	}
+	
+	public List<Node> getChildrenUnsafe() {
+		return children;
 	}
 	
 	public boolean isInputListening() {
