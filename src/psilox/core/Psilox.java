@@ -36,6 +36,7 @@ public class Psilox {
 	public static final Node root = new Node();
 	private static Node mainNode;
 	private static KeySequence terminator;
+	private static Node nextScene;
 	
 	public static void start(Config config, Node mainNode) {
 		Psilox.config = config;
@@ -83,6 +84,10 @@ public class Psilox {
 		root.addChild(mainNode);
 		
 		while(running()) {
+			if(nextScene != null) {
+				root.swapChild(nextScene, 0);
+				nextScene = null;
+			}
 			if(updateInterval != Config.MANUAL && Time.since(lastUpdate) >= updateInterval) {
 				deltaTime = Time.since(lastUpdate) / (float) Time.SECOND;
 				lastUpdate = Time.now();
@@ -104,6 +109,10 @@ public class Psilox {
 		
 		Input.dumpListeners();
 		Audio.shutdown();
+	}
+	
+	public static void changeScene(Node nextScene) {
+		Psilox.nextScene = nextScene;
 	}
 	
 	private static void initLog() {

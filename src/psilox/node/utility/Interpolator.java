@@ -35,7 +35,9 @@ public class Interpolator extends Node {
 			advanced = true;
 			if(currentFrame == keyFrames.size() - 1) {
 				stop();
+				callback.lerp(keyFrames.get(currentFrame).value);
 				onEnd.execute();
+				return;
 			}
 		}
 		
@@ -57,6 +59,7 @@ public class Interpolator extends Node {
 		elapsedTime = 0;
 		currentFrame = 0;
 		updatable = true;
+		callback.lerp(keyFrames.get(currentFrame).value);
 	}
 	
 	public void stop() {

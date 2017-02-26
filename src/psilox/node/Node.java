@@ -126,6 +126,19 @@ public class Node implements InputListener {
 		child.enteredTree();
 	}
 	
+	public void swapChild(Node child, int index) {
+		if(locked || index >= children.size() || iterating) return;
+		Node current = children.get(index);
+		current.setParent(null);
+		current.refreshRoot(null);
+		current.exitedTree();
+		
+		child.setParent(this);
+		child.refreshRoot(null);
+		children.set(index, child);
+		child.enteredTree();
+	}
+	
 	public void addChildren(Node...children) {
 		for(Node n : children) {
 			addChild(n);
@@ -142,6 +155,7 @@ public class Node implements InputListener {
 		child.refreshRoot(null);
 		children.remove(child);
 		child.exitedTree();
+		child.setInputListening(false);
 	}
 	
 	public void removeChildren(Node...children) {

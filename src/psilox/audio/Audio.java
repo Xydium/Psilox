@@ -77,4 +77,8 @@ public class Audio {
 		music.get(name).stop();
 	}
 	
+	public static boolean isMusicPlaying(String name) {
+		return music.get(name).playing();
+	}
+	
 }
