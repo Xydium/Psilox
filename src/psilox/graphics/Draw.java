@@ -207,7 +207,7 @@ public class Draw {
 		texture.setData(image);
 	}
 	
-	public static void texture(Texture tex, Vec i, Color mod) {
+	public static void texture(Texture tex, Vec i, Vec d, Color mod) {
 		if(!immediateEnabled()) return;
 		i = new Vec(i);
 		if(mod == null) { mod = Color.WHITE; }
@@ -216,17 +216,21 @@ public class Draw {
 		glColor4f(mod.r, mod.g, mod.b, mod.a);
 		glTexCoord2f(0, 1);
 		glVertex3f(i.x, i.y, i.z);
-		i.x += tex.getWidth();
+		i.x += d.x;
 		glTexCoord2f(1, 1);
 		glVertex3f(i.x, i.y, i.z);
-		i.y += tex.getHeight();
+		i.y += d.y;
 		glTexCoord2f(1, 0);
 		glVertex3f(i.x, i.y, i.z);
-		i.x -= tex.getWidth();
+		i.x -= d.x;
 		glTexCoord2f(0, 0);
 		glVertex3f(i.x, i.y, i.z);
 		glEnd();
 		tex.unbind();
+	}
+	
+	public static void texture(Texture tex, Vec i, Color mod) {
+		texture(tex, i, new Vec(tex.getWidth(), tex.getHeight()), mod);
 	}
 	
 	public static void texture(Texture tex, Vec i) {

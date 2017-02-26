@@ -79,7 +79,7 @@ class Game extends Node {
 		b.setAnchor(Anchor.BR);
 		UI.bottomRight.addChild(b);
 		
-		Timer spawner = new Timer(.1f, false, () -> { projectileList.addChild(new Asteroid(Asteroid.FULL)); }).start();
+		Timer spawner = new Timer(2, false, () -> { projectileList.addChild(new Asteroid(Asteroid.FULL)); }).start();
 		
 		Label profile = new Label(Color.WHITE, new Font("Verdana", Font.PLAIN, 18), "Psilox Performance - %s", sprofile = new StringPointer(""));
 		UI.bottomLeft.addChild(profile);
@@ -88,7 +88,7 @@ class Game extends Node {
 	}
 	
 	public void update() {
-		if(Psilox.ticks() % 60 == 0) 
+		if(Psilox.ticks() % 10 == 0) 
 			sprofile.set(String.format("Ut: %d, Ft: %d, Ct: %d", 
 					(long) (1 / Psilox.updateTime), 
 					(long) (1 / Psilox.renderTime), 
@@ -98,7 +98,6 @@ class Game extends Node {
 		List<Bullet> bullets = projectileList.getChildren(Bullet.class);
 		
 		for(Asteroid a : asteroids) {
-			if(a.getRadius() < 30) continue;
 			for(Bullet b : bullets) {
 				if(a.position.dst(b.position) < a.getRadius() + 10) {
 					a.split();
@@ -108,13 +107,13 @@ class Game extends Node {
 				}
 			}
 			
-//			if(a.position.dst(player.position) < a.getRadius() + 10) {
-//				projectileList.removeAllChildren();
-//				player.position.set(viewSize().scl(.5f));
-//				score.set(0);
-//				addChild(new DeathScreen());
-//				break;
-//			}
+			if(a.position.dst(player.position) < a.getRadius() + 10) {
+				projectileList.removeAllChildren();
+				player.position.set(viewSize().scl(.5f));
+				score.set(0);
+				addChild(new DeathScreen());
+				break;
+			}
 		}
 	}
 	
@@ -125,7 +124,7 @@ class Sky extends Node {
 	private Shader sky;
 	
 	public void enteredTree() {
-		sky = new Shader("shaders/sky.shd");
+		sky = new Shader("psilox/demo/asteroids/sky.shd");
 		sky.enable();
 		sky.setUniform4f("color", new Color(2, 2, 10));
 		sky.setUniform1f("threshold", .97f);
