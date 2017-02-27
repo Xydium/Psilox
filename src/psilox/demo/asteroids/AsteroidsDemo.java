@@ -1,6 +1,10 @@
 package psilox.demo.asteroids;
 
-import static psilox.input.Input.*;
+import static psilox.input.Input.A;
+import static psilox.input.Input.D;
+import static psilox.input.Input.SPACE;
+import static psilox.input.Input.W;
+import static psilox.input.Input.keyDown;
 
 import java.awt.Font;
 import java.util.List;
@@ -18,7 +22,6 @@ import psilox.node.ui.Container;
 import psilox.node.ui.Label;
 import psilox.node.utility.Interpolator;
 import psilox.node.utility.Timer;
-import psilox.utils.Time;
 import psilox.utils.Pointer.IntPointer;
 import psilox.utils.Pointer.StringPointer;
 
@@ -81,14 +84,19 @@ class Game extends Node {
 		
 		Timer spawner = new Timer(2, false, () -> { projectileList.addChild(new Asteroid(Asteroid.FULL)); }).start();
 		
-		Label profile = new Label(Color.WHITE, new Font("Verdana", Font.PLAIN, 18), "Psilox Performance - %s", sprofile = new StringPointer(""));
+		Label profile = new Label(Color.WHITE, new Font("Verdana", Font.PLAIN, 18), "Psilox Performance - %s", sprofile = new StringPointer("")) {
+			public void render() {
+				super.render();
+				Draw.quad(Color.GREEN.aAdj(.5f), Vec.Z_UNIT, getDimensions());
+			}
+		};
 		UI.bottomLeft.addChild(profile);
 		
 		addChildren(sky, projectileList, player, UI, spawner);
 	}
 	
 	public void update() {
-		if(Psilox.ticks() % 10 == 0) 
+		if(Psilox.ticks() % 60 == 0) 
 			sprofile.set(String.format("Ut: %d, Ft: %d, Ct: %d", 
 					(long) (1 / Psilox.updateTime), 
 					(long) (1 / Psilox.renderTime), 

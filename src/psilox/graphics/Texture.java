@@ -30,11 +30,6 @@ public class Texture {
 		create(null);
 	}
 	
-	protected void finalize() throws Throwable {
-		super.finalize();
-		glDeleteTextures(texture);
-	}
-	
 	public int getWidth() {
 		return width;
 	}
@@ -101,12 +96,16 @@ public class Texture {
 	
 	public void setData(BufferedImage image) {
 		bind();
-		width = image.getWidth();
-		height = image.getHeight();
-		int[] pixels = new int[width * height];
-		image.getRGB(0, 0, width, height, pixels, 0, width);
-		int[] data = new int[width * height];
-		for (int i = 0; i < width * height; i++) {
+		int dataWidth = image.getWidth();
+		int dataHeight = image.getHeight();
+		
+		int newWidth = Math.max(dataWidth, width);
+		int newHeight = Math.max(dataHeight, height);
+		
+		int[] pixels = new int[newWidth * newHeight];
+		image.getRGB(0, 0, dataWidth, dataHeight, pixels, 0, newWidth);
+		int[] data = new int[pixels.length];
+		for (int i = 0; i < data.length; i++) {
 			int a = (pixels[i] & 0xff000000) >> 24;
 			int r = (pixels[i] & 0xff0000) >> 16;
 			int g = (pixels[i] & 0xff00) >> 8;
@@ -114,7 +113,14 @@ public class Texture {
 			
 			data[i] = a << 24 | b << 16 | g << 8 | r;
 		}
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		
+		if(newWidth > width || newHeight > height) {
+			width = newWidth; height = newHeight;
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		} else {
+			width = newWidth; height = newHeight;
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		}
 		unbind();
 	}
 	
