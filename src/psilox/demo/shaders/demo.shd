@@ -1,0 +1,17 @@
+VERTEX:
+
+#version 120
+
+void main() {
+	gl_Position = projection_transform * gl_Vertex;
+}
+
+FRAGMENT:
+
+#version 120
+
+uniform vec4 color;
+
+void main() {
+	gl_FragColor = color;
+}

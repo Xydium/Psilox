@@ -19,9 +19,9 @@ public class StressText extends Node {
 	private IntPointer[] pointers = new IntPointer[9];
 	
 	public void enteredTree() {
-		font = new Font("Arial", Font.PLAIN, 16);
+		font = new Font("Arial", Font.PLAIN, 48);
 		
-		Container c = new Container(viewSize(), new Vec(100));
+		Container c = new Container(viewSize(), new Vec(150));
 		
 		for(int i = 0; i < 9; i++) {
 			pointers[i] = new IntPointer(0);
