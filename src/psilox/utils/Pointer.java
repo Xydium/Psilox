@@ -30,6 +30,10 @@ public class Pointer<Type> {
 		default public void changed(Pointer p) {};	
 	}
 	
+	public String toString() {
+		return get().toString();
+	}
+	
 	public static class IntPointer extends Pointer<Integer> {
 		
 		public IntPointer(int data) {
