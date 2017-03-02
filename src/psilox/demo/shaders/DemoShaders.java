@@ -19,8 +19,10 @@ public class DemoShaders extends Node {
 	
 	public void render() {
 		shader.enable();
-		shader.setUniform1f("time", Psilox.ticks() / 10f);
-		Draw.quad(Color.WHITE, Vec.ZERO, viewSize());
+		float time = Psilox.ticks() / 10f;
+		shader.setUniform1f("time", time);
+		time = (float) Math.sin(time) + 1;
+		Draw.quad(Color.WHITE, new Vec(time * 100, time * 100), viewSize().dif(new Vec(time * 200, time * 200)));
 		shader.disable();
 	}
 	
