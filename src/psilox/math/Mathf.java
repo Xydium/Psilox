@@ -3,7 +3,7 @@ package psilox.math;
 public class Mathf {
 
 	public static float abs(double a) {
-		return Math.abs(a);
+		return (float) Math.abs(a);
 	}
 	
 	public static float acos(double a) {
