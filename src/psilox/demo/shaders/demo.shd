@@ -11,7 +11,8 @@ FRAGMENT:
 #version 120
 
 uniform vec4 color;
+uniform float time;
 
 void main() {
-	gl_FragColor = color;
+	gl_FragColor = vec4(color.xyz, max(sin(time + gl_FragCoord.x / 10), cos(time + gl_FragCoord.y / 10)));
 }

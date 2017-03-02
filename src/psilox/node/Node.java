@@ -115,7 +115,14 @@ public class Node implements InputListener {
 	}
 	
 	public void addChild(Node child) {
-		if(locked) return;
+		if(child == null) {
+			Log.warning("Attempted to add null child to %s", toString());
+			return;
+		}
+		if(locked) {
+			Log.warning("Attempted to add child to locked %s", toString());
+			return;
+		}
 		if(iterating) {
 			queueAddition(this, child);
 			return;
@@ -146,7 +153,13 @@ public class Node implements InputListener {
 	}
 	
 	public void removeChild(Node child) {
-		if(locked) return;
+		if(child == null) {
+			Log.warning("Attempted to remove null child from %s", toString());
+		}
+		if(locked) {
+			Log.warning("Attempted to remove child from locked %s", toString());
+			return;
+		}
 		if(iterating) {
 			queueRemoval(this, child);
 			return;
