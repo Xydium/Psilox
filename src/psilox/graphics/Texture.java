@@ -106,13 +106,15 @@ public class Texture {
 	}
 	
 	public void setData(BufferedImage image) {
-		bind();
-		
 		width = image.getWidth();
 		height = image.getHeight();
 		
 		int[] pixels = new int[width * height];
 		image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, width);
+		setData(pixels);
+	}
+	
+	public void setData(int[] pixels) {
 		int a, r, g, b;
 		for (int i = 0; i < pixels.length; i++) {
 			a = (pixels[i] & 0xff000000) >> 24;
@@ -123,8 +125,16 @@ public class Texture {
 			pixels[i] = a << 24 | b << 16 | g << 8 | r;
 		}
 		
+		bind();
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, BufferUtils.createIntBuffer(pixels));
-		
+		unbind();
+	}
+	
+	public void rawWrite(int[] data, int width, int height) {
+		this.width = width;
+		this.height = height;
+		bind();
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, BufferUtils.createIntBuffer(data));
 		unbind();
 	}
 	

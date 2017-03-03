@@ -81,12 +81,7 @@ class Game extends Node {
 		
 		Timer spawner = new Timer(2, false, () -> { projectileList.addChild(new Asteroid(Asteroid.FULL)); }).start();
 		
-		Label profile = new Label(Color.WHITE, new Font("Verdana", Font.PLAIN, 18), "Psilox Performance - %s", sprofile = new StringPointer("")) {
-			public void render() {
-				super.render();
-				Draw.quad(Color.GREEN.aAdj(.5f), Vec.Z_UNIT, getDimensions());
-			}
-		};
+		Label profile = new Label(Color.WHITE, new Font("Verdana", Font.PLAIN, 18), "Psilox Performance - %s", sprofile = new StringPointer(""));
 		UI.bottomLeft.addChild(profile);
 		
 		addChildren(sky, projectileList, player, UI, spawner);
