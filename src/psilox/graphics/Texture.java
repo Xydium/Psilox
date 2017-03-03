@@ -111,10 +111,12 @@ public class Texture {
 		
 		int[] pixels = new int[width * height];
 		image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, width);
-		setData(pixels);
+		setData(pixels, width, height);
 	}
 	
-	public void setData(int[] pixels) {
+	public void setData(int[] pixels, int width, int height) {
+		this.width = width;
+		this.height = height;
 		int a, r, g, b;
 		for (int i = 0; i < pixels.length; i++) {
 			a = (pixels[i] & 0xff000000) >> 24;

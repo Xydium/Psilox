@@ -264,6 +264,14 @@ public class Node implements InputListener {
 		Log.info(msg, objects);
 	}
 	
+	public void error(Object msg) {
+		Log.error(msg.toString());
+	}
+	
+	public void error(String msg, Object...objects) {
+		Log.error(msg, objects);
+	}
+	
 	public void error(String msg, Exception e) {
 		Log.error(msg);
 		Log.error(e);
