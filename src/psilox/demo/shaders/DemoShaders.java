@@ -1,19 +1,26 @@
 package psilox.demo.shaders;
 
+import static psilox.math.Mathf.*;
 import psilox.core.Config;
 import psilox.core.Psilox;
 import psilox.graphics.Color;
 import psilox.graphics.Draw;
 import psilox.graphics.Shader;
-import static psilox.math.Mathf.*;
+import psilox.graphics.Shape;
 import psilox.math.Vec;
 import psilox.node.Node;
 
 public class DemoShaders extends Node {
 
+	private Shape shape;
 	private Shader shader;
 	
 	public void enteredTree() {
+		float x = viewSize().x, y = viewSize().y;
+		
+		shape = new Shape(Shape.QUAD, new Vec[] { new Vec(0, 0), new Vec(x, 0), new Vec(x, y), new Vec(0, y)}, Color.WHITE,
+				new byte[] {0, 1, 2, 3});
+		
 		shader = new Shader("psilox/demo/shaders/demo.shd");
 		shader.setUniform4f("color", Color.WHITE);
 	}
@@ -23,7 +30,7 @@ public class DemoShaders extends Node {
 		float time = Psilox.ticks() / 10f;
 		shader.setUniform1f("time", time);
 		time = sin(time) + 1;
-		Draw.quad(Color.WHITE, new Vec(time * 100, time * 100), viewSize().dif(new Vec(time * 200, time * 200)));
+		Draw.shape(shape);
 		shader.disable();
 	}
 	

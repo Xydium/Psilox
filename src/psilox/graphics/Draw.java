@@ -13,6 +13,7 @@ import java.util.Stack;
 
 import psilox.math.Mat4;
 import psilox.math.Vec;
+import psilox.utils.BufferUtils;
 import psilox.utils.Log;
 
 public class Draw {
@@ -154,6 +155,32 @@ public class Draw {
 			glVertex3f(idv.x, idv.y, idv.z);
 		}
 		glEnd();
+	}
+	
+	public static void shape(Shape shape) {
+		float[] verts = shape.getVerts();
+		float[] colors = shape.getColors();
+		byte[] inds = shape.getIndices();
+		int mode = shape.getMode();
+		
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, verts);
+		
+		if(colors.length == 4) {
+			glColor4f(colors[0], colors[1], colors[2], colors[3]);
+		} else {
+			glEnableClientState(GL_COLOR_ARRAY);
+			glColorPointer(4, GL_FLOAT, 0, colors);
+		}
+
+		if(inds != null) {
+			glDrawElements(mode, BufferUtils.createByteBuffer(inds));
+		} else {
+			glDrawArrays(mode, 0, verts.length);
+		}
+		
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_COLOR_ARRAY);
 	}
 	
 	public static void point(Color c, Vec i) {

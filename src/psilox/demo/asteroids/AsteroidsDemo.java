@@ -1,10 +1,6 @@
 package psilox.demo.asteroids;
 
-import static psilox.input.Input.A;
-import static psilox.input.Input.D;
-import static psilox.input.Input.SPACE;
-import static psilox.input.Input.W;
-import static psilox.input.Input.keyDown;
+import static psilox.input.Input.*;
 
 import java.awt.Font;
 import java.util.List;
@@ -14,6 +10,7 @@ import psilox.core.Psilox;
 import psilox.graphics.Color;
 import psilox.graphics.Draw;
 import psilox.graphics.Shader;
+import psilox.graphics.Shape;
 import psilox.math.Random;
 import psilox.math.Vec;
 import psilox.node.Node;
