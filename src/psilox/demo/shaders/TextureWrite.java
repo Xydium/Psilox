@@ -14,25 +14,24 @@ import psilox.node.ui.Label;
 import psilox.utils.Pointer.IntPointer;
 
 public class TextureWrite extends Node {
-
-	private int resDiv = 1;
+	
 	private Texture tex;
 	private IntArray2D data;
 	private IntPointer fr;
 	
 	public void enteredTree() {
-		tex = new Texture((int) viewSize().x / resDiv, (int) viewSize().y / resDiv);
+		tex = new Texture((int) viewSize().x, (int) viewSize().y);
 		data = new IntArray2D(tex.getWidth(), tex.getHeight());
 		
 		Label l;
 		getParent().addChild(l = new Label(Color.WHITE, new Font("Arial", Font.PLAIN, 16), "Framerate: %s", fr = new IntPointer(0)));
 		l.setAnchor(Anchor.TL);
-		l.position.set(0, viewSize().y, 10);
+		l.position.set(2, viewSize().y, 10);
 	}
 	
 	public void update() {
-		data.iterate((x, y) -> {
-			return 0xFF000000 | ((x % (y + 1)) ^ (int) Psilox.ticks());
+		data.iterate((x, y, v) -> {
+			return 0xFF000000 | ((x % (y + 1)) ^ (int) Psilox.ticks() & v);
 		});
 		
 		tex.setData(data.array, data.width, data.height);

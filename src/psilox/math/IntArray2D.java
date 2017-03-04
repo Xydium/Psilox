@@ -38,16 +38,29 @@ public class IntArray2D {
 		return area;
 	}
 	
-	public void iterate(ArrayIterator it) {
-		for(int x = 0; x < width; x++) {
-			for(int y = 0; y < height; y++) {
-				array[y * width + x] = it.iterate(x, y);
+	public void iterate(MatrixIterator it) {
+		int i = 0;
+		int x = 0;
+		for(int y = 0; y < height; y++) {
+			for(x = 0; x < width; x++) {
+				array[i] = it.iterate(x, y, array[i]);
+				i++;
 			}
 		}
 	}
 	
-	public static interface ArrayIterator {
-		public int iterate(int x, int y);
+	public void iterate(LinearArrayIterator it) {
+		for(int i = 0; i < array.length; i++) {
+			array[i] = it.iterate(i, array[i]);
+		}
+	}
+	
+	public static interface MatrixIterator {
+		public int iterate(int x, int y, int v);
+	}
+	
+	public static interface LinearArrayIterator {
+		public int iterate(int i, int v);
 	}
 	
 }
