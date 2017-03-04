@@ -1,0 +1,25 @@
+VERTEX:
+
+#version 120
+
+void main() {
+	gl_Position = projection_transform * gl_Vertex;
+}
+
+FRAGMENT:
+
+#version 120
+#extension GL_EXT_gpu_shader4 : enable
+
+uniform int time;
+
+void main() {
+	int x = int(gl_FragCoord.x);
+	int y = int(gl_FragCoord.y);
+	int result = 0xFF000000 | ((x % (y + 1)) ^ time);
+	int a = (result >> 24) & 0xFF;
+	int r = (result >> 16) & 0xFF;
+	int g = (result >> 8) & 0xFF;
+	int b = result & 0xFF;
+	gl_FragColor = vec4(r / 255.0, g / 255.0, b / 255.0, a / 255.0);
+}
