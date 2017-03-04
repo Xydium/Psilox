@@ -11,15 +11,13 @@ FRAGMENT:
 #version 120
 #extension GL_EXT_gpu_shader4 : enable
 
-uniform int time;
+uniform float time;
 
 void main() {
-	int x = int(gl_FragCoord.x);
-	int y = int(gl_FragCoord.y);
-	int result = 0xFF000000 | ((x % (y + 1)) ^ time);
-	int a = (result >> 24) & 0xFF;
-	int r = (result >> 16) & 0xFF;
-	int g = (result >> 8) & 0xFF;
-	int b = result & 0xFF;
-	gl_FragColor = vec4(r / 255.0, g / 255.0, b / 255.0, a / 255.0);
+	int x = int(gl_FragCoord.x + time);
+	int y = int(gl_FragCoord.y + time);
+	int r = ((x % (y + 1))) & 0xFF;
+	int g = ((y % (x + 1))) & 0xFF;
+	int b = (((x * y) % ((y * x) + 1))) & 0xFF;
+	gl_FragColor = vec4(r / 255.0, g / 255.0, b / 255.0, 1.0);
 }

@@ -67,13 +67,13 @@ public class TextureWrite extends Node {
 	public void render() {
 		fr.set((int) (1 / Psilox.renderTime));
 		shader.enable();
-		shader.setUniform1i("time", (int) Psilox.ticks());
+		shader.setUniform1f("time", (int) Psilox.ticks());
 		Draw.quad(Color.WHITE, Vec.ZERO, viewSize());
 		shader.disable();
 	}
 	
 	public static void main(String[] args) {
-		Psilox.start(new Config("TextureWrite", 1600, 900, false), new TextureWrite());
+		Psilox.start(new Config("TextureWrite", 400, 800, false), new TextureWrite());
 	}
 	
 }
