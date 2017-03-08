@@ -236,7 +236,23 @@ public class Draw {
 	
 	public static void multiLineText(Color c, Font font, Texture texture, String[] text) {
 		FontMetrics m = gDefault.getFontMetrics(font);
-		int maxWidth;
+		int maxWidth = 1;
+		for(String s : text) {
+			int w = m.stringWidth(s); 
+			if(w > maxWidth) {
+				maxWidth = w;
+			}
+		}
+		int maxHeight = m.getHeight() * text.length;
+		BufferedImage image = new BufferedImage(maxWidth, maxHeight, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = image.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+		g.setFont(font);
+		g.setColor(new java.awt.Color(c.r, c.g, c.b, c.a));
+		for(int i = 0; i < text.length; i++) {
+			g.drawString(text[i], 0, i * maxHeight - m.getMaxDescent());
+		}
+		texture.setData(image);
 	}
 	
 	public static void texture(Texture tex, Vec i, Vec d, Color mod) {

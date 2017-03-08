@@ -25,9 +25,9 @@ public class TextureWrite extends Node {
 		tex = new Texture(viewSize());
 		data = new IntArray2D(tex.getDimensions());
 		
-		Label l = new Label(Color.BLACK, new Font("Arial", Font.PLAIN, 16), "Framerate: %s", fr = new IntPointer(0));
-		l.setAnchor(Anchor.TL);
-		l.position.set(0, viewSize().y, 1);
+		Label l = new Label(Color.BLACK, new Font("Arial", Font.PLAIN, 16), "Framerate:\nLol\nLol\n%s", fr = new IntPointer(0));
+		l.setAnchor(Anchor.MM);
+		l.position.set(viewSize().scl(.5f).sum(new Vec(0, 0, 1)));
 		l.setBg(Color.WHITE);
 		getParent().addChild(l);
 		

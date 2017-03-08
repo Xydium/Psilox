@@ -55,7 +55,7 @@ public class Label extends Panel implements PointerUpdateListener {
 	}
 	
 	private void refresh() {
-		Draw.text(Color.WHITE, font, label, getText());
+		Draw.multiLineText(Color.WHITE, font, label, getText().split("\n"));
 		setDimensions(new Vec(label.getWidth(), label.getHeight()));
 	}
 	
