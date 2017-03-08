@@ -234,6 +234,11 @@ public class Draw {
 		texture.setData(image);
 	}
 	
+	public static void multiLineText(Color c, Font font, Texture texture, String[] text) {
+		FontMetrics m = gDefault.getFontMetrics(font);
+		int maxWidth;
+	}
+	
 	public static void texture(Texture tex, Vec i, Vec d, Color mod) {
 		if(!immediateEnabled()) return;
 		i = new Vec(i);
