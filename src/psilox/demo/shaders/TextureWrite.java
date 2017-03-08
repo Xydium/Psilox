@@ -6,13 +6,15 @@ import psilox.core.Config;
 import psilox.core.Psilox;
 import psilox.graphics.Color;
 import psilox.graphics.Draw;
-import psilox.graphics.Shader;
+import psilox.graphics.Texture;
+import psilox.input.Input;
+import psilox.math.IntArray2D;
+import psilox.math.Random;
 import psilox.math.Vec;
 import psilox.node.Node;
 import psilox.node.ui.Label;
 import psilox.utils.Pointer.IntPointer;
 
-/*
 public class TextureWrite extends Node {
 	
 	private Texture tex;
@@ -20,60 +22,46 @@ public class TextureWrite extends Node {
 	private IntPointer fr;
 	
 	public void enteredTree() {
-		tex = new Texture((int) viewSize().x, (int) viewSize().y);
-		data = new IntArray2D(tex.getWidth(), tex.getHeight());
+		tex = new Texture(viewSize());
+		data = new IntArray2D(tex.getDimensions());
 		
-		Label l;
-		getParent().addChild(l = new Label(Color.WHITE, new Font("Arial", Font.PLAIN, 16), "Framerate: %s", fr = new IntPointer(0)));
+		Label l = new Label(Color.BLACK, new Font("Arial", Font.PLAIN, 16), "Framerate: %s", fr = new IntPointer(0));
 		l.setAnchor(Anchor.TL);
-		l.position.set(2, viewSize().y, 10);
-	}
-	
-	public void update() {
-		data.iterate((x, y, v) -> {
-			return 0xFF000000 | ((x % (y + 1)) ^ (int) Psilox.ticks());
+		l.position.set(0, viewSize().y, 1);
+		l.setBg(Color.WHITE);
+		getParent().addChild(l);
+		
+		data.iterate((i, v) -> {
+			return 0xFF000000 | Random.intVal(0xFFFFFF);
 		});
 		
 		tex.setData(data.array, data.width, data.height);
 	}
 	
+	public void update() {
+		if(Input.keyDown(Input.SPACE)) {
+			data.iterate((x, y, v) -> {
+				int[][] area = data.getArea(x - 1, y - 1, 3, 3, 0xFF000000);
+				long sum = 0;
+				for(int xx = 0; xx < 3; xx++) {
+					for(int yy = 0; yy < 3; yy++) {
+						sum += area[xx][yy];
+					}
+				}
+				return (int) (sum / 9);
+			});
+			
+			tex.setData(data.array, data.width, data.height);
+		}
+	}
+	
 	public void render() {
 		fr.set((int) (1 / Psilox.updateTime));
-		
 		Draw.texture(tex, Vec.ZERO, viewSize(), Color.WHITE);
 	}
 	
 	public static void main(String[] args) {
-		Psilox.start(new Config("TextureWrite", 1600, 900, false), new TextureWrite());
-	}
-	
-}
-*/
-
-public class TextureWrite extends Node {
-	
-	private Shader shader;
-	private IntPointer fr;
-	
-	public void enteredTree() {
-		shader = new Shader("psilox/demo/shaders/write.shd");
-		
-		Label l;
-		getParent().addChild(l = new Label(Color.WHITE, new Font("Arial", Font.PLAIN, 16), "Framerate: %s", fr = new IntPointer(0)));
-		l.setAnchor(Anchor.TL);
-		l.position.set(2, viewSize().y, 10);
-	}
-	
-	public void render() {
-		fr.set((int) (1 / Psilox.renderTime));
-		shader.enable();
-		shader.setUniform1f("time", (int) Psilox.ticks());
-		Draw.quad(Color.WHITE, Vec.ZERO, viewSize());
-		shader.disable();
-	}
-	
-	public static void main(String[] args) {
-		Psilox.start(new Config("TextureWrite", 400, 800, false), new TextureWrite());
+		Psilox.start(new Config("TextureWrite", 720, 360, false), new TextureWrite());
 	}
 	
 }

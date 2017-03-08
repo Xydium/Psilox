@@ -15,6 +15,7 @@ public class Label extends Panel implements PointerUpdateListener {
 	private String prefix;
 	private Pointer text;
 	private Color color;
+	private Color bg;
 	private Font font;
 	private Texture label;
 	
@@ -34,7 +35,10 @@ public class Label extends Panel implements PointerUpdateListener {
 	}
 	
 	public void render() {
-		Draw.texture(label, Vec.ZERO, color);
+		if(bg != null) {
+			Draw.quad(bg, Vec.ZERO, getDimensions());
+		}
+		Draw.texture(label, new Vec(0, 0, .1f), color);
 	}
 	
 	public String getText() {
@@ -61,6 +65,14 @@ public class Label extends Panel implements PointerUpdateListener {
 	
 	public void setColor(Color color) {
 		this.color = color;
+	}
+	
+	public Color getBg() {
+		return bg;
+	}
+	
+	public void setBg(Color bg) {
+		this.bg = bg;
 	}
 	
 	public Font getFont() {

@@ -12,12 +12,24 @@ public class IntArray2D {
 		this.array = new int[width * height];
 	}
 	
+	public IntArray2D(Vec dim) {
+		this((int) dim.x, (int) dim.y);
+	}
+	
 	public int get(int i) {
 		return array[i];
 	}
 	
 	public int get(int x, int y) {
 		return array[y * width + x];
+	}
+	
+	public int getSafe(int x, int y, int d) {
+		if(x < 0 || x >= width || y < 0 || y >= height) {
+			return d;
+		} else {
+			return get(x, y);
+		}
 	}
 	
 	public void set(int i, int v) {
@@ -28,11 +40,11 @@ public class IntArray2D {
 		array[y * width + x] = v;
 	}
 	
-	public int[][] getArea(int x, int y, int w, int h) {
+	public int[][] getArea(int x, int y, int w, int h, int d) {
 		int[][] area = new int[w][h];
 		for(int xx = x; xx < x + w; xx++) {
 			for(int yy = y; yy < y + h; yy++) {
-				area[xx][yy] = get(xx, yy);
+				area[xx - x][yy - y] = getSafe(xx, yy, d);
 			}
 		}
 		return area;
@@ -49,7 +61,7 @@ public class IntArray2D {
 		}
 	}
 	
-	public void iterate(LinearArrayIterator it) {
+	public void iterate(LinearIterator it) {
 		for(int i = 0; i < array.length; i++) {
 			array[i] = it.iterate(i, array[i]);
 		}
@@ -59,7 +71,7 @@ public class IntArray2D {
 		public int iterate(int x, int y, int v);
 	}
 	
-	public static interface LinearArrayIterator {
+	public static interface LinearIterator {
 		public int iterate(int i, int v);
 	}
 	

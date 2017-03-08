@@ -1,25 +1,14 @@
 package psilox.graphics;
 
-import static org.lwjgl.opengl.GL11.GL_NEAREST;
-import static org.lwjgl.opengl.GL11.GL_RGBA;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.glDeleteTextures;
-import static org.lwjgl.opengl.GL11.glGenTextures;
-import static org.lwjgl.opengl.GL11.glTexImage2D;
-import static org.lwjgl.opengl.GL11.glTexParameteri;
+import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.IntBuffer;
 
 import javax.imageio.ImageIO;
 
+import psilox.math.Vec;
 import psilox.utils.BufferUtils;
-import psilox.utils.Log;
 
 public class Texture {
 	
@@ -41,12 +30,20 @@ public class Texture {
 		create(null);
 	}
 	
+	public Texture(Vec dim) {
+		this((int) dim.x, (int) dim.y);
+	}
+	
 	public int getWidth() {
 		return width;
 	}
 	
 	public int getHeight() {
 		return height;
+	}
+	
+	public Vec getDimensions() {
+		return new Vec(width, height);
 	}
 	
 	public int getTexture() {
