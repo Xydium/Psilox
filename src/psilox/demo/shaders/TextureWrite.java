@@ -25,9 +25,9 @@ public class TextureWrite extends Node {
 		tex = new Texture(viewSize());
 		data = new IntArray2D(tex.getDimensions());
 		
-		Label l = new Label(Color.BLACK, new Font("Arial", Font.PLAIN, 16), "Framerate:\nLol\nLol\n%s", fr = new IntPointer(0));
-		l.setAnchor(Anchor.MM);
-		l.position.set(viewSize().scl(.5f).sum(new Vec(0, 0, 1)));
+		Label l = new Label(Color.BLACK, new Font("Arial", Font.PLAIN, 16), "Framerate:%s", fr = new IntPointer(0));
+		l.setAnchor(Anchor.TL);
+		l.position.set(0, viewSize().y, 1);
 		l.setBg(Color.WHITE);
 		getParent().addChild(l);
 		
@@ -40,16 +40,21 @@ public class TextureWrite extends Node {
 	
 	public void update() {
 		if(Input.keyDown(Input.SPACE)) {
+			int[] result = new int[data.array.length];
 			data.iterate((x, y, v) -> {
-				int[][] area = data.getArea(x - 1, y - 1, 3, 3, 0xFF000000);
-				long sum = 0;
+				int[][] area = data.getArea(x - 1, y - 1, 3, 3, -1);
+				int sum = v;
 				for(int xx = 0; xx < 3; xx++) {
 					for(int yy = 0; yy < 3; yy++) {
-						sum += area[xx][yy];
+						int b = area[xx][yy];
+						if(b == -1) continue;
+						sum = (((sum ^ b) & 0xfefefefe) >> 1) + (sum & b);
 					}
 				}
-				return (int) (sum / 9);
+				result[y * data.width + x] = sum;
+				return v;
 			});
+			data = new IntArray2D(data.width, data.height, result);
 			
 			tex.setData(data.array, data.width, data.height);
 		}

@@ -123,6 +123,14 @@ public class Vec {
 		return (float) Math.sqrt(x * x + y * y + z * z);
 	}
 	
+	public float hp3() {
+		return x * x + y * y + z * z;
+	}
+	
+	public float hp2() {
+		return x * x + y * y;
+	}
+	
 	public Vec nrm() {
 		float mag = mag();
 		if(mag == 0) return Vec.ZERO; 

@@ -12,6 +12,12 @@ public class IntArray2D {
 		this.array = new int[width * height];
 	}
 	
+	public IntArray2D(int width, int height, int[] array) {
+		this.width = width;
+		this.height = height;
+		this.array = array;
+	}
+	
 	public IntArray2D(Vec dim) {
 		this((int) dim.x, (int) dim.y);
 	}
