@@ -234,6 +234,17 @@ public class Draw {
 		texture.setData(image);
 	}
 	
+	public static void text(Color c, Font font, Texture texture, Vec dimensions, String text) {
+		FontMetrics m = gDefault.getFontMetrics(font);
+		BufferedImage image = new BufferedImage((int) dimensions.x, (int) dimensions.y, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = image.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+		g.setFont(font);
+		g.setColor(new java.awt.Color(c.r, c.g, c.b, c.a));
+		g.drawString(text, 0, image.getHeight() - m.getMaxDescent());
+		texture.setData(image);
+	}
+	
 	public static void multiLineText(Color c, Font font, Texture texture, String[] text) {
 		FontMetrics m = gDefault.getFontMetrics(font);
 		int lineHeight = m.getHeight();
