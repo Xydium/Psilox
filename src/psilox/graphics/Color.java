@@ -74,6 +74,14 @@ public class Color {
 		return res;
 	}
 	
+	public static byte getByte(int data, int b) {
+		return (byte) ((data >> (8 * b)) & 0xFF);
+	}
+	
+	public static int byteColor(int a, int r, int g, int b) {
+		return (a << 24) | (r << 16) | (g << 8) | b; 
+	}
+	
 	public static Color hsba(float hue, float saturation, float brightness, int alpha) {
 		int r = 0, g = 0, b = 0;
 		if (saturation == 0) {

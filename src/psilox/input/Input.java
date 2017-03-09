@@ -25,16 +25,6 @@ public class Input {
 	public static int WINDOW_HEIGHT;
 	public static Vec position = new Vec(0);
 	
-	static {
-		for(int i = 0; i < KEYS.length; i++) {
-			KEYS[i] = GLFW_RELEASE;
-		}
-		
-		for(int i = 0; i < BUTTONS.length; i++) {
-			BUTTONS[i] = GLFW_RELEASE;
-		}
-	}
-	
 	public static void addListener(InputListener listener) {
 		listeners.add(listener);
 	}
