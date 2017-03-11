@@ -12,12 +12,15 @@ import psilox.node.ui.Container;
 import psilox.node.ui.Label;
 
 public class Menus extends Node {
+
+	public Font titleFont;
 	
 	public MainMenu mainMenu;
 	public HelpMenu helpMenu;
 	public LevelMenu levelMenu;
 	
 	public void enteredTree() {
+		titleFont = new Font("Verdana", Font.BOLD, 60);
 		mainMenu = new MainMenu();
 		helpMenu = new HelpMenu();
 		helpMenu.position.set(viewSize().x, 0);
@@ -36,14 +39,12 @@ class MainMenu extends Node {
 	
 	public Menus menu;
 	public Container container;
-	public Font titleFont;
 	
 	public void enteredTree() {
 		menu = (Menus) getParent();
 		container = new Container(viewSize(), new Vec(20));
-		titleFont = new Font("Verdana", Font.BOLD, 60);
 		
-		Label title = new Label(Color.ORANGE, titleFont, "Food Truck");
+		Label title = new Label(Color.ORANGE, menu.titleFont, "Food Truck");
 		title.setAnchor(Anchor.TL);
 		container.topLeft.addChild(title);
 		
@@ -64,14 +65,12 @@ class HelpMenu extends Node {
 	
 	public Menus menu;
 	public Container container;
-	public Font titleFont;
 	
 	public void enteredTree() {
 		menu = (Menus) getParent();
 		container = new Container(viewSize(), new Vec(20));
-		titleFont = menu.mainMenu.titleFont;
 		
-		Label title = new Label(Color.ORANGE, titleFont, "Help");
+		Label title = new Label(Color.ORANGE, menu.titleFont, "Help");
 		title.setAnchor(Anchor.TL);
 		container.topLeft.addChild(title);
 		
@@ -91,14 +90,12 @@ class LevelMenu extends Node {
 	
 	public Menus menu;
 	public Container container;
-	public Font titleFont;
 	
 	public void enteredTree() {
 		menu = (Menus) getParent();
 		container = new Container(viewSize(), new Vec(20));
-		titleFont = menu.mainMenu.titleFont;
 		
-		Label title = new Label(Color.ORANGE, titleFont, "Level Select");
+		Label title = new Label(Color.ORANGE, menu.titleFont, "Level Select");
 		title.setAnchor(Anchor.TL);
 		container.topLeft.addChild(title);
 		
