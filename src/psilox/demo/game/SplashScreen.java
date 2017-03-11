@@ -14,7 +14,7 @@ public class SplashScreen extends Node {
 	private Font font;
 	
 	public void enteredTree() {
-		font = new Font("Verdana", Font.ITALIC, 36);
+		font = new Font("Verdana", Font.ITALIC, 72);
 		
 		Label madeBy = new Label(Color.WHITE, font, "Made by Fizzion Studios");
 		madeBy.setAnchor(Anchor.MM);

@@ -41,7 +41,7 @@ class MainMenu extends Node {
 	public void enteredTree() {
 		menu = (Menus) getParent();
 		container = new Container(viewSize(), new Vec(20));
-		titleFont = new Font("Verdana", Font.BOLD, 48);
+		titleFont = new Font("Verdana", Font.BOLD, 60);
 		
 		Label title = new Label(Color.ORANGE, titleFont, "Food Truck");
 		title.setAnchor(Anchor.TL);
