@@ -33,6 +33,10 @@ public class Menus extends Node {
 		position.set(subMenu.position.scl(-1));
 	}
 	
+	public void startGame(Level level) {
+		Psilox.changeScene(new Game(level));
+	}
+	
 }
 
 class MainMenu extends Node {
@@ -102,7 +106,7 @@ class LevelMenu extends Node {
 		Button toMenu = new Button(new Vec(200, 25), "Return to Menu", () -> menu.show(menu.mainMenu));
 		container.bottomLeft.addChild(toMenu);
 		
-		Button testLevel = new Button(new Vec(200, 25), "Test Level", () -> print("Enter test level!"));
+		Button testLevel = new Button(new Vec(200, 25), "Debug Level", () -> menu.startGame(Level.DEBUG));
 		testLevel.setAnchor(Anchor.MM);
 		container.center.addChild(testLevel);
 		
