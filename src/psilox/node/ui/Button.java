@@ -23,6 +23,7 @@ public class Button extends Node {
 		buttonText.setAnchor(Anchor.MM);
 		buttonText.position.z = .1f;
 		centerPoint = new Node();
+		setAnchor(Anchor.BL);
 	}
 	
 	public void setAnchor(Anchor anchor) {

@@ -89,6 +89,10 @@ public class Vec {
 		return new Vec(x / o.x, y / o.y, z / o.z);
 	}
 	
+	public Vec quo(float d) {
+		return new Vec(x / d, y / d, z / d);
+	}
+	
 	public void div(Vec o) {
 		x /= o.x;
 		y /= o.y;
