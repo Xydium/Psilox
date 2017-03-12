@@ -90,4 +90,12 @@ public class Mathf {
 		return (float) Math.toRadians(d);
 	}
 	
+	public static float clm(double v, double min, double max) {
+		return (float) ((v >= min) ? (v <= max ? v : max) : min);
+	}
+	
+	public static boolean btn(double v, double min, double max) {
+		return v >= min && v <= max;
+	}
+	
 }

@@ -9,7 +9,7 @@ public enum Tile {
 
 	TEST_RED(true, null, Color.RED),
 	TEST_BLUE(false, null, Color.BLUE),
-	TEST_GRAY(false, null, Color.LIGHT_GRAY),
+	TEST_GRAY(true, null, Color.LIGHT_GRAY),
 	TEST_GREEN(false, null, new Color(55, 155, 55));
 	
 	public static final Vec SIZE = new Vec(80);
