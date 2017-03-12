@@ -135,6 +135,10 @@ public class Vec {
 		return x * x + y * y;
 	}
 	
+	public Vec ic() {
+		return new Vec((int) x, (int) y, (int) z);
+	}
+	
 	public Vec nrm() {
 		float mag = mag();
 		if(mag == 0) return Vec.ZERO; 

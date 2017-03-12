@@ -9,8 +9,8 @@ public enum Tile {
 
 	TEST_RED(true, null, Color.RED),
 	TEST_BLUE(false, null, Color.BLUE),
-	TEST_GRAY(true, null, Color.LIGHT_GRAY),
-	TEST_GREEN(false, null, new Color(55, 155, 55));
+	TEST_ROAD(true, "psilox/demo/game/road.png", null),
+	TEST_GRASS(false, "psilox/demo/game/grass.png", null);
 	
 	public static final Vec SIZE = new Vec(80);
 	
@@ -41,7 +41,7 @@ public enum Tile {
 				Draw.quad(modulate, coordinate.pro(SIZE), SIZE);
 			}
 		} else {
-			Draw.texture(texture, coordinate.pro(SIZE), modulate == null ? Color.WHITE : modulate);
+			Draw.texture(texture, coordinate.pro(SIZE), SIZE, modulate == null ? Color.WHITE : modulate);
 		}
 	}
 	

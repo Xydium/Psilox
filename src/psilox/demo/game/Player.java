@@ -6,10 +6,11 @@ import psilox.input.Input;
 import psilox.math.Mathf;
 import psilox.math.Vec;
 import psilox.node.Node;
+import psilox.node.utility.Timer;
 
 public class Player extends MapObject {
 
-	private float speed;
+	public float speed;
 	public final Vec mapPosition;
 	
 	public Player(Game game, TileMap map, Node entities) {
@@ -18,40 +19,41 @@ public class Player extends MapObject {
 	}
 	
 	public void update() {
+		accelerate();
+		attemptTurns();
+		moveByVelocity();
+	}
+	
+	private void accelerate() {
 		if(Input.keyDown(Input.W)) {
 			speed += 0.2;
 		} else if(Input.keyDown(Input.S)) {
 			speed -= 0.2;
 		}
 		speed = Mathf.clm(speed, -4, 10);
-		
-		if(Input.keyTap(Input.D)) {
-			Tile right = map.at(mapPosition, Vec.RIGHT.rot(rotation - 90));
-			if(right.passable) {
-				rotation -= 90;
-				if(rotation < 0) rotation += 360;
-				centerInDirection();
-			}
-		} else if(Input.keyTap(Input.A)) {
-			Tile left = map.at(mapPosition, Vec.LEFT.rot(rotation - 90));
-			if(left.passable) {
-				rotation += 90;
-				centerInDirection();
-			}
-		}
-		
-		Vec nextPos = mapPosition.sum(Vec.angMag(rotation, speed));
-		if(map.at(nextPos, Vec.ZERO).passable) {
-			mapPosition.set(nextPos);
-		}
 	}
 	
-	public void render() {
-		//Right Check
-		Draw.line(Color.WHITE, Vec.DOWN.scl(20), Vec.DOWN.scl(30));
-		//Left Check
-		Draw.line(Color.BLACK, Vec.UP.scl(20), Vec.UP.scl(30));
-		Draw.ellipsef(Color.ORANGE, Vec.ZERO, 20, 20);
+	private void attemptTurns() {
+		float dr = 0;
+		if(Input.keyTap(Input.D) && map.at(mapPosition, Vec.RIGHT.rot(rotation - 90)).passable) {
+			dr = -90;
+		} else if(Input.keyTap(Input.A) && map.at(mapPosition, Vec.LEFT.rot(rotation - 90)).passable) {
+			dr = 90;
+		}
+		rotation += dr; 
+		if(rotation < 0) rotation += 360;
+		centerInDirection();
+	}
+	
+	private void moveByVelocity() {
+		Vec nextPos = mapPosition.sum(Vec.angMag(rotation, speed));
+		Vec checkPos = nextPos.sum(Vec.angMag(rotation, speed + Tile.SIZE.x / 2 * Math.signum(speed)));
+		if(map.at(checkPos, Vec.ZERO).passable) {
+			mapPosition.set(nextPos);
+		} else {
+			speed = Mathf.clm(speed - .5, 0, 10);
+			centerInTile();
+		}
 	}
 	
 	private void centerInDirection() {
@@ -60,6 +62,24 @@ public class Player extends MapObject {
 		} else {
 			mapPosition.y = (int) (mapPosition.y / Tile.SIZE.y) * Tile.SIZE.y + Tile.SIZE.y / 2;
 		}
+	}
+	
+	private void centerInTile() {
+		mapPosition.x = (int) (mapPosition.x / Tile.SIZE.x) * Tile.SIZE.x + Tile.SIZE.x / 2;
+		mapPosition.y = (int) (mapPosition.y / Tile.SIZE.y) * Tile.SIZE.y + Tile.SIZE.y / 2;
+	}
+	
+	public void render() {
+		//Right Check
+		Draw.line(Color.WHITE, Vec.DOWN.scl(20), Vec.DOWN.scl(30));
+		//Left Check
+		Draw.line(Color.BLACK, Vec.UP.scl(20), Vec.UP.scl(30));
+		Draw.line(Input.buttonDown(Input.BUTTON_LEFT) ? Color.YELLOW : Color.RED, Vec.ZERO, relMouse().rot(-rotation));
+		Draw.ellipsef(Color.ORANGE, Vec.ZERO, 20, 20);
+	}
+	
+	private Vec relMouse() {
+		return Input.position.dif(viewSize().quo(2));
 	}
 	
 }

@@ -42,7 +42,7 @@ public class Label extends Panel implements PointerUpdateListener {
 	}
 	
 	public String getText() {
-		return String.format(prefix, text.get().toString());
+		return String.format(prefix, text.get());
 	}
 	
 	public void setPrefix(String prefix) {
