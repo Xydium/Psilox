@@ -59,9 +59,13 @@ public class Game extends Node {
 		UI.bottomRight.addChild(timeElapsedLabel);
 		
 		speedLabelText = new FloatPointer(0);
-		Label speedLabel = new Label(Color.WHITE, UIFontLarge, "Speed: %.1fmph", speedLabelText);
+		Label speedLabel = new Label(Color.WHITE, UIFontLarge, "Speed: %.1f m/h", speedLabelText);
 		speedLabel.setAnchor(Anchor.BL);
 		UI.bottomLeft.addChild(speedLabel);
+		
+		Label randomLabel = new Label(Color.WHITE, UIFontLarge, "Level " + (level.ordinal() + 1) + ": " + level.name);
+		randomLabel.setAnchor(Anchor.BM);
+		UI.bottomMiddle.addChild(randomLabel);
 
 		playerMapPosText = new StringPointer("");
 		Label playerMapPosLabel = new Label(Color.RED, UIFontSmall, "Player Pos: %s", playerMapPosText);

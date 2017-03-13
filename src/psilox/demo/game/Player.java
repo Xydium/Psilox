@@ -14,7 +14,8 @@ public class Player extends MapObject {
 	public final Vec mapPosition;
 	
 	public Player(Game game, TileMap map, Node entities) {
-		super(game, map, entities);
+		super("psilox/demo/game/player.png", game, map, entities);
+		setDimensions(new Vec(80));
 		this.mapPosition = new Vec(0);
 	}
 	
@@ -29,6 +30,11 @@ public class Player extends MapObject {
 			speed += 0.2;
 		} else if(Input.keyDown(Input.S)) {
 			speed -= 0.2;
+		} else if(Input.keyDown(Input.SPACE)) {
+			speed += -(speed / 10);
+			if(Math.abs(speed) < 0.01) {
+				speed = 0;
+			}
 		}
 		speed = Mathf.clm(speed, -4, 10);
 	}
@@ -71,11 +77,13 @@ public class Player extends MapObject {
 	
 	public void render() {
 		//Right Check
-		Draw.line(Color.WHITE, Vec.DOWN.scl(20), Vec.DOWN.scl(30));
+		//Draw.line(Color.WHITE, Vec.DOWN.scl(20), Vec.DOWN.scl(30));
 		//Left Check
-		Draw.line(Color.BLACK, Vec.UP.scl(20), Vec.UP.scl(30));
+		//Draw.line(Color.BLACK, Vec.UP.scl(20), Vec.UP.scl(30));
+		//Mouse Line
 		Draw.line(Input.buttonDown(Input.BUTTON_LEFT) ? Color.YELLOW : Color.RED, Vec.ZERO, relMouse().rot(-rotation));
-		Draw.ellipsef(Color.ORANGE, Vec.ZERO, 20, 20);
+		//Draw Texture
+		Draw.texture(texture, getDimensions().scl(-.5f), getDimensions(), modulate);
 	}
 	
 	private Vec relMouse() {
