@@ -201,6 +201,23 @@ public class Node implements InputListener {
 		return children.get(index);
 	}
 	
+	public <Type> Type getChild(int index, Class<Type> t) {
+		return (Type) getChild(index);
+	}
+	
+	public Node getChild(String tag) {
+		for(Node n : children) {
+			if(n.tag.equals(tag)) {
+				return n;
+			}
+		}
+		return null;
+	}
+	
+	public <Type> Type getChild(String tag, Class<Type> t) {
+		return (Type) getChild(tag);
+	}
+	
 	public <T extends Node> List<T> getChildren(Class<T> type) {
 		List<T> nodes = new ArrayList<T>();
 		for(Node n : children) {

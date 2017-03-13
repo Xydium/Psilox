@@ -4,6 +4,7 @@ import java.awt.Font;
 
 import psilox.core.Psilox;
 import psilox.graphics.Color;
+import psilox.input.Input;
 import psilox.math.Vec;
 import psilox.node.Node;
 import psilox.node.ui.Container;
@@ -26,6 +27,7 @@ public class Game extends Node {
 	private FloatPointer speedLabelText; 
 	private StringPointer playerMapPosText;
 	private StringPointer playerTilePosText;
+	private boolean quitting;
 	
 	public Game(Level level) {
 		this.level = level;
@@ -63,9 +65,9 @@ public class Game extends Node {
 		speedLabel.setAnchor(Anchor.BL);
 		UI.bottomLeft.addChild(speedLabel);
 		
-		Label randomLabel = new Label(Color.WHITE, UIFontLarge, "Level " + (level.ordinal() + 1) + ": " + level.name);
-		randomLabel.setAnchor(Anchor.BM);
-		UI.bottomMiddle.addChild(randomLabel);
+		Label levelLabel = new Label(Color.WHITE, UIFontLarge, "Level " + (level.ordinal() + 1) + ": " + level.name);
+		levelLabel.setAnchor(Anchor.BM);
+		UI.bottomMiddle.addChild(levelLabel);
 
 		playerMapPosText = new StringPointer("");
 		Label playerMapPosLabel = new Label(Color.RED, UIFontSmall, "Player Pos: %s", playerMapPosText);
@@ -88,6 +90,22 @@ public class Game extends Node {
 		int seconds = (int) timeElapsed % 60;
 		int millis = (int) (timeElapsed * 100) % 100;
 		timeLabelText.set(String.format("%02d:%02d:%02d", minutes, seconds, millis));
+		
+		if(Input.keyTap(Input.ESCAPE)) {
+			quitting = true;
+			Label quit = (Label) UI.bottomMiddle.getChild(0);
+			quit.setPrefix("Quit? Y/N");
+			quit.setColor(Color.RED);
+		} else if(quitting) {
+			if(Input.keyTap(Input.Y)) {
+				Psilox.changeScene(new Menus());
+			} else if(Input.keyTap(Input.N)) {
+				quitting = false;
+				Label quit = (Label) UI.bottomMiddle.getChild(0);
+				quit.setPrefix("Level " + (level.ordinal() + 1) + ": " + level.name);
+				quit.setColor(Color.WHITE);
+			}
+		}
 	}
 	
 	public void render() {
