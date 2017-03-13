@@ -13,6 +13,7 @@ import psilox.graphics.Draw;
 import psilox.input.Input;
 import psilox.input.KeySequence;
 import psilox.math.Mat4;
+import psilox.math.Vec;
 import psilox.node.Node;
 import psilox.utils.Log;
 import psilox.utils.Time;
@@ -165,6 +166,7 @@ public class Psilox {
 		
 		if(config.fullscreen) {
 			glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, m.width(), m.height(), 60);
+			Input.scale = new Vec(config.width / (float) m.width(), config.height / (float) m.height());
 		}
 		
 		glfwSetKeyCallback(window, Input.keyCallback);

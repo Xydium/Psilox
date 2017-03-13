@@ -24,6 +24,7 @@ public class Input {
 	private static final byte[] BUTTONS = new byte[NUM_BUTTONS];
 	public static int WINDOW_HEIGHT;
 	public static Vec position = new Vec(0);
+	public static Vec scale = null;
 	
 	public static void addListener(InputListener listener) {
 		listeners.add(listener);
@@ -99,8 +100,13 @@ public class Input {
 	
 	public static final GLFWCursorPosCallback cursorCallback = new GLFWCursorPosCallback() {
 		public void invoke(long window, double x, double y) {
-			position.x = (float) x;
-			position.y = WINDOW_HEIGHT - (float) y;
+			if(scale == null) {
+				position.x = (float) x;
+				position.y = WINDOW_HEIGHT - (float) y;
+			} else {
+				position.x = (float) x * scale.x;
+				position.y = WINDOW_HEIGHT - (float) y * scale.y;
+			}
 			dispatchEvent(InputType.MOUSE, 0, InputState.MOVED);
 		}
 	};
