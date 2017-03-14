@@ -332,7 +332,7 @@
 <ol>
 <li>Open Eclipse and select your Workspace folder. Eclipse stores a variety of configuration information in this location, along with all of your project folders.</li>
 <li>If you opened Eclipse for the first time, you will see a <em>Welcome</em> page, which can be closed using the <code>X</code> icon for the tab toward the top of the window.</li>
-<li>Eclipse defaults to one of two default <em>Perspectives</em>, or window organizations. If the left-most window is labeled <em>Package Explorer</em>, ignore this step. If not, look for the icon in the top right of the main window labeled <em>Java EE</em>, now look for an icon to its left which is a window with a <code>+</code> icon, click it, and select <em>Java</em> from the resulting drop-down window.</li>
+<li>Eclipse defaults to one of two <em>Perspectives</em>, or window organizations. If the left sidebar is labeled <em>Package Explorer</em>, ignore this step. If not, look for the icon in the top right of the main window labeled <em>Java EE</em>, now look for an icon to its left which is a window with a <code>+</code> icon, click it, and select <em>Java</em> from the resulting drop-down window.</li>
 <li>Close the <em>Task View</em> sidebar on the right side of the editor.</li>
 <li><em>Right-Click</em> in the <em>Package Explorer</em> and select <em>New &gt; Java Project</em>. Specify the name you like and click <em>Next</em>.</li>
 <li>Select the <em>Libraries</em> tab. If you have <em>Psilox_X_Y_Z.jar</em> inside your project directory, click <em>Add JARs</em>, otherwise click <em>Add External JARs</em>. Select your Psilox jar file and click <em>Finish</em> to create the project.</li>
@@ -401,7 +401,7 @@ Determines whether or not Psilox will call glClear(), erasing the contents of th
 <p style="margin-left:40px"><font color="9986c6"><u>
 public boolean doubleBuffer
 </u></font><p style="margin-left:80px">
-Determines whether Psilox will use double buffering when rendering, helping to reduce flickering and rendering artifacts.
+Determines whether Psilox will use double buffering when rendering, helping to reduce flickering and rendering artifacts. (Default = true)
 </p>
 <p style="margin-left:40px"><font color="9986c6"><u>
 public boolean undecorated
@@ -411,7 +411,7 @@ Determines whether the window created will have border decorations in accordance
 <p style="margin-left:40px"><font color="9986c6"><u>
 public boolean console
 </u></font><p style="margin-left:80px">
-Determines whether Psilox will output to System.out when calling Log functions.
+Determines whether Psilox will output to System.out when calling Log functions. (Default = true)
 </p>
 <p style="margin-left:40px"><font color="9986c6"><u>
 public boolean immediateMode
@@ -426,7 +426,7 @@ The level of detail for the Log class. Log calls will only have effect when the 
 <p style="margin-left:40px"><font color="9986c6"><u>
 public int[] terminationSequence
 </u></font><p style="margin-left:80px">
-The key sequence, in Input key-codes, that will cause the engine to quit on the next update when concurrently pressed. (Default = {Input.LEFT<em>CONTROL, Input.LEFT</em>SHIFT, Input.Z})
+The key sequence, in Input key-codes, that will cause the engine to quit on the next update when concurrently pressed. (Default = {Input.LEFT_CONTROL, Input.LEFT_SHIFT, Input.Z})
 </p>
 <p style="margin-left:40px"><font color="9986c6"><u>
 public Color clearColor

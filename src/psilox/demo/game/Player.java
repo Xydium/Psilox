@@ -3,10 +3,10 @@ package psilox.demo.game;
 import psilox.graphics.Color;
 import psilox.graphics.Draw;
 import psilox.input.Input;
+import psilox.input.LogicMap;
 import psilox.math.Mathf;
 import psilox.math.Vec;
 import psilox.node.Node;
-import psilox.node.utility.Timer;
 
 public class Player extends MapObject {
 
