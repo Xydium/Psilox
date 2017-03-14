@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Preview</title>
+        <style type="text/css">
+        body {
+                margin: 0;
+                padding: 0;
+                font-size: 16px;
+                font-family: "Verdana", Helvetica, sans-serif;
+                line-height: 140%;
+                overflow-y: scroll;
+                overflow-x: hidden;
+        }
+        a {
+                text-decoration: none;
+        }
+        h1, h2, h3, h4, h5, h6 {
+                font-family: "Verdana";
+                font-weight: bold;
+                font-style: bold;
+                margin-top: 32px;
+                margin-bottom: 12px;
+        }
+        h1 {
+                font-size: 24px;
+        }
+        h2 {
+                font-size: 22px;
+        }
+        h3, h4, h5, h6 {
+                font-size: 20px;
+        }
+        p {
+                margin-bottom: 12px;
+        }
+        p:last-child {
+                margin-bottom: 0;
+        }
+        ol {
+                list-style: outside decimal;
+        }
+        ul {
+                list-style: outside disc;
+        }
+        li > p {
+                margin-bottom: 12px;
+        }
+        li > ol, li > ul {
+                margin-top: 12px !important;
+                padding-left: 12px;
+        }
+        ol:last-child, ul:last-child {
+                margin-bottom: 12px;
+        }
+        pre {
+                white-space: pre-wrap;
+                margin-bottom: 24px;
+                overflow: hidden;
+                padding: 3px;
+                border-radius: 2px;
+                border: 0.5px solid;
+        }
+        code {
+                font-family: "Courier", monospace;
+                font-size: 0.9em;
+                white-space: nowrap;
+                padding: 1px;
+                border-radius: 2px;
+        }
+        pre code {
+                font-size: 16px;
+                white-space: pre-wrap;
+        }
+        blockquote {
+                border-left: 3px solid #ccc;
+                margin-left: 0;
+                margin-right: auto;
+                width: 95%;
+                padding: 0 10px;
+        }
+        table {
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 24px;
+                border-bottom: 1px solid #ddd;
+                border-right: 1px solid #ddd;
+                border-spacing: 0;
+        }
+        table th {
+                padding: 3px 10px;
+                border-top: 1px solid #ddd;
+                border-left: 1px solid #ddd;
+        }
+        table td {
+                padding: 3px 10px;
+                border-top: 1px solid #ddd;
+                border-left: 1px solid #ddd;
+        }
+        img {
+                border: none;
+                display: block;
+                margin: 0 auto;
+                max-width: 100%;
+        }
+        hr {
+                border: 0;
+                height: 1px;
+                background-color: #ddd;
+        }
+        .footnote {
+                font-size: 0.8em;
+                vertical-align: super;
+        }
+        .footnotes ol {
+                font-weight: bold;
+        }
+        .footnotes ol li p {
+                font-weight: normal;
+        }
+        #content {
+                height: 100%;
+                width: 100%;
+        }
+
+        /* Device-specific styles: */
+        @media only screen and (min-device-width : 768px) {
+                #content {
+                        width: auto;
+                        padding: 40px;
+                }
+        }
+        @media only screen and (max-device-width : 767px) {
+                #content {
+                        width: auto;
+                        padding: 12px;
+                }
+        }
+
+        /* Theme-specific styles */
+        body.theme-default {
+                background-color: #fafafa;
+                color: #333;
+        }
+        .theme-default a {
+                color: #045591;
+        }
+        .theme-default pre {
+                background-color: #f2f2f2;
+                border-color: #d9d9d9;
+        }
+        .theme-default code {
+                background-color: #f2f2f2;
+        }
+        body.theme-dark {
+                background-color: #262B30;
+                color: #ccc;
+        }
+        .theme-dark a {
+                color: #a2bde0;
+        }
+        .theme-dark pre {
+                background-color: #333940;
+                border-color: #4c565f;
+        }
+        .theme-dark code {
+                background-color: #333940;
+        }
+
+        /* CriticMarkup styles: */
+        .theme-dark ins {
+                background-color: rgba(132, 235, 124, 0.2);
+                color: #86e873;
+                border-radius: 3px;
+                text-decoration: none;
+        }
+        .theme-dark del.cm {
+                background-color: rgba(253, 124, 113, 0.2);
+                color: #ff4043;
+                border-radius: 3px;
+        }
+        .theme-dark span.comment {
+                color: #56e4ff;
+        }
+        .theme-dark span.substitution {
+                background-color: rgba(255, 136, 0, 0.2);
+                color: #ffbb00;
+                border-radius: 3px;
+        }
+        .theme-dark mark {
+                background-color: rgba(182, 108, 251, 0.2);
+                color: #c680ff;
+                border-radius: 3px;
+        }
+
+        .theme-default ins {
+                background-color: rgba(132, 235, 124, 0.2);
+                color: #4f7a28;
+                border-radius: 3px;
+                text-decoration: none;
+        }
+        .theme-default del.cm {
+                background-color: rgba(253, 124, 113, 0.2);
+                color: #831000;
+                border-radius: 3px;
+        }
+        .theme-default span.comment {
+                color: #10b3cc;
+        }
+        .theme-default span.substitution {
+                background-color: rgba(255, 136, 0, 0.2);
+                color: #e66e12;
+                border-radius: 3px;
+        }
+        .theme-default mark {
+                background-color: rgba(182, 108, 251, 0.2);
+                color: #5d2b8c;
+                border-radius: 3px;
+        }
+
+        /* Fountain styles: */
+        .scene-heading, .transition, .new-act, .end-of-act, .character {
+                text-transform: uppercase;
+        }
+
+        .transition {
+                text-align: right;
+        }
+
+        .new-act, .end-of-act {
+                text-align: center;
+        }
+
+        .character {
+                margin: 1.3em auto 0;
+                width: 180px;
+        }
+
+        .dialogue {
+                margin: 0 auto;
+                width: 310px;
+        }
+
+        .parenthetical {
+                margin: 0 auto;
+                width: 250px;
+        }
+
+        .scene-heading {
+                margin-top: 2.6em;
+                font-weight: bold;
+                position: relative;
+                padding-right: 40px;
+        }
+        .scene-number-left {
+                float: left;
+                margin-left: -50px;
+        }
+        .scene-number-right {
+                position: absolute;
+                right: 0;
+                top: 0;
+        }
+        #script-title {
+                overflow: hidden;
+                display: block;
+                padding-bottom: 2.6em;
+                margin-bottom: 2.6em;
+        }
+        #script-title .title {
+                text-align: center;
+                margin: 1.3em 0;
+                text-decoration: underline;
+                font-weight: bold;
+                text-transform: uppercase;
+        }
+        #script-title .credit {
+                text-align: center;
+        }
+        #script-title .authors {
+                text-align: center;
+        }
+        #script-title .source {
+                text-align: center;
+                padding-top: 1.3em;
+        }
+        #script-title .notes {
+                padding-top: 2.6em;
+        }
+        #script-title .notes {
+                white-space: pre-line !important;shape-rendering
+        }
+        .center {
+                text-align: center !important;
+        }
+        .dual-dialogue {
+                overflow: hidden;
+        }
+        .dual-dialogue .dual-dialogue-left,
+        .dual-dialogue .dual-dialogue-right {
+                width: 228px;
+                float: left;
+        }
+        .dual-dialogue p {
+                width: auto;
+        }
+        .dual-dialogue .character {
+                text-align: center;
+                padding-left: 40px;
+        }
+        .dual-dialogue .parenthetical {
+                padding-left: 40px;
+        }
+        p.page-break {
+                text-align: right;
+                border-top: 1px solid #ccc;
+                padding-top: 20px;
+                margin-top: 20px;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="content">
+<p align="center"><b><font size="72",  color="b9a3e6">Psilox User Guide</font></b></p>
+<hr>
+<h2><font color="b099da">Getting Started</font></h2>
+<hr>
+<h3><font color="a690d0"> <p style="margin-left: 40px">Installation</p> </font></h3>
+<hr>
+<p>Running Psilox has only a few prerequisites: a graphics card that is OpenGL 2.1+ enabled, the Java 8 JDK, and the desired version of the Psilox Java Archive. The following is the procedure for creating an Eclipse project and linking Psilox.</p>
+
+<ol>
+<li>Open Eclipse and select your Workspace folder. Eclipse stores a variety of configuration information in this location, along with all of your project folders.</li>
+<li>If you opened Eclipse for the first time, you will see a <em>Welcome</em> page, which can be closed using the <code>X</code> icon for the tab toward the top of the window.</li>
+<li>Eclipse defaults to one of two default <em>Perspectives</em>, or window organizations. If the left-most window is labeled <em>Package Explorer</em>, ignore this step. If not, look for the icon in the top right of the main window labeled <em>Java EE</em>, now look for an icon to its left which is a window with a <code>+</code> icon, click it, and select <em>Java</em> from the resulting drop-down window.</li>
+<li>Close the <em>Task View</em> sidebar on the right side of the editor.</li>
+<li><em>Right-Click</em> in the <em>Package Explorer</em> and select <em>New &gt; Java Project</em>. Specify the name you like and click <em>Next</em>.</li>
+<li>Select the <em>Libraries</em> tab. If you have <em>Psilox_X_Y_Z.jar</em> inside your project directory, click <em>Add JARs</em>, otherwise click <em>Add External JARs</em>. Select your Psilox jar file and click <em>Finish</em> to create the project.</li>
+</ol>
+<h3><font color="a690d0"> <p style="margin-left: 40px">Running Your First Program</p> </font></h3>
+<hr>
+<p><em>Right click</em> the <code>src</code> folder and select <em>New Class</em>, and name it <strong>MyNode</strong>. Modify the class declaration to extend <strong>Node</strong> as follows, then include a <code>main</code> method:</p>
+<pre><code>public class MyNode extends Node {
+    public static void main(String[] args) {
+
+    }
+}
+</code></pre>
+<p>Running a Psilox program occurs with a single function call within the <code>main</code> method:</p>
+<pre><code>public static void main(String[] args) {
+    Psilox.start(new Config(&quot;My First Program&quot;, 600, 400, false), new MyNode());
+}
+</code></pre>
+<p>Running this code will create a window that is 600x400 pixels in dimensions, with the title <em>My First Program</em>.</p>
+<blockquote>
+<p>NOTE: Press Ctrl-Shift-O on Windows or Cmd-Shift-O on Mac to auto-import classes in Eclipse.</p>
+</blockquote>
+<h3><font color="a690d0"> <p style="margin-left: 40px">Config Objects</p> </font></h3>
+<hr>
+<p>Using the shorthand convenience constructor for <strong>Config</strong> omits the details of a number of settings, so those are printed to the console when the program runs. The <strong>Config</strong> object has the following fields and capabilities:
+<p style="margin-left: 40px"><font color="9986c6"><u>
+public Config(String title, int width, int height, boolean fullscreen)
+</u></font><p style="margin-left: 80px">
+This constructor allows for easy setting of the title, width, height, and fullscreen, as these four characteristics are the most commonly utilized parameters for a Psilox window.
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public int width
+</u></font><p style="margin-left:80px">
+The width of the window, in pixels. (Default = 500)
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public int height
+</u></font><p style="margin-left:80px">
+The height of the window, in pixels. (Default = 500)
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public String title
+</u></font><p style="margin-left:80px">
+The title of the window. (Default = &ldquo;Psilox&rdquo;)
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public boolean fullscreen
+</u></font><p style="margin-left:80px">
+Whether or not Psilox starts fullscreen, automatically scaling the window to the main monitor&#39;s width and height, but keeping the viewport the same size as specified in this config. (Default = false)
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public int updateRate
+</u></font><p style="margin-left:80px">
+The number of times per second the update function is called on all Node objects connected to root. This rate will not be met if updating takes too long. Set to Config.UNLIMITED to update as fast as possible, or Config.MANUAL to manually update by calling Psilox.update(). (Default = 60)
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public int frameRate
+</u></font><p style="margin-left:80px">
+The number of times per second the render function is called on all Node objects connected to root. This may not have a visible effect if set above the refresh rate of the monitor. This rate will not be met if rendering takes too long. Set to Config.UNLIMITED to render as fast as possible, or Config.MANUAL to manually render by calling Psilox.render(). (Default = 60)
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public boolean clearscreen
+</u></font><p style="margin-left:80px">
+Determines whether or not Psilox will call glClear(), erasing the contents of the framebuffer before new rendering occurs for the current frame. If set to false, doubleBuffer should also be set to false to prevent unwanted flickering effects. (Default = true)
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public boolean doubleBuffer
+</u></font><p style="margin-left:80px">
+Determines whether Psilox will use double buffering when rendering, helping to reduce flickering and rendering artifacts.
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public boolean undecorated
+</u></font><p style="margin-left:80px">
+Determines whether the window created will have border decorations in accordance with OS specifications. Set to false when using fullscreen. (Default = true)
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public boolean console
+</u></font><p style="margin-left:80px">
+Determines whether Psilox will output to System.out when calling Log functions.
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public boolean immediateMode
+</u></font><p style="margin-left:80px">
+Determines whether Psilox will allow the use of immediate-mode (GL 2.1 or less) functions. Setting this to false will force all such Draw functions to instantly return. (Default = false)
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public String logLevel
+</u></font><p style="margin-left:80px">
+The level of detail for the Log class. Log calls will only have effect when the log level is above or equal to them. For example, with logLevel = &ldquo;DEBUG&rdquo;, a call to Log.error() will write to the Log, but Log.internal() will not. The valid options are &ldquo;ERROR&rdquo;, &ldquo;WARNING&rdquo;, &ldquo;INFO&rdquo;, &ldquo;DEBUG&rdquo;, &ldquo;INTERNAL&rdquo;. (Default = &ldquo;DEBUG&rdquo;)
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public int[] terminationSequence
+</u></font><p style="margin-left:80px">
+The key sequence, in Input key-codes, that will cause the engine to quit on the next update when concurrently pressed. (Default = {Input.LEFT<em>CONTROL, Input.LEFT</em>SHIFT, Input.Z})
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public Color clearColor
+</u></font><p style="margin-left:80px">
+The color that is passed to glClearColor() and used to clear the framebuffer if clearScreen is true. (Default = Color.BLACK)
+</p></p>
+<h3><font color="a690d0"> <p style="margin-left: 40px">Lifecycle of a Node</p> </font></h3>
+<hr>
+<p>Nodes have four lifecycle functions that may be overriden by subclasses:</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public void enteredTree()
+</u></font><p style="margin-left:80px">
+Called when the node is added to the tree. This does not necessarily occur immediately after the node was passed to addChild, as additions to the tree do not occur until the end of an update.
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public void update()
+</u></font><p style="margin-left:80px">
+Called a certain number of times per second, based on the settings of the config. Used to update node data and perform game logic.
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public void render()
+</u></font><p style="margin-left:80px">
+Called a certain number of times per second, based on the settings of the config. Used to render the node through calls to Draw. Inside of render, the positions sent to Draw are relative to the transform of the node.
+</p>
+<p style="margin-left:40px"><font color="9986c6"><u>
+public void exitedTree()
+</u></font><p style="margin-left:80px">
+Called when the node is removed from the tree. This does not necessarily occur immediately after the node was passed to removeChild, as additions to the tree do not occur until the end of an update.
+</p>
+<p>The following demo will show these in action.</p>
+<h3><font color="a690d0"> <p style="margin-left: 40px">Giving MyNode Behavior</p> </font></h3>
+<hr>
+<p>For starters, let&#39;s have <strong>MyNode</strong> center itself in the window when it is added to the tree. To do this we will modify its <code>position</code> which is inherited from <strong>Node</strong>.</p>
+<pre><code>public void enteredTree() {
+    position.set(viewSize().half());
+}
+</code></pre>
+<p>The <code>viewSize()</code> function returns the width and height of the window as a <strong>Vec</strong>.  <strong>Vec</strong> objects are three-dimensional vector types, however can also be treated as two-dimensional vectors, and two or three-dimensional coordinates. The <code>half()</code> function returns a new <strong>Vec</strong> which is all three components of the <strong>Vec</strong> it was called on divided by two. Since the <code>position</code> of a node is final, and thus always the same instance, setting it to another <strong>Vec</strong> is accomplished with the <code>set()</code> function, which copies over the components of the passed <strong>Vec</strong> to the target.</p>
+<p>Next, when <strong>MyNode</strong> is rendered, it should draw a square centered on its position.</p>
+<pre><code>public void render() {
+    Draw.cquad(Color.RED, Vec.ZERO, new Vec(50));
+}
+</code></pre>
+<blockquote>
+<p>NOTE: Remember to select Psilox classes when prompted while auto-importing. For example, java.awt.Color will not work, only psilox.graphics.Color will.</p>
+</blockquote>
+<p>The <code>cquad</code> function draws a rectangle of the requested size (50, 50) centered around the point (0, 0) relative to the current node. Since <strong>MyNode</strong>&#39;s position is the center of the screen (300, 200), that is the actual window position the rectangle is rendered at.</p>
+<p>Now when you run the program, you will see a red square in the center of the window.</p>
+<p>Next, we will make the square rotate by incrementing its <code>rotation</code> every update. We want it to rotate 90 degrees every second, so we will multiply it&#39;s per-second rotation by the duration of one update, to determine its per-update rotation.</p>
+<pre><code>public void update() {
+    rotation += 90 * Psilox.deltaTime();
+}
+</code></pre>
+<p>Finally, let&#39;s print a message to the console when <strong>MyNode</strong> is removed, using on of the several shorthand <strong>Node</strong> logging functions.</p>
+<pre><code>public void exitedTree() {
+    print(&quot;Node %s was removed from the tree.&quot;, this);
+}
+</code></pre>
+<p>The <code>print()</code> function includes String formatting, so by passing <code>this</code> to it and including <code>%s</code> in the format string, the result of a call to <code>this.toString()</code> will be included. The end result will print out as <code>[INFO] Node MyNode, UID=0 was removed from the tree.</code></p>
+<p>There&#39;s just one problem: <code>exitedTree()</code> is never called, because the node is never removed. To fix this, let&#39;s remove <strong>MyNode</strong> after it turns a full 360 degrees.</p>
+<pre><code>public void update() {
+    //Prior Code Omitted
+    if(rotation &gt; 360) {
+        freeSelf();
+    }
+}
+</code></pre>
+<p>The function <code>freeSelf()</code> is short for <code>getParent().removeChild(this)</code> but has the same effect. Since all nodes are in the tree as children of parents, it is the responsibility of the parent to add or remove them.</p>
+<p>Now, when the program is run, the red square will make one complete rotation and then disappear, exactly as expected.</p>
+<p>To clarify the effects of parent-child relative positioning, add the following to <code>enteredTree()</code>:</p>
+<pre><code>public void enteredTree() {
+    //Prior Code Omitted
+    if(UID == 0) {
+        MyNode m = new MyNode();
+        addChild(m); //m.position is now (300, 200)
+        m.position.set(100, 0);
+    }
+}
+</code></pre>
+<blockquote>
+<p>NOTE: The if-statement is included to prevent infinitely adding more <strong>MyNode</strong> instances, as without it the program would crash. UID=0 will always be the instance passed to Psilox.start(). The node <code>m</code> will have a UID=2, since <code>root</code> is UID=1.</p>
+</blockquote>
+<p>Observe how the second <strong>MyNode</strong> instance orbits the first, while also rotating relative to its center.</p>
+<pre><code>import psilox.core.*;
+import psilox.graphics.*;
+import psilox.math.*;
+import psilox.node.*;
+
+public class MyNode extends Node {
+
+    public void enteredTree() {
+        position.set(viewSize().half());
+        if(UID == 0) {
+            MyNode m = new MyNode();
+            addChild(m);
+            m.position.set(100, 0);
+        }
+    }
+
+    public void update() {
+        rotation += 90 * Psilox.deltaTime();
+        if(rotation &gt; 360) {
+            freeSelf();
+        }
+    }
+
+    public void render() {
+        Draw.cquad(Color.RED, Vec.ZERO, new Vec(50));
+    }
+
+    public void exitedTree() {
+        print(&quot;Node %s was removed from the tree.&quot;, this);
+    }
+
+    public static void main(String[] args) {
+        Psilox.start(new Config(&quot;My First Program&quot;, 600, 400, false), new MyNode());
+    }
+
+}
+</code></pre>
+        </div>
+    </body>
+</html>
