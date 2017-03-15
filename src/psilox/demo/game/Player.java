@@ -77,9 +77,9 @@ public class Player extends MapObject {
 	
 	public void render() {
 		//Right Check
-		//Draw.line(Color.WHITE, Vec.DOWN.scl(20), Vec.DOWN.scl(30));
+		Draw.line(Color.WHITE, Vec.DOWN.scl(20), Vec.DOWN.scl(80));
 		//Left Check
-		//Draw.line(Color.BLACK, Vec.UP.scl(20), Vec.UP.scl(30));
+		Draw.line(Color.BLACK, Vec.UP.scl(20), Vec.UP.scl(80));
 		//Mouse Line
 		Draw.line(Input.buttonDown(Input.BUTTON_LEFT) ? Color.YELLOW : Color.RED, Vec.ZERO, relMouse().rot(-rotation));
 		//Draw Texture
