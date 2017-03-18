@@ -69,4 +69,28 @@ public class Shape {
 		this.mode = mode;
 	}
 	
+	public static Shape quadf(Vec offset, Vec dimensions, Color...colors) {
+		assert(colors.length == 1 || colors.length == 4);
+		Vec[] verts = new Vec[4];
+		verts[0] = new Vec(offset);
+		verts[1] = offset.sum(dimensions.yc());
+		verts[2] = offset.sum(dimensions);
+		verts[3] = offset.sum(dimensions.xc());
+		return new Shape(QUAD, verts, colors);
+	}
+	
+	public static Shape quado(Vec offset, Vec dimensions, Color...colors) {
+		Shape s = quadf(offset, dimensions, colors);
+		s.setMode(LINE_STRIP);
+		return s;
+	}
+	
+	public static Shape cquadf(Vec offset, Vec dimensions, Color...colors) {
+		return quadf(offset.dif(dimensions.half()), dimensions, colors);
+	}
+	
+	public static Shape cquado(Vec offset, Vec dimensions, Color...colors) {
+		return quado(offset.dif(dimensions.half()), dimensions, colors);
+	}
+	
 }

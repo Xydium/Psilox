@@ -313,6 +313,36 @@ public class Vec {
 	}
 	
 	/**
+	 * Constructs a new Vec that is the x-component
+	 * vector of this Vec.
+	 * 
+	 * @return
+	 */
+	public Vec xc() {
+		return new Vec(x, 0, 0);
+	}
+	
+	/**
+	 * Constructs a new Vec that is the y-component
+	 * vector of this Vec.
+	 * 
+	 * @return
+	 */
+	public Vec yc() {
+		return new Vec(0, y, 0);
+	}
+	
+	/**
+	 * Constructs a new Vec that is the z-component
+	 * vector of this Vec.
+	 * 
+	 * @return
+	 */
+	public Vec zc() {
+		return new Vec(0, 0, z);
+	}
+	
+	/**
 	 * Contructs a Vec that is the normalized version
 	 * of this Vec, with the same angle but a mag
 	 * of 1.
