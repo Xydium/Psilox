@@ -15,6 +15,7 @@ public class Interpolator extends Node {
 	private int currentFrame;
 	private float elapsedTime;
 	private boolean discrete;
+	private boolean oneShot;
 	
 	public Interpolator(InterpolatorCallback callback) {
 		super();
@@ -23,6 +24,7 @@ public class Interpolator extends Node {
 		currentFrame = 0;
 		elapsedTime = 0;
 		updatable = false;
+		oneShot = true;
 	}
 	
 	public void update() {
@@ -34,9 +36,14 @@ public class Interpolator extends Node {
 			currentFrame++;
 			advanced = true;
 			if(currentFrame == keyFrames.size() - 1) {
-				stop();
 				callback.lerp(keyFrames.get(currentFrame).value);
 				onEnd.execute();
+				if(oneShot) {
+					stop();
+				} else {
+					currentFrame = 0;
+					elapsedTime = 0;
+				}
 				return;
 			}
 		}
@@ -64,6 +71,14 @@ public class Interpolator extends Node {
 	
 	public void stop() {
 		updatable = false;
+	}
+	
+	public boolean isOneShot() {
+		return oneShot;
+	}
+	
+	public void setOneShot(boolean oneShot) {
+		this.oneShot = oneShot;
 	}
 	
 	public void setOnEnd(Function onEnd) {
