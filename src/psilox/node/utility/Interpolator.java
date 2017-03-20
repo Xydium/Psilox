@@ -5,6 +5,7 @@ import java.util.List;
 
 import psilox.core.Psilox;
 import psilox.input.Function;
+import psilox.math.Mathf;
 import psilox.node.Node;
 
 public class Interpolator extends Node {
@@ -16,6 +17,7 @@ public class Interpolator extends Node {
 	private float elapsedTime;
 	private boolean discrete;
 	private boolean oneShot;
+	private boolean cosLerp;
 	
 	public Interpolator(InterpolatorCallback callback) {
 		super();
@@ -53,12 +55,24 @@ public class Interpolator extends Node {
 				callback.lerp(keyFrames.get(currentFrame).value);
 			}
 		} else {
-			KeyFrame a = keyFrames.get(currentFrame);
-			KeyFrame b = keyFrames.get(currentFrame + 1);
-			if(a.value == b.value) return;
+			callback.lerp(calculateValue());
+		}
+	}
+	
+	public float calculateValue() {
+		KeyFrame a = keyFrames.get(currentFrame);
+		KeyFrame b = keyFrames.get(currentFrame + 1);
+		if(a.value == b.value) return b.value;
+		
+		if(cosLerp) {
+			float mu = (elapsedTime - a.time) / (b.time - a.time);
+			float mu2 = (1 - Mathf.cos(mu * Math.PI)) / 2;
+			return(a.value * (1 - mu2) + b.value * mu2);
+		} else {
 			float av = a.value * (1 - ((elapsedTime - a.time) / (b.time - a.time)));
 			float bv = b.value * ((elapsedTime - a.time) / (b.time - a.time));
-			callback.lerp(av + bv);
+			
+			return av + bv;
 		}
 	}
 	
@@ -79,6 +93,14 @@ public class Interpolator extends Node {
 	
 	public void setOneShot(boolean oneShot) {
 		this.oneShot = oneShot;
+	}
+	
+	public boolean isCosineInterpolated() {
+		return cosLerp;
+	}
+	
+	public void setCosineInterpolated(boolean cosLerp) {
+		this.cosLerp = cosLerp;
 	}
 	
 	public void setOnEnd(Function onEnd) {
