@@ -74,7 +74,11 @@ public class Psilox {
 			Log.error("Last GL Error: %d", error);
 		}
 		
-		glfwSwapBuffers(window);
+		if(config.doubleBuffer) {
+			glfwSwapBuffers(window);
+		} else {
+			glFlush();
+		}
 	}
 	
 	private static void loop() {
@@ -82,6 +86,7 @@ public class Psilox {
 		long lastRender = Time.now() - renderInterval;
 		
 		initWindow();
+		clear();
 		root.addChild(mainNode);
 		
 		while(running()) {
