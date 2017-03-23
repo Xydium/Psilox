@@ -176,7 +176,7 @@ public class Draw {
 		if(inds != null) {
 			glDrawElements(mode, BufferUtils.createByteBuffer(inds));
 		} else {
-			glDrawArrays(mode, 0, verts.length);
+			glDrawArrays(mode, 0, verts.length / 3);
 		}
 		
 		glDisableClientState(GL_VERTEX_ARRAY);

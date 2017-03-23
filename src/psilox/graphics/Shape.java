@@ -9,6 +9,7 @@ public class Shape {
 	public static final int QUAD = GL11.GL_QUADS;
 	public static final int TRI = GL11.GL_TRIANGLES;
 	public static final int POLY = GL11.GL_TRIANGLE_FAN;
+	public static final int OUTLINE = GL11.GL_LINE_LOOP;
 	public static final int TRI_STRIP = GL11.GL_TRIANGLE_STRIP;
 	public static final int LINE = GL11.GL_LINE;
 	public static final int LINE_STRIP = GL11.GL_LINE_STRIP;
