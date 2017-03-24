@@ -82,7 +82,7 @@ public class Shape {
 	
 	public static Shape quado(Vec offset, Vec dimensions, Color...colors) {
 		Shape s = quadf(offset, dimensions, colors);
-		s.setMode(LINE_STRIP);
+		s.setMode(OUTLINE);
 		return s;
 	}
 	
