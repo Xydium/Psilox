@@ -201,8 +201,8 @@ public class Node implements InputListener {
 		return children.get(index);
 	}
 	
-	public <Type> Type getChild(int index, Class<Type> t) {
-		return (Type) getChild(index);
+	public <T extends Node> T getChild(int index, Class<T> t) {
+		return (T) getChild(index);
 	}
 	
 	public Node getChild(String tag) {
@@ -214,8 +214,8 @@ public class Node implements InputListener {
 		return null;
 	}
 	
-	public <Type> Type getChild(String tag, Class<Type> t) {
-		return (Type) getChild(tag);
+	public <T extends Node> T getChild(String tag, Class<T> t) {
+		return (T) getChild(tag);
 	}
 	
 	public <T extends Node> List<T> getChildren(Class<T> type) {
@@ -258,6 +258,10 @@ public class Node implements InputListener {
 		}
 		
 		return current;
+	}
+	
+	public <T extends Node> T nodePath(String path, Class<T> t) { 
+		return (T) nodePath(path);
 	}
 	
 	public boolean isInputListening() {
