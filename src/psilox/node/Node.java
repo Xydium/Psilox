@@ -236,6 +236,29 @@ public class Node implements InputListener {
 		return children;
 	}
 	
+	public Node nodePath(String path) {
+		Node current;
+		
+		if(path.charAt(0) == '/') {
+			current = Psilox.root;
+		} else {
+			current = this;
+		}
+		
+		String[] nodes = path.substring(1).split("/");
+		
+		for(String n : nodes) {
+			Node next = current.getChild(n);
+			if(next != null) {
+				current = next;
+			} else {
+				return null;
+			}
+		}
+		
+		return current;
+	}
+	
 	public boolean isInputListening() {
 		return inputListening;
 	}
