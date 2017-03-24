@@ -62,6 +62,23 @@ public class Shape {
 		return indices;
 	}
 	
+	public void setColorAt(int index, Color color) {
+		if(index * 4 + 4 == colors.length) {
+			colors[index] = color.r;
+			colors[index + 1] = color.g;
+			colors[index + 2] = color.b;
+			colors[index + 3] = color.a;
+		}
+	}
+	
+	public void setVertAt(int index, Vec vert) {
+		if(index * 3 + 3 == verts.length) {
+			verts[index] = vert.x;
+			verts[index + 1] = vert.y;
+			verts[index + 2] = vert.z;
+		}
+	}
+	
 	public int getMode() {
 		return mode;
 	}
