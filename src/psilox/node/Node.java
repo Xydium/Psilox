@@ -241,11 +241,12 @@ public class Node implements InputListener {
 		
 		if(path.charAt(0) == '/') {
 			current = Psilox.root;
+			path = path.substring(1);
 		} else {
 			current = this;
 		}
 		
-		String[] nodes = path.substring(1).split("/");
+		String[] nodes = path.split("/");
 		
 		for(String n : nodes) {
 			Node next = current.getChild(n);
@@ -318,7 +319,7 @@ public class Node implements InputListener {
 	}
 	
 	public String toString() {
-		return String.format("%s, UID=%s", tag.equals("") ? getClass().getSimpleName() : tag, UID);
+		return String.format("%s (%s), UID=%s", tag.equals("") ? "{tagless}" : tag, getClass().getSimpleName(), UID);
 	}
 	
 	public Vec viewSize() {
