@@ -455,6 +455,26 @@ public class Vec {
 	}
 	
 	/**
+	 * Reflects this vector against the provided vector.
+	 * For example, if a vec points toward a vertical Vec at
+	 * an angle of -45 or 315 degrees, the returned vector will
+	 * be a vector of the same magnitude of angle 45 degrees. The above parameter
+	 * controls which side o is reflected off of, and does not necessarily correspond
+	 * to above or below a vector. When false, for vertical vectors it will flip the normal 
+	 * horizontally. For horizontal vectors it will flip the normal vertically.
+	 * 
+	 * @param above
+	 * @param o
+	 */
+	public Vec rfl(boolean above, Vec o) {
+		Vec normal = new Vec(y, x).nrm();
+		if(!above) {
+			normal.mul(-1);
+		}
+		return o.dif(normal.scl(2 * normal.dot(o)));
+	}
+	
+	/**
 	 * Contructs a new Vec with the specified
 	 * angle and magnitude.
 	 * 
