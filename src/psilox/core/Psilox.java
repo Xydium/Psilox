@@ -38,6 +38,7 @@ public class Psilox {
 	private static Node mainNode;
 	private static KeySequence terminator;
 	private static Node nextScene;
+	private static Node cameraTarget;
 	
 	public static void start(Config config, Node mainNode) {
 		Psilox.config = config;
@@ -67,7 +68,13 @@ public class Psilox {
 			clear();
 		}
 		
+		if(cameraTarget != null) {
+			Vec pos = cameraTarget.globalPosition().scl(-1).sum(cameraTarget.viewSize().half());
+			float rot = cameraTarget.globalRotation();
+			Draw.pushTransform(Mat4.transform(pos, rot));
+		}
 		root.renderChildren();
+		Draw.popTransform();
 		
 		int error = glGetError();
 		if(error != GL_NO_ERROR) {
@@ -119,6 +126,10 @@ public class Psilox {
 	
 	public static void changeScene(Node nextScene) {
 		Psilox.nextScene = nextScene;
+	}
+	
+	public static void cameraTarget(Node cameraTarget) {
+		Psilox.cameraTarget = cameraTarget;
 	}
 	
 	private static void initLog() {
