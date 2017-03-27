@@ -64,18 +64,18 @@ public class Shape {
 	
 	public void setColorAt(int index, Color color) {
 		if(index * 4 + 4 == colors.length) {
-			colors[index] = color.r;
-			colors[index + 1] = color.g;
-			colors[index + 2] = color.b;
-			colors[index + 3] = color.a;
+			colors[index * 4] = color.r;
+			colors[index * 4 + 1] = color.g;
+			colors[index * 4 + 2] = color.b;
+			colors[index * 4 + 3] = color.a;
 		}
 	}
 	
 	public void setVertAt(int index, Vec vert) {
 		if(index * 3 + 3 == verts.length) {
-			verts[index] = vert.x;
-			verts[index + 1] = vert.y;
-			verts[index + 2] = vert.z;
+			verts[index * 3] = vert.x;
+			verts[index * 3 + 1] = vert.y;
+			verts[index * 3 + 2] = vert.z;
 		}
 	}
 	
