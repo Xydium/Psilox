@@ -198,6 +198,7 @@ public class Node implements InputListener {
 	}
 	
 	public Node getChild(int index) {
+		if(index < 0 || index >= children.size()) return null;
 		return children.get(index);
 	}
 	
@@ -230,6 +231,10 @@ public class Node implements InputListener {
 	
 	public List<Node> getChildren() {
 		return new ArrayList<Node>(children);
+	}
+	
+	public int getChildCount() {
+		return children.size();
 	}
 	
 	public List<Node> getChildrenUnsafe() {
