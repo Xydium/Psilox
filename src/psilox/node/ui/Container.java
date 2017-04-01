@@ -19,15 +19,15 @@ public class Container extends Node {
 	public final Node topRight = new Node();
 	
 	{
-		bottomLeft.tag = "BottomLeft";
-		middleLeft.tag = "MiddleLeft";
-		topLeft.tag = "TopLeft";
-		bottomMiddle.tag = "BottomMiddle";
-		center.tag = "Center";
-		topMiddle.tag = "TopMiddle";
-		bottomRight.tag = "BottomRight";
-		middleRight.tag = "MiddleRight";
-		topRight.tag = "TopRight";
+		bottomLeft.tag = "bottomLeft";
+		middleLeft.tag = "middleLeft";
+		topLeft.tag = "topLeft";
+		bottomMiddle.tag = "bottomMiddle";
+		center.tag = "center";
+		topMiddle.tag = "topMiddle";
+		bottomRight.tag = "bottomRight";
+		middleRight.tag = "middleRight";
+		topRight.tag = "topRight";
 	}
 	
 	public final Node[] anchors = {
