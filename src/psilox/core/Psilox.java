@@ -40,6 +40,15 @@ public class Psilox {
 	private static Node nextScene;
 	private static Node cameraTarget;
 	
+	/**
+	 * Begins a new Psilox runtime, of which only one may exist
+	 * at a time per Java program, using the configuration
+	 * provided, and after initialization, setting the first
+	 * child node of root to mainNode.
+	 * 
+	 * @param config
+	 * @param mainNode
+	 */
 	public static void start(Config config, Node mainNode) {
 		Psilox.config = config;
 		initLog();
@@ -51,10 +60,18 @@ public class Psilox {
 		initThread();
 	}
 	
+	/**
+	 * Causes Psilox to terminate on the next run of its
+	 * internal loop.
+	 */
 	public static void stop() {
 		running = false;
 	}
 	
+	/**
+	 * Called by the internal loop or end user to run
+	 * an update frame.
+	 */
 	public static void update() {
 		glfwPollEvents();
 		tick++;
@@ -62,6 +79,10 @@ public class Psilox {
 		Node.applyChanges();
 	}
 	
+	/**
+	 * Called by the internal loop or end user to run
+	 * a render frame. 
+	 */
 	public static void render() {
 		clearTransform();
 		if(clearScreen) {
@@ -126,10 +147,24 @@ public class Psilox {
 		Audio.shutdown();
 	}
 	
+	/**
+	 * Sets the target scene to nextScene, with root's
+	 * first child switched accordingly on the next
+	 * internal loop cycle.
+	 * 
+	 * @param nextScene
+	 */
 	public static void changeScene(Node nextScene) {
 		Psilox.nextScene = nextScene;
 	}
 	
+	/**
+	 * Sets the node which the camera will translate to center
+	 * in the screen regardless of its actual position. All other
+	 * geometry will be accordingly shifted.
+	 * 
+	 * @param cameraTarget
+	 */
 	public static void cameraTarget(Node cameraTarget) {
 		Psilox.cameraTarget = cameraTarget;
 	}
@@ -156,7 +191,6 @@ public class Psilox {
 			System.setProperty("java.awt.headless", "true");
 			Log.warning("AWT cannot start it's event loop since GLFW is confined to the main thread. Resolving this causes an error you can safely ignore.");
 			Log.warning("Drawing to custom framebuffers fails on OpenGL 2.1, do not attempt.");
-			Log.warning("Do yourself a favor: Stop spending $3000 on outdated hardware with obnoxiously restrictive software.");
 			loop();
 		} else {
 			thread = new Thread(() -> { loop(); });
@@ -222,18 +256,32 @@ public class Psilox {
 		return ps <= 0 ? ps : (long) (Time.SECOND / ps);
 	}
 	
+	/**
+	 * Returns the number of ticks elapsed since the
+	 * engine started.
+	 * 
+	 * @return
+	 */
 	public static long ticks() {
 		return tick;
 	}
 	
-	public static float deltaTime() {
-		return deltaTime;
-	}
-	
+	/**
+	 * Returns whether the engine is still running.
+	 * 
+	 * @return
+	 */
 	public static boolean running() {
 		return running;
 	}
 	
+	/**
+	 * Returns the config for the engine. If values inside
+	 * are depended on, ensure that the config remains unaltered,
+	 * as changes will not apply to the current runtime.
+	 * 
+	 * @return
+	 */
 	public static Config config() {
 		return config;
 	}

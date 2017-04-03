@@ -4,6 +4,12 @@ import psilox.graphics.Color;
 import psilox.input.Input;
 import psilox.utils.Log;
 
+/**
+ * Variable-encapsulating object used to setup a Psilox
+ * runtime at start.
+ * 
+ * @author Xydium
+ */
 public class Config {
 
 	public static final int UNLIMITED = 0;
@@ -14,10 +20,6 @@ public class Config {
 	public String title = "Psilox", logLevel = "DEBUG";
 	public int[] terminationSequence = {Input.LEFT_CONTROL, Input.LEFT_SHIFT, Input.Z};
 	public Color clearColor = new Color(0.0f, 0.0f, 0.0f);
-	
-	public Config() {
-		
-	}
 	
 	public Config(String title, int width, int height, boolean fullscreen) {
 		this.title = title;
