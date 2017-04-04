@@ -20,7 +20,9 @@ public class Color {
 	public final float r, g, b, a;
 	
 	/**
-	 * 
+	 * Constructs a new Color object with
+	 * the given rgba values as floats
+	 * between 0 and 1.
 	 * 
 	 * @param r
 	 * @param g
@@ -34,38 +36,114 @@ public class Color {
 		this.a = a;
 	}
 	
+	/**
+	 * Constructs a new Color object with
+	 * the given rgb values as floats between
+	 * 0 and 1, with an a value of 1.
+	 * 
+	 * @param r
+	 * @param g
+	 * @param b
+	 */
 	public Color(float r, float g, float b) {
 		this(r, g, b, 1);
 	}
 
+	/**
+	 * Constructs a new Color object with
+	 * the given rgba values as ints
+	 * from 0 to 255, converted to floats
+	 * between 0 and 1.
+	 * 
+	 * @param r
+	 * @param g
+	 * @param b
+	 * @param a
+	 */
 	public Color(int r, int g, int b, int a) {
 		this(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
 	}
 	
+	/**
+	 * Constructs a new Color object with
+	 * the given rgb values as ints between
+	 * 0 and 255, converted to float values
+	 * between 0 and 1, and with an a value
+	 * of 1.
+	 * 
+	 * @param r
+	 * @param g
+	 * @param b
+	 */
 	public Color(int r, int g, int b) {
 		this(r, g, b, 255);
 	}
 	
+	/**
+	 * Constructs a new Color object with the
+	 * given hexadecimal rgba color formatted as
+	 * 0xRRGGBBAA.
+	 * 
+	 * @param hex
+	 */
 	public Color(int hex) {
 		this((hex >> 24) & 0xFF, (hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0xFF);
 	}
 	
+	/**
+	 * Returns a new Color object with the same
+	 * values except for the specified r.
+	 * 
+	 * @param r
+	 * @return
+	 */
 	public Color rAdj(float r) {
 		return new Color(r, g, b, a);
 	}
 	
+	/**
+	 * Returns a new Color object with the same
+	 * values except for the specified g.
+	 * 
+	 * @param g
+	 * @return
+	 */
 	public Color gAdj(float g) {
 		return new Color(r, g, b, a);
 	}
 	
+	/**
+	 * Returns a new Color object with the same
+	 * values except for the specified b.
+	 * 
+	 * @param b
+	 * @return
+	 */
 	public Color bAdj(float b) {
 		return new Color(r, g, b, a);
 	}
 	
+	/**
+	 * Returns a new Color object with the same
+	 * values except for the specified a.
+	 * 
+	 * @param a
+	 * @return
+	 */
 	public Color aAdj(float a) {
 		return new Color(r, g, b, a);
 	}
 	
+	/**
+	 * Returns an array of floats four times
+	 * the length of the passed color array,
+	 * in the form {R, G, B, A, R, G, B, A...}. This
+	 * is for use with OpenGL and not meant for end-user
+	 * use.
+	 * 
+	 * @param colors
+	 * @return
+	 */
 	public static float[] toFloatArray(Color[] colors) { 
 		float[] res = new float[colors.length * 4];
 		int i = 0;
@@ -82,14 +160,42 @@ public class Color {
 		return res;
 	}
 	
+	/**
+	 * Returns a byte of a given hex color. For example,
+	 * if data is 0x8E0000FF and b is 3, it will return
+	 * 0xFF.
+	 * 
+	 * @param data
+	 * @param b
+	 * @return
+	 */
 	public static byte getByte(int data, int b) {
 		return (byte) ((data >> (8 * b)) & 0xFF);
 	}
 	
+	/**
+	 * Returns a hex code from the given four byte values.
+	 * 
+	 * @param a
+	 * @param r
+	 * @param g
+	 * @param b
+	 * @return
+	 */
 	public static int byteColor(int a, int r, int g, int b) {
 		return (a << 24) | (r << 16) | (g << 8) | b; 
 	}
 	
+	/**
+	 * Creates a color object using the given
+	 * hue, saturation, brightness, and alpha values.
+	 * 
+	 * @param hue
+	 * @param saturation
+	 * @param brightness
+	 * @param alpha
+	 * @return
+	 */
 	public static Color hsba(float hue, float saturation, float brightness, int alpha) {
 		int r = 0, g = 0, b = 0;
 		if (saturation == 0) {
