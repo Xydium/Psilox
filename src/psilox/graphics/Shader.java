@@ -37,7 +37,8 @@ public class Shader {
 	
 	/**
 	 * Returns the shader address if the name exists,
-	 * and stores 
+	 * and stores it to prevent repeated GL calls. If the
+	 * uniform name does not exist, returns -1.
 	 * 
 	 * @param name
 	 * @return
@@ -52,36 +53,83 @@ public class Shader {
 		return result;
 	}
 	
+	/**
+	 * Enables the shader and then sets an integer
+	 * uniform by the given name to the passed value.
+	 * 
+	 * @param name
+	 * @param value
+	 */
 	public void setUniform1i(String name, int value) {
 		if (!enabled) enable();
 		glUniform1i(getUniform(name), value);
 	}
 	
+	/**
+	 * Enables the shader and then sets a float
+	 * uniform by the given name to the passed value.
+	 * 
+	 * @param name
+	 * @param value
+	 */
 	public void setUniform1f(String name, float value) {
 		if (!enabled) enable();
 		glUniform1f(getUniform(name), value);
 	}
 	
+	/**
+	 * Enables the shader and then sets a vec2
+	 * uniform by the given name to the passed values.
+	 * 
+	 * @param name
+	 * @param value
+	 */
 	public void setUniform2f(String name, float x, float y) {
 		if (!enabled) enable();
 		glUniform2f(getUniform(name), x, y);
 	}
 	
+	/**
+	 * Enables the shader and then sets a vec3
+	 * uniform by the given name to the passed value.
+	 * 
+	 * @param name
+	 * @param value
+	 */
 	public void setUniform3f(String name, Vec vector) {
 		if (!enabled) enable();
 		glUniform3f(getUniform(name), vector.x, vector.y, vector.z);
 	}
 	
+	/**
+	 * Enables the shader and then sets a vec4/color
+	 * uniform by the given name to the passed value.
+	 * 
+	 * @param name
+	 * @param value
+	 */
 	public void setUniform4f(String name, Color c) {
 		if (!enabled) enable();
 		glUniform4f(getUniform(name), c.r, c.g, c.b, c.a);
 	}
 	
+	
+	/**
+	 * Enables the shader and then sets a mat4
+	 * uniform by the given name to the passed value.
+	 * 
+	 * @param name
+	 * @param value
+	 */
 	public void setUniformMat4f(String name, Mat4 matrix) {
 		if (!enabled) enable();
 		glUniformMatrix4fv(getUniform(name), false, matrix.toFloatBuffer());
 	}
 	
+	/**
+	 * Enables the shader, meaning that it will be used for
+	 * all rendering that occurs before it is disabled.
+	 */
 	public void enable() {
 		glUseProgram(ID);
 		enabled = true;
@@ -98,6 +146,10 @@ public class Shader {
 		}
 	}
 	
+	/**
+	 * Disables the shader and allows draw calls
+	 * to pass through the default GL program.
+	 */
 	public void disable() {
 		glUseProgram(0);
 		enabled = false;
