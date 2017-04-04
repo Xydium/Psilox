@@ -19,6 +19,14 @@ public class Color {
 	
 	public final float r, g, b, a;
 	
+	/**
+	 * 
+	 * 
+	 * @param r
+	 * @param g
+	 * @param b
+	 * @param a
+	 */
 	public Color(float r, float g, float b, float a) {
 		this.r = r;
 		this.g = g;
