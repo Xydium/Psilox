@@ -7,7 +7,7 @@ import static org.lwjgl.opengl.GL30.*;
 
 import psilox.utils.BufferUtils;
 
-public class VertexArray {
+class VertexArray {
 	
 	private int vao, vbo, ibo, tbo, cbo;
 	private int count;

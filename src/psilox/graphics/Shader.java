@@ -20,6 +20,13 @@ public class Shader {
 	private Map<String, Integer> locationCache = new HashMap<String, Integer>();
 	private boolean ignoreTrn, ignoreProj, ignoreTrnProj;
 	
+	/**
+	 * Constructs a new Shader object from the specified
+	 * resource path, which will have added to it the transform,
+	 * projection, and projection_transform shader uniforms.
+	 * 
+	 * @param shader
+	 */
 	public Shader(String shader) {
 		ID = ShaderUtils.load(shader);
 		enable();
@@ -28,6 +35,13 @@ public class Shader {
 		ignoreTrnProj = getUniform("projection_transform") == -1;
 	}
 	
+	/**
+	 * Returns the shader address if the name exists,
+	 * and stores 
+	 * 
+	 * @param name
+	 * @return
+	 */
 	public int getUniform(String name) {
 		if (locationCache.containsKey(name))
 			return locationCache.get(name);
