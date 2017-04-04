@@ -21,7 +21,7 @@ public class Timer extends Node {
 	}
 	
 	public void update() {
-		elapsed += Psilox.deltaTime();
+		elapsed += Psilox.deltaTime;
 		
 		if(elapsed >= duration) {
 			connection.execute();

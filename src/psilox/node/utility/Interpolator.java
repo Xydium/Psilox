@@ -30,7 +30,7 @@ public class Interpolator extends Node {
 	}
 	
 	public void update() {
-		elapsedTime += Psilox.deltaTime();
+		elapsedTime += Psilox.deltaTime;
 		
 		boolean advanced = false;
 		
