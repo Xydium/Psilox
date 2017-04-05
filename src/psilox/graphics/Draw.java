@@ -36,6 +36,12 @@ public class Draw {
 		tex.setFrameBuffer(frameBuffer);
 	}
 	
+	/**
+	 * Makes the specified texture the render target
+	 * for all GL draw calls.
+	 * 
+	 * @param tex
+	 */
 	public static void renderTarget(Texture tex) {
 		glGetIntegerv(GL_VIEWPORT, viewport);
 		glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColor);
@@ -47,26 +53,48 @@ public class Draw {
 		glViewport(0, 0, tex.getWidth(), tex.getHeight());
 	}
 	
+	/**
+	 * Unbinds a texture as the render target, allowing
+	 * rendering to again apply to the window framebuffer.
+	 */
 	public static void restoreFrameBuffer() {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 		clearColor(new Color(clearColor[0], clearColor[1], clearColor[2], clearColor[3]));
 	}
 	
+	/**
+	 * Applies Color and Depth buffer bit clearing.
+	 */
 	public static void clear() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 	
+	/**
+	 * Changes the clear color of the window.
+	 * 
+	 * @param c
+	 */
 	public static void clearColor(Color c) {
 		glClearColor(c.r, c.g, c.b, c.a);
 	}
 	
+	/**
+	 * Restores the identity transform and clears 
+	 * the client-side stack.
+	 */
 	public static void clearTransform() {
 		glLoadIdentity();
 		transforms.clear();
 		transforms.push(Mat4.identity());
 	}
 	
+	/**
+	 * Pushes a new relative transformation to the stack
+	 * and to GL Immediate.
+	 * 
+	 * @param transform
+	 */
 	public static void pushTransform(Mat4 transform) {
 		if(transforms.size() == 0) {
 			transforms.push(Mat4.identity());
@@ -77,11 +105,20 @@ public class Draw {
 		}
 	}
 	
+	/**
+	 * Returns the top of the transform stack,
+	 * which is the product of all below.
+	 * 
+	 * @return
+	 */
 	public static Mat4 currentTransform() {
 		if(transforms.size() == 0) transforms.push(Mat4.identity());
 		return transforms.peek();
 	}
 	
+	/**
+	 * Removes the top transform.
+	 */
 	public static void popTransform() {
 		if(transforms.size() > 1) {
 			transforms.pop();
@@ -91,6 +128,12 @@ public class Draw {
 		}
 	}
 	
+	/**
+	 * Returns the global origin point of the current
+	 * transformation.
+	 * 
+	 * @return
+	 */
 	public static Vec getOrigin() {
 		float[] t = transforms.peek().elements;
 		return new Vec(t[0 + 3 * 4], t[1 + 3 * 4], t[2 + 3 * 4]);
@@ -103,21 +146,43 @@ public class Draw {
 		return immediateMode;
 	}
 	
+	/**
+	 * Directly applies a translation to GL Immediate.
+	 * 
+	 * @param p
+	 */
 	public static void translate(Vec p) {
 		if(!immediateEnabled()) return;
 		glTranslatef(p.x, p.y, p.z);
 	}
 	
+	/**
+	 * Directly rotates GL Immediate.
+	 * 
+	 * @param theta
+	 */
 	public static void rotate(float theta) {
 		if(!immediateEnabled()) return;
 		glRotatef(theta, 0, 0, 1);
 	}
 	
+	/**
+	 * Directly scales GL Immediate.
+	 * 
+	 * @param s
+	 */
 	public static void scale(Vec s) {
 		if(!immediateEnabled()) return;
 		glScalef(s.x, s.y, s.z);
 	}
 	
+	/**
+	 * Directly transforms GL Immediate.
+	 * 
+	 * @param p
+	 * @param theta
+	 * @param s
+	 */
 	public static void transform(Vec p, float theta, Vec s) {
 		if(!immediateEnabled()) return;
 		translate(p);
