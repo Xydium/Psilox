@@ -15,49 +15,89 @@ public class Texture {
 	private int width, height;
 	private int texture;
 	private int frameBuffer;
-	
+
+	/**
+	 * Loads an image file from the resource
+	 * path and transfers it into VRAM.
+	 * 
+	 * @param path
+	 */
 	public Texture(String path) {
 		load(path);
 	}
 	
+	/**
+	 * Transfers the data from the image passed
+	 * to VRAM.
+	 * 
+	 * @param image
+	 */
 	public Texture(BufferedImage image) {
 		load(image);
 	}
 	
+	/**
+	 * Generates and allocates empty VRAM
+	 * of the given dimensions.
+	 * 
+	 * @param width
+	 * @param height
+	 */
 	public Texture(int width, int height) {
 		this.width = width;
 		this.height = height;
 		create(null);
 	}
 	
+	/**
+	 * Generates and allocates empty VRAM
+	 * of the given dimensions.
+	 * 
+	 * @param dim
+	 */
 	public Texture(Vec dim) {
 		this((int) dim.x, (int) dim.y);
 	}
 	
+	/**
+	 * @return pixel width of texture
+	 */
 	public int getWidth() {
 		return width;
 	}
 	
+	/**
+	 * @return pixel height of texture
+	 */
 	public int getHeight() {
 		return height;
 	}
 	
+	/**
+	 * @return pixel dimensions of texture
+	 */
 	public Vec getDimensions() {
 		return new Vec(width, height);
 	}
 	
+	/**
+	 * @return VRAM handle of texture
+	 */
 	public int getTexture() {
 		return texture;
 	}
 	
+	/**
+	 * @return VRAM handle of framebuffer
+	 */
 	public int getFrameBuffer() {
 		return frameBuffer;
 	}
-	
+
 	void setFrameBuffer(int buffer) {
 		this.frameBuffer = buffer;
 	}
-	
+
 	private void load(String path) {
 		int[] pixels = null;
 		try {
@@ -102,6 +142,12 @@ public class Texture {
 		create(data);
 	}
 	
+	/**
+	 * Replaces the data in VRAM with the data
+	 * of the given image.
+	 * 
+	 * @param image
+	 */
 	public void setData(BufferedImage image) {
 		width = image.getWidth();
 		height = image.getHeight();
@@ -111,6 +157,14 @@ public class Texture {
 		setData(pixels, width, height);
 	}
 	
+	/**
+	 * Replaces the data of the texture in VRAM
+	 * with the given int data.
+	 * 
+	 * @param pixels
+	 * @param width
+	 * @param height
+	 */
 	public void setData(int[] pixels, int width, int height) {
 		this.width = width;
 		this.height = height;
@@ -129,6 +183,15 @@ public class Texture {
 		unbind();
 	}
 	
+	/**
+	 * Sets the data of the texture in VRAM
+	 * to the int data passed without converting it
+	 * to the reversed color format.
+	 * 
+	 * @param data
+	 * @param width
+	 * @param height
+	 */
 	public void rawWrite(int[] data, int width, int height) {
 		this.width = width;
 		this.height = height;
@@ -150,14 +213,23 @@ public class Texture {
 		unbind();
 	}
 	
+	/**
+	 * Makes the texture available for rendering.
+	 */
 	public void bind() {
 		glBindTexture(GL_TEXTURE_2D, texture);
 	}
 	
+	/**
+	 * Makes the texture unavailable for rendering.
+	 */
 	public void unbind() {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	
+	/**
+	 * Deletes the texture from VRAM.
+	 */
 	public void dispose() {
 		glDeleteTextures(texture);
 	}
