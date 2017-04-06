@@ -190,12 +190,27 @@ public class Draw {
 		scale(s);
 	}
 	
+	/**
+	 * Clears and then directly transforms GL Immediate.
+	 * 
+	 * @param p
+	 * @param theta
+	 * @param s
+	 */
 	public static void setTransform(Vec p, float theta, Vec s) {
 		if(!immediateEnabled()) return;
 		clearTransform();
 		transform(p, theta, s);
 	}
 	
+	/**
+	 * Runs a set of immediate mode verts with the specified
+	 * mode and color.
+	 * 
+	 * @param mode
+	 * @param c
+	 * @param verts
+	 */
 	public static void immediate(int mode, Color c, Vec... verts) {
 		if(!immediateEnabled()) return;
 		glBegin(mode);
@@ -208,6 +223,14 @@ public class Draw {
 		glEnd();
 	}
 	
+	/**
+	 * Runs a set of immediate mode verts with the
+	 * specified modes and colors.
+	 * 
+	 * @param mode
+	 * @param colors
+	 * @param verts
+	 */
 	public static void immediate(int mode, Color[] colors, Vec[] verts) {
 		if(!immediateEnabled()) return;
 		glBegin(mode);
@@ -222,6 +245,11 @@ public class Draw {
 		glEnd();
 	}
 	
+	/**
+	 * Renders a shape object.
+	 * 
+	 * @param shape
+	 */
 	public static void shape(Shape shape) {
 		float[] verts = shape.getVerts();
 		float[] colors = shape.getColors();
@@ -248,46 +276,126 @@ public class Draw {
 		glDisableClientState(GL_COLOR_ARRAY);
 	}
 	
+	/**
+	 * Renders a point.
+	 * 
+	 * @param c
+	 * @param i
+	 */
 	public static void point(Color c, Vec i) {
 		immediate(GL_POINTS, c, i);
 	}
 	
+	/**
+	 * Renders a line.
+	 * 
+	 * @param c
+	 * @param i
+	 * @param j
+	 */
 	public static void line(Color c, Vec i, Vec j) {
 		immediate(GL_LINES, c, i, j);
 	}
 	
+	/**
+	 * Renders a triangle.
+	 * 
+	 * @param c
+	 * @param i
+	 * @param j
+	 * @param k
+	 */
 	public static void tri(Color c, Vec i, Vec j, Vec k) {
 		immediate(GL_TRIANGLES, c, i, j, k);
 	}
 	
+	/**
+	 * Renders a rectangle.
+	 * 
+	 * @param c
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param l
+	 */
 	public static void quad(Color c, Vec i, Vec j, Vec k, Vec l) {
 		immediate(GL_QUADS, c, i, j, k, l);
 	}
 	
+	/**
+	 * Renders a rectangle with origin p
+	 * of size s.
+	 * 
+	 * @param c
+	 * @param p
+	 * @param s
+	 */
 	public static void quad(Color c, Vec p, Vec s) {
 		quad(c, p, new Vec(p.x + s.x, p.y), new Vec(p.x + s.x, p.y + s.y), new Vec(p.x, p.y + s.y));
 	}
 	
+	/**
+	 * Renders a rectangle centered around
+	 * origin p of size s.
+	 * 
+	 * @param c
+	 * @param p
+	 * @param s
+	 */
 	public static void cquad(Color c, Vec p, Vec s) {
 		quad(c, p.dif(s.scl(.5f)), s);
 	}
 	
+	/**
+	 * Renders a polygon.
+	 * 
+	 * @param c
+	 * @param verts
+	 */
 	public static void poly(Color c, Vec... verts) {
 		immediate(GL_TRIANGLE_FAN, c, verts);
 	}
 	
+	/**
+	 * Renders an outline.
+	 * 
+	 * @param c
+	 * @param verts
+	 */
 	public static void outline(Color c, Vec...verts) {
 		immediate(GL_LINE_LOOP, c, verts);
 	}
 	
+	/**
+	 * Renders a strip of lines.
+	 * 
+	 * @param c
+	 * @param verts
+	 */
 	public static void strip(Color c, Vec...verts) {
 		immediate(GL_TRIANGLE_STRIP, c, verts);
 	}
 
+	/**
+	 * Returns the default font metrics for
+	 * a java.awt.Font object.
+	 * 
+	 * @param f
+	 * @return
+	 */
 	public static FontMetrics getFontMetrics(Font f) {
 		return gDefault.getFontMetrics(f);
 	}
 	
+	/**
+	 * Renders text with the given color and font
+	 * into the specified texture object.
+	 * 
+	 * @param c
+	 * @param font
+	 * @param texture
+	 * @param text
+	 */
 	public static void text(Color c, Font font, Texture texture, String text) {
 		FontMetrics m = gDefault.getFontMetrics(font);
 		BufferedImage image = new BufferedImage(m.stringWidth(text) + (text.isEmpty() ? 1 : 0), m.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -299,6 +407,16 @@ public class Draw {
 		texture.setData(image);
 	}
 	
+	/**
+	 * Renders a subsection of text using the specified dimensions
+	 * for the texture passed.
+	 * 
+	 * @param c
+	 * @param font
+	 * @param texture
+	 * @param dimensions
+	 * @param text
+	 */
 	public static void text(Color c, Font font, Texture texture, Vec dimensions, String text) {
 		FontMetrics m = gDefault.getFontMetrics(font);
 		BufferedImage image = new BufferedImage((int) dimensions.x, (int) dimensions.y, BufferedImage.TYPE_INT_ARGB);
@@ -310,6 +428,15 @@ public class Draw {
 		texture.setData(image);
 	}
 	
+	/**
+	 * Renders multiple lines of text, left-justified,
+	 * into the given texture.
+	 * 
+	 * @param c
+	 * @param font
+	 * @param texture
+	 * @param text
+	 */
 	public static void multiLineText(Color c, Font font, Texture texture, String[] text) {
 		FontMetrics m = gDefault.getFontMetrics(font);
 		int lineHeight = m.getHeight();
@@ -334,6 +461,16 @@ public class Draw {
 		texture.setData(image);
 	}
 	
+	/**
+	 * Renders a texture on screen with the bottom-left
+	 * corner at point i, on a quad of size d, with a color
+	 * modulation of mod.
+	 * 
+	 * @param tex
+	 * @param i
+	 * @param d
+	 * @param mod
+	 */
 	public static void texture(Texture tex, Vec i, Vec d, Color mod) {
 		if(!immediateEnabled()) return;
 		i = new Vec(i);
@@ -356,46 +493,144 @@ public class Draw {
 		tex.unbind();
 	}
 	
+	/**
+	 * Renders a texture with bottom-left
+	 * corner at point i, with a color mod,
+	 * using the dimensions of the texture.
+	 * 
+	 * @param tex
+	 * @param i
+	 * @param mod
+	 */
 	public static void texture(Texture tex, Vec i, Color mod) {
 		texture(tex, i, new Vec(tex.getWidth(), tex.getHeight()), mod);
 	}
 	
+	/**
+	 * Renders a texture with bottom-left corner
+	 * at point i using no color modulation.
+	 * 
+	 * @param tex
+	 * @param i
+	 */
 	public static void texture(Texture tex, Vec i) {
 		texture(tex, i, Color.WHITE);
 	}
 	
+	/**
+	 * Renders a texture centered around point i.
+	 * 
+	 * @param tex
+	 * @param i
+	 */
 	public static void ctexture(Texture tex, Vec i) {
 		texture(tex, i.dif(new Vec(tex.getWidth(), -tex.getHeight()).scl(.5f)));
 	}
 	
+	/**
+	 * Renders a filled ellipse.
+	 * 
+	 * @param c
+	 * @param origin
+	 * @param r
+	 * @param segs
+	 */
 	public static void ellipsef(Color c, Vec origin, float r, int segs) {
 		arc(c, origin, r, r, 0, 360, segs, GL_TRIANGLE_FAN);
 	}
 	
+	/**
+	 * Renders an outline ellipse.
+	 * 
+	 * @param c
+	 * @param origin
+	 * @param r
+	 * @param segs
+	 */
 	public static void ellipse(Color c, Vec origin, float r, int segs) {
 		arc(c, origin, r, r, 0, 360, segs, GL_LINE_LOOP);
 	}
 	
+	/**
+	 * Renders a filled arc.
+	 * 
+	 * @param c
+	 * @param origin
+	 * @param r
+	 * @param ti
+	 * @param tf
+	 * @param segs
+	 */
 	public static void arcf(Color c, Vec origin, float r, float ti, float tf, int segs) {
 		arc(c, origin, r, r, ti % 360, tf % 360, segs, GL_TRIANGLE_FAN);
 	}
 	
+	/**
+	 * Renders a line arc.
+	 * 
+	 * @param c
+	 * @param origin
+	 * @param r
+	 * @param ti
+	 * @param tf
+	 * @param segs
+	 */
 	public static void arc(Color c, Vec origin, float r, float ti, float tf, int segs) {
 		arc(c, origin, r, r, ti % 360, tf % 360, segs, GL_LINE_STRIP);
 	}
 	
+	/**
+	 * Renders a filled ellipse.
+	 * 
+	 * @param c
+	 * @param origin
+	 * @param hr
+	 * @param vr
+	 * @param segs
+	 */
 	public static void ellipsef(Color c, Vec origin, float hr, float vr, int segs) {
 		arc(c, origin, hr, vr, 0, 360, segs, GL_TRIANGLE_FAN);
 	}
 	
+	/**
+	 * Renders an outline ellipse.
+	 * 
+	 * @param c
+	 * @param origin
+	 * @param hr
+	 * @param vr
+	 * @param segs
+	 */
 	public static void ellipse(Color c, Vec origin, float hr, float vr, int segs) {
 		arc(c, origin, hr, vr, 0, 360, segs, GL_LINE_LOOP);
 	}
 	
+	/**
+	 * Renders a filled arc.
+	 * 
+	 * @param c
+	 * @param origin
+	 * @param hr
+	 * @param vr
+	 * @param ti
+	 * @param tf
+	 * @param segs
+	 */
 	public static void arcf(Color c, Vec origin, float hr, float vr, float ti, float tf, int segs) {
 		arc(c, origin, hr, vr, ti % 360, tf % 360, segs, GL_TRIANGLE_FAN);
 	}
 	
+	/**
+	 * Renders an outline arc.
+	 * 
+	 * @param c
+	 * @param origin
+	 * @param hr
+	 * @param vr
+	 * @param ti
+	 * @param tf
+	 * @param segs
+	 */
 	public static void arc(Color c, Vec origin, float hr, float vr, float ti, float tf, int segs) {
 		arc(c, origin, hr, vr, ti % 360, tf % 360, segs, GL_LINE_STRIP);
 	}
