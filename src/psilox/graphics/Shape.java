@@ -19,18 +19,52 @@ public class Shape {
 	private byte[] indices;
 	private int mode;
 	
+	/**
+	 * Constructs a new shape with a single
+	 * color and no indexing.
+	 * 
+	 * @param mode
+	 * @param verts
+	 * @param color
+	 */
 	public Shape(int mode, Vec[] verts, Color color) {
 		this(mode, verts, color, null);
 	}
 	
+	/**
+	 * Constructs a new shape with a single color
+	 * and indexing.
+	 * 
+	 * @param mode
+	 * @param verts
+	 * @param color
+	 * @param indices
+	 */
 	public Shape(int mode, Vec[] verts, Color color, byte[] indices) {
 		this(mode, verts, new Color[] {color}, indices);
 	}
 	
+	/**
+	 * Constructs a shape with multiple colors and no indexing.
+	 * 
+	 * @param mode
+	 * @param verts
+	 * @param colors
+	 */
 	public Shape(int mode, Vec[] verts, Color[] colors) {
 		this(mode, verts, colors, null);
 	}
 	
+	/**
+	 * Constructs a shape rendered in immediate-mode with
+	 * specified render mode, vertices, colors, and indices.
+	 * Indices may be null if indexing is not used.
+	 * 
+	 * @param mode
+	 * @param verts
+	 * @param colors
+	 * @param indices
+	 */
 	public Shape(int mode, Vec[] verts, Color[] colors, byte[] indices) {
 		this.mode = mode;
 		this.verts = Vec.toFloatArray(verts);
@@ -38,30 +72,68 @@ public class Shape {
 		this.indices = indices;
 	}
 	
+	/**
+	 * Sets the shape to use a single color.
+	 * 
+	 * @param color
+	 */
 	public void setColor(Color color) {
 		colors = new float[] { color.r, color.g, color.b, color.a };
 	}
 
+	/**
+	 * Sets the shape to use multiple colors.
+	 * 
+	 * @param colors
+	 */
 	public void setColors(Color[] colors) {
 		this.colors = Color.toFloatArray(colors);
 	}
 	
+	/**
+	 * Sets the verts of the shape.
+	 * 
+	 * @param verts
+	 */
 	public void setVerts(Vec[] verts) {
 		this.verts = Vec.toFloatArray(verts);
 	}
 	
+	/**
+	 * Returns the colors of the shape in an array
+	 * of float values.
+	 * 
+	 * @return
+	 */
 	public float[] getColors() {
 		return colors;
 	}
 	
+	/**
+	 * Returns the verts of the shape in an array
+	 * of float values.
+	 * 
+	 * @return
+	 */
 	public float[] getVerts() {
 		return verts;
 	}
 	
+	/**
+	 * Returns the indices of the shape.
+	 * 
+	 * @return
+	 */
 	public byte[] getIndices() {
 		return indices;
 	}
 	
+	/**
+	 * Sets the color for a given vert.
+	 * 
+	 * @param index
+	 * @param color
+	 */
 	public void setColorAt(int index, Color color) {
 		if(index * 4 + 4 <= colors.length) {
 			colors[index * 4] = color.r;
@@ -71,6 +143,12 @@ public class Shape {
 		}
 	}
 	
+	/**
+	 * Sets a given vert.
+	 * 
+	 * @param index
+	 * @param vert
+	 */
 	public void setVertAt(int index, Vec vert) {
 		if(index * 3 + 3 <= verts.length) {
 			verts[index * 3] = vert.x;
@@ -79,10 +157,19 @@ public class Shape {
 		}
 	}
 	
+	/**
+	 * Returns the immediate render mode of the shape.
+	 * @return
+	 */
 	public int getMode() {
 		return mode;
 	}
 	
+	/**
+	 * Sets the immediate render mode of the shape.
+	 * 
+	 * @param mode
+	 */
 	public void setMode(int mode) {
 		this.mode = mode;
 	}
