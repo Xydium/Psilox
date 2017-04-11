@@ -91,8 +91,7 @@ public class Psilox {
 		
 		if(cameraTarget != null) {
 			Vec pos = cameraTarget.globalPosition().scl(-1).sum(cameraTarget.viewSize().half());
-			float rot = cameraTarget.globalRotation();
-			Draw.pushTransform(Mat4.transform(pos, rot));
+			Draw.pushTransform(Mat4.translate(pos));
 			root.renderChildren();
 			Draw.popTransform();
 		} else {
