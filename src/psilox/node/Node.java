@@ -101,13 +101,9 @@ public class Node implements InputListener {
 		iterating = true;
 		for(Node c : children) {
 			if(c.visible) {
-				Draw.pushTransform(Mat4.translate(c.position));
-				Draw.pushTransform(Mat4.rotate(c.rotation, c.position));
-				Draw.pushTransform(Mat4.translate(c.anchor.calculate(c.getDimensions(), Vec.ZERO).scl(-1)));
+				Draw.pushTransform(Mat4.transform(c.position, c.rotation, Vec.ONE));
 				c.render();
 				c.renderChildren();
-				Draw.popTransform();
-				Draw.popTransform();
 				Draw.popTransform();
 			}
 		}

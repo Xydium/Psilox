@@ -58,15 +58,29 @@ public class Mat4 {
 		result.elements[0 + 1 * 4] = -sin;
 		result.elements[1 + 1 * 4] = cos;
 		
-		result.elements[0 + 3 * 4] = (p.x - cos) * (p.x + sin) * p.y * p.z;
-		result.elements[1 + 3 * 4] = (p.y - sin) * (p.x + cos) * p.y * p.z;
-		result.elements[2 + 3 * 4] = p.z * p.x * (p.y - 1) * p.z;
-		
 		return result;
 	}
 	
-	public static Mat4 transform(Vec p, float angle) {
-		return Mat4.translate(p).multiply(Mat4.rotate(angle, p));
+	public static Mat4 transform(Vec p, float angle, Vec scl) {
+		Mat4 result = new Mat4();
+		float r = Mathf.rad(angle);
+		float cos = Mathf.cos(r);
+		float sin = Mathf.sin(r);
+		
+		result.elements[0 + 0 * 4] = scl.x * cos;
+		result.elements[0 + 1 * 4] = scl.y * sin;
+		result.elements[0 + 3 * 4] = p.x;
+		
+		result.elements[1 + 0 * 4] = -scl.x * sin;
+		result.elements[1 + 1 * 4] = scl.y * cos;
+		result.elements[1 + 3 * 4] = p.y;
+		
+		result.elements[2 + 3 * 4] = p.z;
+		
+		result.elements[2 + 2 * 4] = 1;
+		result.elements[3 + 3 * 4] = 1;
+		
+		return result;
 	}
 	
 	public Mat4 multiply(Mat4 matrix) {
