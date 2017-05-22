@@ -68,4 +68,13 @@ public class Window {
 		}
 	}
 	
+	void terminate() {
+		glfwDestroyWindow(handle);
+		glfwTerminate();
+	}
+	
+	boolean shouldClose() {
+		return glfwWindowShouldClose(handle);
+	}
+	
 }
