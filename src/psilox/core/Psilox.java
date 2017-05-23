@@ -1,7 +1,5 @@
 package psilox.core;
 
-import org.lwjgl.opengl.GL30;
-
 import psilox.utility.Time;
 
 public class Psilox {

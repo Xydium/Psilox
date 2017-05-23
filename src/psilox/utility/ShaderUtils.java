@@ -15,7 +15,7 @@ public class ShaderUtils {
 		int fragmentStartLine = shd.find("FRAGMENT:");
 		int fragmentVersionLine = shd.find("#version", fragmentStartLine + 1);
 		
-		String vert = shd.concatenated('\n', vertexVersionLine + 1, fragmentStartLine);
+		String vert = shd.concatenated('\n', vertexVersionLine, fragmentStartLine);
 		
 		String frag = shd.concatenated('\n', fragmentVersionLine, shd.getLineCount());
 		
