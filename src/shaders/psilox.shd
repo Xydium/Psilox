@@ -1,0 +1,27 @@
+VERTEX:
+
+#version 400 core
+
+in vec3 v_position;
+in vec2 v_tcoord;
+
+varying out vec2 f_tcoord;
+
+void main(void) {
+	gl_Position = vec4(v_position, 1);
+	f_tcoord = v_tcoord;
+}
+
+FRAGMENT:
+
+#version 400 core
+
+in vec2 f_tcoord;
+
+out vec4 f_fragcolor;
+
+uniform sampler2D tex;
+
+void main(void) {
+	f_fragcolor = texture(tex, f_tcoord);
+}

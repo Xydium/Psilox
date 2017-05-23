@@ -1,5 +1,9 @@
 package psilox.core;
 
+import org.lwjgl.opengl.GL30;
+
+import psilox.utility.Time;
+
 public class Psilox {
 	
 	private static final long DEFAULT_INTERVAL = Time.SECOND / 60;
@@ -19,6 +23,21 @@ public class Psilox {
 		if(running) return;
 		Psilox.window = window;
 		initThread();
+	}
+	
+	private static void update() {
+		window.pollEvents();
+		//root.updateChildren();
+		//Node.applyChanges();
+	}
+	
+	private static void render() {
+		window.clear();
+		
+		window.debugRender();
+		
+		window.logLastError();
+		window.swapBuffers();
 	}
 	
 	private static void loop() {
