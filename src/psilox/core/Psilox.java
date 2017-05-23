@@ -1,5 +1,6 @@
 package psilox.core;
 
+import psilox.node.Node;
 import psilox.utility.Time;
 
 public class Psilox {
@@ -17,22 +18,26 @@ public class Psilox {
 	
 	private static Thread psiloxThread;
 	
-	public static void start(Window window) {
+	public static final Node root = new Node("root");
+	private static Node mainNode; 
+	
+	public static void start(Window window, Node mainNode) {
 		if(running) return;
 		Psilox.window = window;
+		Psilox.mainNode = mainNode;
 		initThread();
 	}
 	
 	private static void update() {
 		window.pollEvents();
-		//root.updateChildren();
-		//Node.applyChanges();
+		root.updateChildren();
+		Node.applyChanges();
 	}
 	
 	private static void render() {
 		window.clear();
 		
-		window.debugRender();
+		window.renderTree(root);
 		
 		window.logLastError();
 		window.swapBuffers();
@@ -43,7 +48,7 @@ public class Psilox {
 		long lastFrame = Time.now() - frameInterval;
 		
 		window.initialize();
-		//root.addChild(mainNode);
+		root.addChild(mainNode);
 		
 		while(running) {
 			if(Time.since(lastTick) >= tickInterval) {

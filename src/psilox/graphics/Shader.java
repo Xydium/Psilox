@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import psilox.math.Mat4;
+import psilox.math.Rect;
 import psilox.math.Vec;
 import psilox.utility.ShaderUtils;
 
@@ -115,6 +116,17 @@ public class Shader {
 		glUniform4f(getUniform(name), c.r, c.g, c.b, c.a);
 	}
 	
+	/**
+	 * Enables the shader and then sets a vec4
+	 * uniform by the given name to the passed value.
+	 * 
+	 * @param name
+	 * @param value
+	 */
+	public void setUniform4f(String name, Rect r) {
+		if (!enabled) enable();
+		glUniform4f(getUniform(name), r.x, r.y, r.w, r.h);
+	}
 	
 	/**
 	 * Enables the shader and then sets a mat4

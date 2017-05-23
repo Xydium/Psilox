@@ -71,4 +71,26 @@ public class Mesh {
 		}
 	}
 	
+	public static Mesh unitSquare() {
+		float[] verts = {
+				0, 1, 0f, //Top Left
+				0, 0, 0f, //Bottom Left
+				1, 0, 0f, //Bottom Right
+				1, 0, 0f, //Bottom Right 
+				1, 1, 0f, //Top Right
+				0, 1, 0f //Top Left
+			};
+			
+		float[] tcoords = {
+			0f, 0f,
+			0f, 1f,
+			1f, 1f,
+			1f, 1f,
+			1f, 0f,
+			0f, 0f
+		};
+			
+		return Mesh.loadToVao(verts, tcoords);
+	}
+	
 }

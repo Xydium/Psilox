@@ -83,6 +83,30 @@ public class Mat4 {
 		return result;
 	}
 	
+	public static Mat4 transform(Mat4 parent, Vec p, float angle, Vec scl) {
+		Mat4 result = new Mat4();
+		float r = Mathf.rad(angle);
+		float cos = Mathf.cos(r);
+		float sin = Mathf.sin(r);
+		
+		float a = parent.elements[0], b = parent.elements[1], c = parent.elements[4], d = parent.elements[5];
+		
+		result.elements[0 + 0 * 4] = (a * scl.x * cos) - (c * scl.x * sin);
+		result.elements[1 + 0 * 4] = (b * scl.x * cos) - (d * scl.x * sin);
+		
+		result.elements[0 + 1 * 4] = (a * scl.y * sin) + (c * scl.y * cos);
+		result.elements[1 + 1 * 4] = (b * scl.x * sin) + (d * scl.y * cos);
+		
+		result.elements[0 + 3 * 4] = a * p.x + c * p.y + parent.elements[0 + 3 * 4];
+		result.elements[1 + 3 * 4] = b * p.x + d * p.y + parent.elements[1 + 3 * 4];
+		result.elements[2 + 3 * 4] = p.z + parent.elements[2 + 3 * 4];
+		
+		result.elements[2 + 2 * 4] = 1;
+		result.elements[3 + 3 * 4] = 1;
+		
+		return result;
+	}
+	
 	public Mat4 multiply(Mat4 matrix) {
 		Mat4 result = new Mat4();
 		for (int y = 0; y < 4; y++) {

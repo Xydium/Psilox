@@ -10,20 +10,24 @@ out vec2 f_dimensions;
 uniform mat4 u_projection;
 uniform mat4 u_transform;
 uniform vec2 u_dimensions;
+uniform bool u_tex_valid;
 uniform vec2 u_tex_dimensions;
-uniform vec2 u_tex_botleft;
-uniform vec2 u_tex_topright;
+uniform vec4 u_tex_region;
 uniform vec2 u_anchor;
 
-float constrained(float v, float min, float max) {
-	return (max - min) * v + min;
+float constrained(float v, float min, float range) {
+	return range * v + min;
 }
 
 void main(void) {
-	gl_Position = u_projection * u_transform * (vec4(v_position, 1) - vec4(u_anchor, 0, 0));
-	f_tcoord.x = constrained(v_tcoord.x, u_tex_botleft.x / u_tex_dimensions.x, u_tex_topright.x / u_tex_dimensions.x);
-	f_tcoord.y = constrained(v_tcoord.y, u_tex_botleft.y / u_tex_dimensions.y, u_tex_topright.y / u_tex_dimensions.y);
-	//f_tcoord = v_tcoord;
+	vec4 anchored = vec4(v_position, 1) - vec4(u_anchor, 0, 0);
+	anchored.x *= u_dimensions.x;
+	anchored.y *= u_dimensions.y;
+	gl_Position = u_projection * u_transform * anchored;
+	if(u_tex_valid) {
+		f_tcoord.x = constrained(v_tcoord.x, u_tex_region.x / u_tex_dimensions.x, u_tex_region.z / u_tex_dimensions.x);
+		f_tcoord.y = constrained(v_tcoord.y, u_tex_region.y / u_tex_dimensions.y, u_tex_region.w / u_tex_dimensions.y);
+	}
 	f_dimensions = u_dimensions;
 }
 
@@ -37,7 +41,12 @@ out vec4 f_fragcolor;
 
 uniform sampler2D u_texture;
 uniform vec4 u_modulate;
+uniform bool u_tex_valid;
 
 void main(void) {
-	f_fragcolor = texture(u_texture, f_tcoord) * u_modulate;
+	if(u_tex_valid) {
+		f_fragcolor = texture(u_texture, f_tcoord) * u_modulate;
+	} else {
+		f_fragcolor = u_modulate;
+	}
 }
