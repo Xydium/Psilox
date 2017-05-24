@@ -1,5 +1,6 @@
 package psilox.core;
 
+import psilox.audio.Audio;
 import psilox.node.Node;
 import psilox.utility.Time;
 
@@ -48,6 +49,7 @@ public class Psilox {
 		long lastFrame = Time.now() - frameInterval;
 		
 		window.initialize();
+		Audio.init();
 		root.addChild(mainNode);
 		
 		while(running) {
@@ -68,6 +70,7 @@ public class Psilox {
 			running = !window.shouldClose();
 		}
 		
+		Audio.shutdown();
 		window.terminate();
 	}
 	

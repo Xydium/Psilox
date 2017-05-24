@@ -2,6 +2,7 @@ import psilox.core.Psilox;
 import psilox.core.Window;
 import psilox.graphics.Color;
 import psilox.graphics.Texture;
+import psilox.input.Input;
 import psilox.math.Anchor;
 import psilox.math.Rect;
 import psilox.math.Vec;
@@ -18,9 +19,9 @@ class Test extends Node {
 	}
 	
 	public void enteredTree() {
-		if(RUID < 20) {
+		if(RUID < 100) {
 			addChild(new Test("test"));
-			position = new Vec(15, 0, .1f);
+			position = new Vec(10, 0, .1f);
 		}
 		if(RUID == 0) {
 			position = new Vec(WIDTH / 2, HEIGHT / 2);
@@ -37,7 +38,17 @@ class Test extends Node {
 	}
 	
 	public void update() {
-		rotation += 1;
+		float delta = 0.1f;
+		
+		if(Input.keyDown(Input.LEFT_SHIFT)) {
+			delta = 1;
+		}
+		
+		if(Input.keyDown(Input.RIGHT)) {
+			rotation += delta;
+		} else if(Input.keyDown(Input.LEFT)) {
+			rotation -= delta;
+		}
 	}
 
 	public static void main(String[] args) {

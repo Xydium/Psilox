@@ -12,13 +12,13 @@ import java.util.Stack;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
+import psilox.audio.Audio;
 import psilox.graphics.Color;
 import psilox.graphics.Mesh;
 import psilox.graphics.Shader;
-import psilox.graphics.Texture;
+import psilox.input.Input;
 import psilox.math.Mat4;
 import psilox.math.Rect;
-import psilox.math.Vec;
 import psilox.node.Node;
 import psilox.utility.Log;
 
@@ -76,6 +76,11 @@ public class Window {
 		if(fullscreen) {
 			glfwSetWindowMonitor(handle, glfwGetPrimaryMonitor(), 0, 0, m.width(), m.height(), 60);
 		}
+		
+		glfwSetKeyCallback(handle, Input.keyCallback);
+		glfwSetMouseButtonCallback(handle, Input.mouseCallback);
+		glfwSetCursorPosCallback(handle, Input.cursorCallback);
+		glfwSetCharCallback(handle, Input.charCallback);
 		
 		glfwMakeContextCurrent(handle);
 		glfwShowWindow(handle);
