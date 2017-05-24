@@ -8,7 +8,7 @@ import psilox.math.Vec;
 import psilox.node.Node;
 import psilox.utility.Time;
 
-public class Test extends Node {
+class Test extends Node {
 
 	static final int WIDTH = 1280;
 	static final int HEIGHT = 720;
