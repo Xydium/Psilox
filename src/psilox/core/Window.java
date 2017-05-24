@@ -102,7 +102,7 @@ public class Window {
 		
 		defaultMesh = Mesh.unitSquare();
 		defaultShader = new Shader("shaders/psilox.shd");
-		projection = Mat4.orthographic(0, width, 0, height, 10, -10);
+		projection = Mat4.orthographic(0, width, 0, height, -10, 10);
 		transforms = new Stack<Mat4>();
 	}
 	
@@ -147,7 +147,8 @@ public class Window {
 		defaultShader.enable();
 		defaultShader.setUniformMat4f("u_projection", projection);
 		
-		renderNode(root);
+		if(root.visible)
+			renderNode(root);
 		
 		defaultShader.disable();
 		
@@ -164,7 +165,9 @@ public class Window {
 		}
 	
 		for(Node n : node.getChildrenUnsafe()) {
-			renderNode(n);
+			if(n.visible) {
+				renderNode(n);
+			}
 		}
 		
 		defaultShader.setUniformMat4f("u_transform", transforms.peek());
@@ -178,8 +181,9 @@ public class Window {
 			defaultShader.setUniform2f("u_tex_dimensions", width, height);
 			if(node.textureRegion != null) {
 				defaultShader.setUniform4f("u_tex_region", node.textureRegion);
+				defaultShader.setUniform1i("u_region_valid", 1);
 			} else {
-				defaultShader.setUniform4f("u_tex_region", new Rect(0, 0, width, height));
+				defaultShader.setUniform1i("u_region_valid", 0);
 			}
 		} else {
 			defaultShader.setUniform1i("u_tex_valid", 0);
