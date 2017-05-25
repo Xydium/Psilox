@@ -7,7 +7,6 @@ import psilox.math.Anchor;
 import psilox.math.Rect;
 import psilox.math.Vec;
 import psilox.node.Node;
-import psilox.utility.Time;
 
 class Test extends Node {
 
@@ -52,7 +51,7 @@ class Test extends Node {
 	}
 
 	public static void main(String[] args) {
-		Psilox.start(new Window("Test", WIDTH, HEIGHT, false, false, Color.BLACK), new Test("test"));
+		Psilox.start(new Window("Test", WIDTH, HEIGHT, false, false, false, Color.BLACK), new Test("test"));
 	}
 	
 }

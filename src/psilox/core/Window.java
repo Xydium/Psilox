@@ -29,6 +29,7 @@ public class Window {
 	private int height;
 	private boolean fullscreen;
 	private boolean undecorated;
+	private boolean antiAlias;
 	private Color clearColor;
 	private long handle;
 	
@@ -38,15 +39,16 @@ public class Window {
 	private Stack<Mat4> transforms;
 	
 	public Window() {
-		this("Psilox", 500, 500, false, false, Color.BLACK);
+		this("Psilox", 500, 500, false, false, false, Color.BLACK);
 	}
 	
-	public Window(String title, int width, int height, boolean fullscreen, boolean undecorated, Color clearColor) {
+	public Window(String title, int width, int height, boolean fullscreen, boolean undecorated, boolean antiAlias, Color clearColor) {
 		this.title = title;
 		this.width = width;
 		this.height = height;
 		this.fullscreen = fullscreen;
 		this.undecorated = undecorated;
+		this.antiAlias = antiAlias;
 		this.clearColor = clearColor;
 	}
 	
@@ -62,6 +64,7 @@ public class Window {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		if(antiAlias) glfwWindowHint(GLFW_SAMPLES, 4);
 		
 		handle = glfwCreateWindow(width, height, title, NULL, NULL);
 		
@@ -85,7 +88,8 @@ public class Window {
 		glfwMakeContextCurrent(handle);
 		glfwShowWindow(handle);
 		GL.createCapabilities();
-		
+
+		if(antiAlias) glEnable(GL_MULTISAMPLE);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
