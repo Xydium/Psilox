@@ -1,7 +1,9 @@
 package psilox.node;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import psilox.core.Psilox;
 import psilox.graphics.Color;
@@ -221,7 +223,12 @@ public class Node {
 		String[] nodes = path.split("/");
 		
 		for(String n : nodes) {
-			Node next = current.getChild(n);
+			Node next;
+			if(n.equals(".")) {
+				next = current.getParent();
+			} else {
+				next = current.getChild(n);
+			}
 			if(next != null) {
 				current = next;
 			} else {
@@ -279,6 +286,30 @@ public class Node {
 		for(Node n : node.children) {
 			printTree(n, indent + "    ");
 		}
+	}
+	
+	private static Map<String, Integer> layers = new HashMap<String, Integer>();
+	
+	public static void addLayer(String name, Integer z) {
+		layers.put(name, z);
+	}
+	
+	public static int layer(String name) {
+		if(layers.containsKey(name)) {
+			return layers.get(name);
+		} else {
+			return 0;
+		}
+	}
+	
+	public static void deleteLayer(String name) {
+		if(layers.containsKey(name)) {
+			layers.remove(name);
+		}
+	}
+	
+	public static void deleteAllLayers() {
+		layers.clear();
 	}
 	
 	private static List<NodePair> queuedChanges = new ArrayList<NodePair>();

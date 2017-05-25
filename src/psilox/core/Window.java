@@ -12,13 +12,11 @@ import java.util.Stack;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
-import psilox.audio.Audio;
 import psilox.graphics.Color;
 import psilox.graphics.Mesh;
 import psilox.graphics.Shader;
 import psilox.input.Input;
 import psilox.math.Mat4;
-import psilox.math.Rect;
 import psilox.node.Node;
 import psilox.utility.Log;
 
@@ -64,7 +62,7 @@ public class Window {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		if(antiAlias) glfwWindowHint(GLFW_SAMPLES, 4);
+		if(antiAlias) glfwWindowHint(GLFW_SAMPLES, 8);
 		
 		handle = glfwCreateWindow(width, height, title, NULL, NULL);
 		
@@ -106,7 +104,7 @@ public class Window {
 		
 		defaultMesh = Mesh.unitSquare();
 		defaultShader = new Shader("shaders/psilox.shd");
-		projection = Mat4.orthographic(0, width, 0, height, -10, 10);
+		projection = Mat4.orthographic(0, width, 0, height, -100, 100);
 		transforms = new Stack<Mat4>();
 	}
 	
