@@ -146,13 +146,8 @@ public class Window {
 		glEnableVertexAttribArray(1);
 		glActiveTexture(GL_TEXTURE0);
 		
-		defaultShader.enable();
-		defaultShader.setUniformMat4f("u_projection", projection);
-		
 		if(root.visible)
 			renderNode(root);
-		
-		defaultShader.disable();
 		
 		glDisableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
@@ -172,33 +167,41 @@ public class Window {
 			}
 		}
 		
-		defaultShader.setUniformMat4f("u_transform", transforms.peek());
-		defaultShader.setUniform2f("u_dimensions", node.dimensions.x, node.dimensions.y);
+		Shader s = node.shader == null ? defaultShader : node.shader;
+		
+		s.enable();
+		s.setUniformMat4f("u_projection", projection);
+		s.setUniformMat4f("u_transform", transforms.peek());
+		s.setUniform2f("u_dimensions", node.dimensions.x, node.dimensions.y);
 		
 		if(node.texture != null) {
 			node.texture.bind();
-			defaultShader.setUniform1i("u_tex_valid", 1);
+			s.setUniform1i("u_tex_valid", 1);
 			final int width = node.texture.getWidth();
 			final int height = node.texture.getHeight();
-			defaultShader.setUniform2f("u_tex_dimensions", width, height);
+			s.setUniform2f("u_tex_dimensions", width, height);
 			if(node.textureRegion != null) {
-				defaultShader.setUniform4f("u_tex_region", node.textureRegion);
-				defaultShader.setUniform1i("u_region_valid", 1);
+				s.setUniform4f("u_tex_region", node.textureRegion);
+				s.setUniform1i("u_region_valid", 1);
 			} else {
-				defaultShader.setUniform1i("u_region_valid", 0);
+				s.setUniform1i("u_region_valid", 0);
 			}
 		} else {
-			defaultShader.setUniform1i("u_tex_valid", 0);
+			s.setUniform1i("u_tex_valid", 0);
 		}
 				
-		defaultShader.setUniform2f("u_anchor", node.anchor.x, node.anchor.y);
-		defaultShader.setUniform4f("u_modulate", node.modulate);
+		s.setUniform2f("u_anchor", node.anchor.x, node.anchor.y);
+		s.setUniform4f("u_modulate", node.modulate);
+		
+		node.setUniforms(s);
 		
 		glDrawArrays(GL_TRIANGLES, 0, defaultMesh.getVertCount());
 		
 		if(node.texture != null) {
 			node.texture.unbind();
 		}
+		
+		s.disable();
 		
 		transforms.pop();
 	}

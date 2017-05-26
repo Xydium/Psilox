@@ -36,6 +36,8 @@ public class Node {
 	
 	private final ArrayList<Node> children;
 	
+	private final long instantiationTick;
+	
 	public boolean updatable;
 	public boolean visible;
 	public boolean locked;
@@ -56,11 +58,13 @@ public class Node {
 		this.children = new ArrayList<Node>();
 		this.updatable = true;
 		this.visible = true;
+		this.instantiationTick = Psilox.ticks;
 	}
 	
 	public void enteredTree() {}
 	public void exitedTree() {}
 	public void update() {}
+	public void setUniforms(Shader s) {}
 	
 	public void updateChildren() {
 		iterating = true;
@@ -71,6 +75,10 @@ public class Node {
 			}
 		}
 		iterating = false;
+	}
+	
+	public long ticksAlive() {
+		return Psilox.ticks - instantiationTick;
 	}
 	
 	public Vec globalPosition() {
