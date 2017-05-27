@@ -15,6 +15,7 @@ uniform bool u_region_valid;
 uniform vec2 u_tex_dimensions;
 uniform vec4 u_tex_region;
 uniform vec2 u_anchor;
+uniform float u_time;
 
 float constrained(float v, float min, float range) {
 	return range * v + min;

@@ -30,6 +30,7 @@ public class Window {
 	private boolean antiAlias;
 	private Color clearColor;
 	private long handle;
+	private float uTime;
 	
 	private Mesh defaultMesh;
 	private Shader defaultShader;
@@ -146,6 +147,8 @@ public class Window {
 		glEnableVertexAttribArray(1);
 		glActiveTexture(GL_TEXTURE0);
 		
+		uTime = Psilox.ticks / 60.0f;
+		
 		if(root.visible)
 			renderNode(root);
 		
@@ -173,6 +176,7 @@ public class Window {
 		s.setUniformMat4f("u_projection", projection);
 		s.setUniformMat4f("u_transform", transforms.peek());
 		s.setUniform2f("u_dimensions", node.dimensions.x, node.dimensions.y);
+		s.setUniform1f("u_time", uTime);
 		
 		if(node.texture != null) {
 			node.texture.bind();
