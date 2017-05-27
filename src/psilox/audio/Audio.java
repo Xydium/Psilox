@@ -34,7 +34,7 @@ public class Audio {
 	public static void addSound(String name, String path) {
 		if(!sounds.containsKey(name))
 			sounds.put(name, TinySound.loadSound(path));
-		Log.internal("Added audio with name: " + name + " and path: " + path);
+		Log.internal("Added Sound with name: " + name + " and path: " + path);
 	}
 	
 	/**
@@ -47,7 +47,7 @@ public class Audio {
 	public static void addMusic(String name, String path) {
 		if(!music.containsKey(name)) {
 			music.put(name, TinySound.loadMusic(path));
-			Log.internal("Added Music with name: " + name + " and path:" + path);
+			Log.internal("Added Music with name: " + name + " and path: " + path);
 		}
 	}
 	
@@ -59,7 +59,7 @@ public class Audio {
 	 */
 	public static void removeSound(String name) {
 		sounds.remove(name);
-		Log.internal("Removed sound with name: " + name);
+		Log.internal("Removed Sound with name: " + name);
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class Audio {
 	 */
 	public static void removeMusic(String name) {
 		music.remove(name);
-		Log.internal("Removed music with name: " + name);
+		Log.internal("Removed Music with name: " + name);
 	}
 	
 	/**

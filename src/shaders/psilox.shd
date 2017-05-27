@@ -46,6 +46,7 @@ out vec4 f_fragcolor;
 uniform sampler2D u_texture;
 uniform vec4 u_modulate;
 uniform bool u_tex_valid;
+uniform float u_time;
 
 vec2 vmod(vec2 v) {
 	return vec2(mod(v.x, 1.0), mod(v.y, 1.0));
