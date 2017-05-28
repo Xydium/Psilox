@@ -20,13 +20,18 @@ public class Psilox {
 	private static Thread psiloxThread;
 	
 	public static final Node root = new Node("root");
-	private static Node mainNode; 
+	private static Node mainNode;
+	private static Node nextScene;
 	
 	public static void start(Window window, Node mainNode) {
 		if(running) return;
 		Psilox.window = window;
 		Psilox.mainNode = mainNode;
 		initThread();
+	}
+	
+	public static void quit() {
+		running = false;
 	}
 	
 	private static void update() {
@@ -53,6 +58,10 @@ public class Psilox {
 		root.addChild(mainNode);
 		
 		while(running) {
+			if(nextScene != null) {
+				root.swapChild(nextScene, 0);
+				nextScene = null;
+			}
 			if(Time.since(lastTick) >= tickInterval) {
 				dt = Time.since(lastTick) / (float) Time.SECOND;
 				lastTick = Time.now();
@@ -67,11 +76,15 @@ public class Psilox {
 				df = (Time.now() - lastFrame) / (float) Time.SECOND;
 			}
 			
-			running = !window.shouldClose();
+			running &= !window.shouldClose();
 		}
 		
 		Audio.shutdown();
 		window.terminate();
+	}
+	
+	public static void changeScene(Node nextScene) {
+		Psilox.nextScene = nextScene;
 	}
 	
 	private static void initThread() {
