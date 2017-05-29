@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL32.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 import java.util.Stack;
@@ -15,8 +16,10 @@ import org.lwjgl.opengl.GL;
 import psilox.graphics.Color;
 import psilox.graphics.Mesh;
 import psilox.graphics.Shader;
+import psilox.graphics.Texture;
 import psilox.input.Input;
 import psilox.math.Mat4;
+import psilox.math.Rect;
 import psilox.node.Node;
 import psilox.utility.Log;
 
@@ -36,6 +39,11 @@ public class Window {
 	private Shader defaultShader;
 	private Mat4 projection;
 	private Stack<Mat4> transforms;
+	private int backBuffer;
+	private Texture backTexture;
+	private Shader postProcess;
+	private Texture postProcessAid;
+	private Node postProcessUniformSet;
 	
 	public Window() {
 		this("Psilox", 500, 500, false, false, false, Color.BLACK);
@@ -49,6 +57,12 @@ public class Window {
 		this.undecorated = undecorated;
 		this.antiAlias = antiAlias;
 		this.clearColor = clearColor;
+	}
+	
+	public void setPostProcess(Shader s, Texture aid, Node setter) {
+		this.postProcess = s;
+		this.postProcessAid = aid;
+		this.postProcessUniformSet = setter;
 	}
 	
 	void initialize() {
@@ -107,6 +121,16 @@ public class Window {
 		defaultShader = new Shader("shaders/psilox.shd");
 		projection = Mat4.orthographic(0, width, 0, height, -100, 100);
 		transforms = new Stack<Mat4>();
+		
+		backTexture = new Texture(width, height);
+		backBuffer = glGenFramebuffers();
+		glBindFramebuffer(GL_FRAMEBUFFER, backBuffer);
+		int depthBuffer = glGenRenderbuffers();
+		glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, backTexture.getTexture(), 0);
+		backTexture.setFrameBuffer(backBuffer);
 	}
 	
 	void pollEvents() {
@@ -142,6 +166,10 @@ public class Window {
 	}
 	
 	void renderTree(Node root) {
+		glBindFramebuffer(GL_FRAMEBUFFER, backBuffer);
+		glViewport(0, 0, width, height);
+		clear();
+		
 		glBindVertexArray(defaultMesh.getVaoID());
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
@@ -151,6 +179,43 @@ public class Window {
 		
 		if(root.visible)
 			renderNode(root);
+		
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glViewport(0, 0, width, height);
+		clear();
+		backTexture.bind();
+		
+		if(postProcessAid != null) {
+			glActiveTexture(GL_TEXTURE1);
+			postProcessAid.bind();
+		}
+		
+		Shader s = postProcess == null ? defaultShader : postProcess;
+		
+		s.setUniformMat4f("u_projection", projection);
+		s.setUniformMat4f("u_transform", Mat4.identity());
+		s.setUniform2f("u_dimensions", width, height);
+		s.setUniform1f("u_time", uTime);
+		s.setUniform1i("u_tex_valid", 1);
+		s.setUniform2f("u_tex_dimensions", width, height);
+		s.setUniform4f("u_tex_region", new Rect(0, height, width, -height));
+		s.setUniform1i("u_region_valid", 1);
+		s.setUniform2f("u_anchor", 0, 0);
+		s.setUniform4f("u_modulate", Color.WHITE);
+		s.setUniform1i("u_aid", 1);
+		
+		postProcessUniformSet.setUniforms(postProcess);
+		
+		glDrawArrays(GL_TRIANGLES, 0, defaultMesh.getVertCount());
+		
+		s.disable();
+		
+		if(postProcessAid != null) {
+			postProcessAid.unbind();
+			glActiveTexture(GL_TEXTURE0);
+		}
+		
+		backTexture.unbind();
 		
 		glDisableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);

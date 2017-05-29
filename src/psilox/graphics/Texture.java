@@ -94,7 +94,7 @@ public class Texture {
 		return frameBuffer;
 	}
 
-	void setFrameBuffer(int buffer) {
+	public void setFrameBuffer(int buffer) {
 		this.frameBuffer = buffer;
 	}
 

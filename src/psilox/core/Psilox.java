@@ -41,8 +41,6 @@ public class Psilox {
 	}
 	
 	private static void render() {
-		window.clear();
-		
 		window.renderTree(root);
 		
 		window.logLastError();
