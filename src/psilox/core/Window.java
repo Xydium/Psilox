@@ -204,7 +204,8 @@ public class Window {
 		s.setUniform4f("u_modulate", Color.WHITE);
 		s.setUniform1i("u_aid", 1);
 		
-		postProcessUniformSet.setUniforms(postProcess);
+		if(postProcessUniformSet != null)
+			postProcessUniformSet.setUniforms(postProcess);
 		
 		glDrawArrays(GL_TRIANGLES, 0, defaultMesh.getVertCount());
 		
