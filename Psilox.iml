@@ -9,5 +9,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
     <orderEntry type="library" name="glm" level="project" />
+    <orderEntry type="library" name="lwjgl" level="project" />
+    <orderEntry type="library" name="lwjgl-glfw-natives-linux" level="project" />
+    <orderEntry type="library" name="lwjgl-opengl-natives-linux" level="project" />
   </component>
 </module>

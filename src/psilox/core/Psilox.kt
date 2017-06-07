@@ -1,15 +1,16 @@
 package psilox.core
 
+import psilox.graphics.BLACK
+import psilox.graphics.RED
 import psilox.utility.Time
 import psilox.utility.Time.now
 import psilox.utility.Time.per
 import psilox.utility.Time.elapsed
 import psilox.utility.Time.sinceF
 
-import glm.vec3.Vec3
-
 object Psilox {
 
+    var window: Window? = null
     var running = false
 
     private var tickInterval = 60 per Time.SECOND
@@ -18,9 +19,10 @@ object Psilox {
     var dt = 0F; private set
     var ticks = 0L; private set
 
-    fun start() {
+    fun start(window: Window) {
         if (running) return
         running = true
+        this.window = window
         System.setProperty("java.awt.headless", "true");
 
         loop()
@@ -31,21 +33,23 @@ object Psilox {
     }
 
     private fun update() {
-        if(ticks == 10L) quit()
-        //window.pollEvents()
+        window!!.pollEvents()
         //root.updateChildren()
         //Node.applyChanges()
     }
 
     private fun render() {
+        window!!.clear()
         //window.renderTree(root);
-        //window.logLastError();
-        //window.swapBuffers();
+        window!!.logLastError();
+        window!!.swapBuffers();
     }
 
     private fun loop() {
         var lastTick = 0L
         var lastFrame = 0L
+
+        window!!.initialize()
 
         while(running) {
             if(lastTick elapsed tickInterval) {
@@ -59,11 +63,15 @@ object Psilox {
                 lastFrame = now
                 render()
             }
+
+            running = running and !window!!.shouldClose()
         }
+
+        window!!.terminate()
     }
 
 }
 
 fun main(args: Array<String>) {
-    Psilox.start()
+    Psilox.start(Window(clear = RED))
 }
