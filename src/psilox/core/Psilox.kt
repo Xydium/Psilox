@@ -6,6 +6,8 @@ import psilox.utility.Time.per
 import psilox.utility.Time.elapsed
 import psilox.utility.Time.sinceF
 
+import glm.vec3.Vec3
+
 object Psilox {
 
     var running = false
@@ -60,4 +62,8 @@ object Psilox {
         }
     }
 
+}
+
+fun main(args: Array<String>) {
+    Psilox.start()
 }

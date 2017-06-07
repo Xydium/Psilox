@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="glm">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/glm.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
