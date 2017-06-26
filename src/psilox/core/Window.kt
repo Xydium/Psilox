@@ -42,7 +42,7 @@ class Window(val title: String = "Psilox",
 
         handle = glfwCreateWindow(width, height, title, NULL, NULL)
 
-        if (handle === NULL) {
+        if (handle == NULL) {
             error("Creating GLFW window failed.")
             return
         }
@@ -79,6 +79,7 @@ class Window(val title: String = "Psilox",
     internal fun swapBuffers() = glfwSwapBuffers(handle)
     internal fun clear() = glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
     internal fun shouldClose() = glfwWindowShouldClose(handle)
+
     internal fun logLastError() {
         val e = glGetError()
         if (e != 0) {
