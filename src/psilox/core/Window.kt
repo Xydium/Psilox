@@ -6,10 +6,14 @@ import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL.createCapabilities
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL13.GL_MULTISAMPLE
+import org.lwjgl.opengl.GL20.glDisableVertexAttribArray
+import org.lwjgl.opengl.GL20.glEnableVertexAttribArray
+import org.lwjgl.opengl.GL30.*
 import org.lwjgl.system.MemoryUtil.NULL
-import psilox.graphics.Color
-import psilox.graphics.WHITE
+import psilox.graphics.*
 import java.util.*
+import glm.vec3.Vec3
+import psilox.math.radians
 
 class Window(val title: String = "Psilox",
              val width: Int = 500,
@@ -24,6 +28,9 @@ class Window(val title: String = "Psilox",
     var projection = glm.ortho(0F, width.toFloat(), 0F, height.toFloat(), -zDepth / 2, zDepth / 2)
     var transforms = Stack<Mat4>()
     var handle = 0L
+
+    lateinit var defaultMesh: Mesh
+    lateinit var defaultShader: Shader
 
     internal fun initialize() {
         if(!glfwInit()) {
@@ -72,6 +79,9 @@ class Window(val title: String = "Psilox",
         }
 
         println("Created Window using GL: ${getGLVersion()}")
+
+        defaultMesh = Mesh.unitSquare()
+        defaultShader = Shader("/psilox.glsl")
     }
 
     internal fun pollEvents() = glfwPollEvents()
@@ -90,6 +100,23 @@ class Window(val title: String = "Psilox",
     internal fun terminate() {
         glfwDestroyWindow(handle)
         glfwTerminate()
+    }
+
+    internal fun debugRender() {
+        glBindVertexArray(defaultMesh.vao.glReference)
+        glEnableVertexAttribArray(0)
+        glEnableVertexAttribArray(1)
+
+        defaultShader.enable()
+        defaultShader["u_projection"] = projection
+        defaultShader["u_transform"] = Mat4().translate(Vec3(250, 250, 0)).rotate(Psilox.ticks.radians, Vec3(0, 0, 1)).scale(50F)
+        defaultShader["u_modulate"] = GREEN
+        glDrawArrays(GL_TRIANGLES, 0, defaultMesh.verts)
+        defaultShader.disable()
+
+        glDisableVertexAttribArray(0)
+        glDisableVertexAttribArray(1)
+        glBindVertexArray(0)
     }
 
 }

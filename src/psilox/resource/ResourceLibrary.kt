@@ -5,32 +5,35 @@ import java.util.*
 object ResourceLibrary {
 
     private val resources = ArrayList<Resource>()
-    private val dereferenced = ArrayList<Resource>()
 
-    private fun addReference(res: Resource) {
+    internal fun addReference(res: Resource) {
+        if(!res.registered) {
+            resources += res
+            res.registered = true
+        }
         res.references++
     }
 
-    private fun remReference(res: Resource) {
+    internal fun remReference(res: Resource) {
         res.references--
-        if(res.references == 0) {
-            dereferenced += res
-        }
     }
 
     fun clearDereferenced() {
-        for(r in dereferenced) {
-            resources -= r
-            r.destroy()
+        var i: Int = 0
+        while(i < resources.size) {
+            if(resources[i].references <= 0) {
+                resources[i].destroy()
+                resources.removeAt(i)
+            } else {
+                i++
+            }
         }
-        dereferenced.clear()
     }
 
     fun clearAll() {
         for(r in resources) {
             r.destroy()
         }
-        dereferenced.clear()
         resources.clear()
     }
 

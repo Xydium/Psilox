@@ -1,6 +1,9 @@
 package psilox.core
 
+import glm.vec3.Vec3
+import psilox.graphics.Mesh
 import psilox.graphics.RED
+import psilox.graphics.Shader
 import psilox.resource.ResourceLibrary
 import psilox.utility.Time
 import psilox.utility.Time.elapsed
@@ -40,9 +43,10 @@ object Psilox {
 
     private fun render() {
         window.clear()
-        //window.renderTree(root);
-        window.logLastError();
-        window.swapBuffers();
+        //window.renderTree(root)
+        window.debugRender()
+        window.logLastError()
+        window.swapBuffers()
     }
 
     private fun loop() {
