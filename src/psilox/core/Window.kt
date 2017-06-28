@@ -14,6 +14,7 @@ import psilox.graphics.*
 import java.util.*
 import glm.vec3.Vec3
 import psilox.math.radians
+import psilox.math.randOf
 
 class Window(val title: String = "Psilox",
              val width: Int = 500,
@@ -31,6 +32,7 @@ class Window(val title: String = "Psilox",
 
     lateinit var defaultMesh: Mesh
     lateinit var defaultShader: Shader
+    lateinit var debugTexture: Texture
 
     internal fun initialize() {
         if(!glfwInit()) {
@@ -82,6 +84,7 @@ class Window(val title: String = "Psilox",
 
         defaultMesh = Mesh.unitSquare()
         defaultShader = Shader("/psilox.glsl")
+        debugTexture = Texture("/0e9.jpg")
     }
 
     internal fun pollEvents() = glfwPollEvents()
@@ -108,10 +111,12 @@ class Window(val title: String = "Psilox",
         glEnableVertexAttribArray(1)
 
         defaultShader.enable()
+        debugTexture.bind()
         defaultShader["u_projection"] = projection
-        defaultShader["u_transform"] = Mat4().translate(Vec3(250, 250, 0)).rotate(Psilox.ticks.radians, Vec3(0, 0, 1)).scale(50F)
-        defaultShader["u_modulate"] = GREEN
+        defaultShader["u_transform"] = Mat4().translate(Vec3(250, 250, 0)).rotate(Psilox.ticks.radians, Vec3(0, 0, 1)).scale(200F)
+        defaultShader["u_modulate"] = randOf(RED, GREEN, WHITE, BLUE)
         glDrawArrays(GL_TRIANGLES, 0, defaultMesh.verts)
+        debugTexture.unbind()
         defaultShader.disable()
 
         glDisableVertexAttribArray(0)

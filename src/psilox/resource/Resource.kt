@@ -40,3 +40,12 @@ class ShaderResource(programID: Int): Resource(programID) {
     }
 
 }
+
+class TextureResource(textureID: Int): Resource(textureID) {
+
+    override fun destroy() {
+        super.destroy()
+        glDeleteTextures(glReference)
+    }
+
+}

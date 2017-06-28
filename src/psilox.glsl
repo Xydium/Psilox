@@ -9,7 +9,7 @@ uniform mat4 u_projection;
 uniform mat4 u_transform;
 
 void main(void) {
-    gl_Position = u_projection * u_transform * vec4(v_position, 1);
+    gl_Position = u_projection * u_transform * vec4(v_position - vec3(.5, .5, 0), 1);
     f_tcoord = v_tcoord;
 }
 
@@ -19,8 +19,9 @@ in vec2 f_tcoord;
 
 out vec4 f_fragcolor;
 
+uniform sampler2D u_texture;
 uniform vec4 u_modulate;
 
 void main(void) {
-    f_fragcolor = vec4(f_tcoord * u_modulate.xy, 1.0, 1.0);
+    f_fragcolor = texture(u_texture, f_tcoord) * u_modulate;
 }
